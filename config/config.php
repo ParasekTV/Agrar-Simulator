@@ -14,8 +14,9 @@ if (DEBUG_MODE) {
     ini_set('display_errors', 0);
 }
 
-// Basis-URL der Anwendung
-define('BASE_URL', '/farming-simulator/public');
+// Basis-URL der Anwendung (ohne abschliessenden Slash)
+define('BASE_URL', '');
+define('SITE_URL', 'https://agrar.sl-wide.de');
 
 // Pfade
 define('ROOT_PATH', dirname(__DIR__));

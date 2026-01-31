@@ -1,0 +1,649 @@
+/* ==========================================
+   Farm-spezifische Styles
+   ========================================== */
+
+/* ==========================================
+   Stats Grid
+   ========================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card .stat-icon {
+    font-size: 2.5rem;
+}
+
+.stat-card .stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gray-800);
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+}
+
+.stat-card .stat-detail {
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+    margin-left: auto;
+}
+
+/* ==========================================
+   Dashboard Grid
+   ========================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+/* ==========================================
+   Fields
+   ========================================== */
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.field-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.field-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.field-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--color-gray-100);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.field-id {
+    font-weight: 600;
+    color: var(--color-gray-700);
+}
+
+.field-size {
+    color: var(--color-gray-600);
+    font-size: 0.9rem;
+}
+
+.field-content {
+    padding: 1.5rem;
+    text-align: center;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.field-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.field-empty .plant-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.field-growing .timer-display {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0.5rem 0;
+}
+
+.field-ready .field-icon {
+    color: var(--color-success);
+}
+
+.field-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-gray-200);
+    background: var(--color-gray-50);
+}
+
+.soil-quality {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.soil-quality .progress-bar {
+    flex: 1;
+}
+
+.fertilize-form {
+    margin-top: 0.5rem;
+}
+
+/* Field Status Colors */
+.field-empty { border-left: 4px solid var(--color-gray-400); }
+.field-growing { border-left: 4px solid var(--color-warning); }
+.field-ready { border-left: 4px solid var(--color-success); }
+
+/* Mini Fields (Dashboard) */
+.fields-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.field-mini {
+    padding: 0.75rem;
+    background: var(--color-gray-100);
+    border-radius: var(--radius);
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.field-mini.field-ready { background: #d4edda; }
+.field-mini.field-growing { background: #fff3cd; }
+
+.field-mini-status { margin-bottom: 0.25rem; }
+.field-mini-size { color: var(--color-gray-600); font-size: 0.8rem; }
+
+.status-empty { color: var(--color-gray-600); }
+.status-growing { color: var(--color-secondary); }
+.status-ready { color: var(--color-success); font-weight: 600; }
+
+/* ==========================================
+   Animals
+   ========================================== */
+
+.animals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.animal-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.animal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.animal-icon {
+    font-size: 2.5rem;
+}
+
+.animal-info h4 {
+    margin: 0;
+}
+
+.animal-count {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+}
+
+.animal-stats {
+    margin-bottom: 1rem;
+}
+
+.animal-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.animal-stat .stat-label {
+    width: 80px;
+    color: var(--color-gray-600);
+}
+
+.animal-stat .progress-bar { flex: 1; }
+
+.animal-production {
+    padding: 0.75rem;
+    background: var(--color-gray-100);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+
+.production-item {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.production-status {
+    font-size: 0.9rem;
+}
+
+.production-status.ready {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.animal-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* ==========================================
+   Research
+   ========================================== */
+
+.research-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.research-category-section {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.category-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.category-crops { border-color: #4caf50; }
+.category-animals { border-color: #8b5a2b; }
+.category-vehicles { border-color: #2196f3; }
+.category-buildings { border-color: #ff9800; }
+.category-efficiency { border-color: #9c27b0; }
+
+.research-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.research-item {
+    padding: 1rem;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.research-item:hover { border-color: var(--color-gray-400); }
+
+.research-completed { background: #d4edda; border-color: #c3e6cb; }
+.research-in_progress { background: #fff3cd; border-color: #ffeeba; }
+.research-locked { opacity: 0.6; }
+
+.research-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.research-header h4 { margin: 0; font-size: 1rem; }
+
+.research-description {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+    margin-bottom: 0.75rem;
+}
+
+.research-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+}
+
+.research-requirement {
+    font-size: 0.8rem;
+    color: var(--color-warning);
+    margin-top: 0.5rem;
+}
+
+.research-form { margin-top: 0.75rem; }
+
+.active-research {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.research-progress { text-align: right; }
+
+/* ==========================================
+   Market
+   ========================================== */
+
+.market-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+}
+
+.market-filters {
+    margin-bottom: 1.5rem;
+}
+
+.filter-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-form .form-select,
+.filter-form .form-input {
+    width: auto;
+    min-width: 180px;
+}
+
+.market-listings {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.my-listings {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.my-listing-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.my-listing-item:last-child { border-bottom: none; }
+
+.listing-info strong { display: block; }
+
+.listing-info span {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+}
+
+.listing-status {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.status-active { color: var(--color-success); }
+.status-sold { color: var(--color-info); }
+.status-expired { color: var(--color-gray-500); }
+
+.listing-inactive { opacity: 0.6; }
+
+.total-price {
+    font-size: 1.25rem;
+    margin: 1rem 0;
+}
+
+/* ==========================================
+   Rankings
+   ========================================== */
+
+.rankings-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.my-rank-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.rank-display {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.rank-position {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.rank-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.rank-stat {
+    text-align: center;
+}
+
+.rank-stat .stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: block;
+}
+
+.rank-stat .stat-label {
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+}
+
+.global-stats {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-mini {
+    text-align: center;
+}
+
+.stat-mini .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    display: block;
+}
+
+.stat-mini .stat-label {
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+}
+
+.table-rankings .rank-number {
+    font-size: 1.25rem;
+}
+
+.rank-1 { color: #ffd700; }
+.rank-2 { color: #c0c0c0; }
+.rank-3 { color: #cd7f32; }
+
+.level-badge {
+    background: var(--color-primary-light);
+    color: white;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+/* ==========================================
+   Challenges
+   ========================================== */
+
+.challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.challenge-card {
+    padding: 1rem;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius);
+}
+
+.challenge-card.completed {
+    background: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.challenge-header h4 { margin: 0; font-size: 1rem; }
+
+.challenge-reward {
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.challenge-description {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+    margin-bottom: 0.75rem;
+}
+
+.challenge-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.challenge-progress .progress-bar { flex: 1; }
+
+.progress-text {
+    font-size: 0.85rem;
+    color: var(--color-gray-600);
+    white-space: nowrap;
+}
+
+/* ==========================================
+   Event List
+   ========================================== */
+
+.event-list {
+    list-style: none;
+}
+
+.event-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.event-item:last-child { border-bottom: none; }
+
+.event-icon {
+    font-size: 1.25rem;
+}
+
+.event-content {
+    flex: 1;
+}
+
+.event-description {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.event-time {
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+}
+
+.event-money {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.event-money.positive { color: var(--color-success); }
+.event-money.negative { color: var(--color-danger); }
+
+/* ==========================================
+   Level Progress
+   ========================================== */
+
+.level-progress-card {
+    margin-top: 1.5rem;
+}
+
+.level-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.current-level,
+.next-level {
+    font-weight: 600;
+}
+
+.points-progress {
+    color: var(--color-gray-600);
+}

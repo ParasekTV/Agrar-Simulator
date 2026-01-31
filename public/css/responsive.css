@@ -1,0 +1,201 @@
+/* ==========================================
+   Responsive Styles
+   ========================================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .market-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .rankings-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar-stats {
+        display: none;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    html { font-size: 15px; }
+
+    .navbar {
+        flex-wrap: wrap;
+    }
+
+    .navbar-toggle {
+        display: flex;
+    }
+
+    .navbar-menu {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        background: var(--color-primary-dark);
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border-radius: var(--radius);
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    .nav-link {
+        padding: 0.75rem 1rem;
+    }
+
+    .nav-divider {
+        border-top: 1px solid rgba(255,255,255,0.2);
+        margin: 0.5rem 0;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .page-actions .btn {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stat-card .stat-detail {
+        margin-left: 0;
+    }
+
+    .fields-grid,
+    .animals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .research-items {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-form {
+        flex-direction: column;
+    }
+
+    .filter-form .form-select,
+    .filter-form .form-input {
+        width: 100%;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table {
+        min-width: 600px;
+    }
+
+    .rank-display {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .rank-stats {
+        justify-content: center;
+    }
+
+    .global-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .active-research {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .research-progress {
+        text-align: center;
+    }
+
+    .my-listing-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    html { font-size: 14px; }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fields-mini-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .auth-card {
+        padding: 1.5rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .pagination-link {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Print */
+@media print {
+    .header,
+    .footer,
+    .navbar,
+    .page-actions,
+    .btn,
+    form {
+        display: none !important;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

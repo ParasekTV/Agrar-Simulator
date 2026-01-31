@@ -1,193 +1,189 @@
-# Landwirtschafts-Simulator Browsergame - Entwicklungsfortschritt
+# Agrar Simulator
 
-## Status: Backend und Grundstruktur FERTIG
+Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt mit PHP 8 und MySQL.
 
-**Letztes Update:** Heute
+![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?style=flat-square&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
----
+## Features
 
-## Abgeschlossene Komponenten
+### Farming & Produktion
+- **Felder bewirtschaften** - Kaufe Felder, pflanze verschiedene Feldfruchte und ernte sie
+- **Tiere halten** - Kuehe, Schweine, Huehner und Schafe mit Produkten wie Milch, Eier und Wolle
+- **Fahrzeuge nutzen** - Traktoren, Maehdrescher und Transportfahrzeuge
 
-### 1. Datenbankstruktur (100%)
-- [x] `sql/install.sql` - Komplettes Datenbankschema
-  - 13 Haupttabellen
-  - Foreign Keys und Indizes
-  - Initiale Daten (Crops, Animals, Vehicles, Research, Buildings)
+### Wirtschaft & Handel
+- **Marktplatz** - Handel mit anderen Spielern in Echtzeit
+- **Dynamische Preise** - Angebot und Nachfrage beeinflussen die Preise
+- **NPC-Verkauf** - Verkaufe direkt an das System zu festen Preisen
 
-### 2. Konfiguration (100%)
-- [x] `config/config.php` - Hauptkonfiguration
-- [x] `config/database.php` - Datenbankverbindung
+### Forschung & Fortschritt
+- **Forschungsbaum** - Schalte neue Technologien und Boni frei
+- **Level-System** - Sammle Punkte und steige im Level auf
+- **Taeglicher Login-Bonus** - Belohnungen fuer regelmaessiges Spielen
 
-### 3. Core-Klassen (100%)
-- [x] `app/core/Database.php` - PDO Wrapper (Singleton)
-- [x] `app/core/Session.php` - Session-Management mit CSRF
-- [x] `app/core/Router.php` - URL-Routing
-- [x] `app/core/Validator.php` - Input-Validierung
-- [x] `app/core/Logger.php` - Logging-System
-- [x] `app/core/Controller.php` - Basis-Controller
+### Community
+- **Genossenschaften** - Gruende oder tritt einer Genossenschaft bei
+- **Ausruestung teilen** - Verleihe Fahrzeuge an Genossenschaftsmitglieder
+- **Forum** - Diskutiere mit anderen Spielern
 
-### 4. Models (100%)
-- [x] `app/models/User.php` - Benutzer & Auth
-- [x] `app/models/Farm.php` - Farm-Hauptlogik
-- [x] `app/models/Field.php` - Felder & Anbau
-- [x] `app/models/Animal.php` - Tierverwaltung
-- [x] `app/models/Vehicle.php` - Fahrzeuge
-- [x] `app/models/Research.php` - Forschungsbaum
-- [x] `app/models/Market.php` - Marktplatz
-- [x] `app/models/Cooperative.php` - Genossenschaften
-- [x] `app/models/News.php` - Forum/Zeitung
-- [x] `app/models/Ranking.php` - Ranglisten
+### Wettbewerb
+- **Ranglisten** - Globale Spieler- und Genossenschafts-Rankings
+- **Woechentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
 
-### 5. Controllers (100%)
-- [x] `app/controllers/AuthController.php`
-- [x] `app/controllers/FarmController.php`
-- [x] `app/controllers/FieldController.php`
-- [x] `app/controllers/AnimalController.php`
-- [x] `app/controllers/VehicleController.php`
-- [x] `app/controllers/ResearchController.php`
-- [x] `app/controllers/MarketController.php`
-- [x] `app/controllers/CooperativeController.php`
-- [x] `app/controllers/NewsController.php`
-- [x] `app/controllers/RankingController.php`
+## Screenshots
 
-### 6. Views (80%)
-- [x] `app/views/layouts/main.php` - Haupt-Layout
-- [x] `app/views/layouts/navigation.php` - Navigation
-- [x] `app/views/layouts/footer.php` - Footer
-- [x] `app/views/auth/login.php` - Login-Seite
-- [x] `app/views/auth/register.php` - Registrierung
-- [x] `app/views/dashboard.php` - Dashboard
-- [x] `app/views/fields/index.php` - Felder-Uebersicht
-- [x] `app/views/animals/index.php` - Tiere-Uebersicht
-- [x] `app/views/research/index.php` - Forschungsbaum
-- [x] `app/views/market/index.php` - Marktplatz
-- [x] `app/views/rankings/index.php` - Rangliste
-- [x] `app/views/errors/404.php` - Fehlerseite
+*Screenshots folgen*
 
-**Noch zu erstellen:**
-- [ ] `app/views/vehicles/index.php`
-- [ ] `app/views/farm/overview.php`
-- [ ] `app/views/farm/inventory.php`
-- [ ] `app/views/farm/events.php`
-- [ ] `app/views/cooperative/index.php`
-- [ ] `app/views/cooperative/show.php`
-- [ ] `app/views/news/index.php`
-- [ ] `app/views/news/show.php`
-- [ ] `app/views/news/create.php`
-- [ ] `app/views/market/history.php`
-- [ ] `app/views/rankings/cooperatives.php`
-- [ ] `app/views/rankings/challenges.php`
-- [ ] `app/views/fields/show.php`
+## Technologie-Stack
 
-### 7. Public Assets (100%)
-- [x] `public/index.php` - Entry Point mit Routing
-- [x] `public/.htaccess` - URL Rewriting
-- [x] `public/css/main.css` - Hauptstile
-- [x] `public/css/farm.css` - Farm-spezifische Stile
-- [x] `public/css/responsive.css` - Responsive Design
-- [x] `public/js/app.js` - Haupt-JavaScript
-- [x] `public/js/timers.js` - Timer-System
-- [x] `public/js/farm.js` - Farm-Interaktionen
+- **Backend:** PHP 8.x mit MVC-Architektur
+- **Datenbank:** MySQL/MariaDB
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Sicherheit:** CSRF-Schutz, bcrypt Passwort-Hashing, Prepared Statements
 
-### 8. Cron Jobs (100%)
-- [x] `cron/harvest_check.php` - Ernte-Pruefung
-- [x] `cron/research_check.php` - Forschungs-Pruefung
-- [x] `cron/animal_check.php` - Tier-Status
-- [x] `cron/rankings_update.php` - Ranglisten-Update
+## Installation
 
----
+### Voraussetzungen
 
-## Naechste Schritte
+- PHP 8.0 oder hoeher
+- MySQL 5.7 / MariaDB 10.3 oder hoeher
+- Apache mit mod_rewrite oder Nginx
+- Composer (optional)
 
-### Prioritaet 1: Fehlende Views
-1. Fahrzeuge-View erstellen
-2. Farm-Uebersicht und Inventar Views
-3. Genossenschafts-Views
-4. News/Forum Views
-5. Weitere Rankings-Views
+### Schnellstart
 
-### Prioritaet 2: Testing
-1. Datenbank einrichten und Schema importieren
-2. Registrierung und Login testen
-3. Felder pflanzen/ernten testen
-4. Alle Spielmechaniken durchspielen
-
-### Prioritaet 3: Erweiterungen
-1. Bilder/Icons fuer Crops, Animals, Vehicles hinzufuegen
-2. Sound-Effekte (optional)
-3. Weitere Forschungen hinzufuegen
-4. Mehr Herausforderungen erstellen
-
----
-
-## Verzeichnisstruktur
-
-```
-farming-simulator/
-├── app/
-│   ├── controllers/    [10 Dateien]
-│   ├── core/          [6 Dateien]
-│   ├── models/        [10 Dateien]
-│   └── views/
-│       ├── layouts/   [3 Dateien]
-│       ├── auth/      [2 Dateien]
-│       ├── fields/    [1 Datei]
-│       ├── animals/   [1 Datei]
-│       ├── research/  [1 Datei]
-│       ├── market/    [1 Datei]
-│       ├── rankings/  [1 Datei]
-│       └── errors/    [1 Datei]
-├── config/            [2 Dateien]
-├── cron/              [4 Dateien]
-├── logs/              [leer]
-├── public/
-│   ├── css/           [3 Dateien]
-│   ├── js/            [3 Dateien]
-│   └── images/        [Verzeichnisse erstellt]
-├── sql/               [1 Datei]
-└── PROGRESS.md
+1. **Repository klonen:**
+```bash
+git clone https://github.com/dein-username/agrar-simulator.git
+cd agrar-simulator
 ```
 
----
-
-## Installation (fuer spaeter)
-
-1. **Datenbank erstellen:**
+2. **Datenbank erstellen:**
 ```sql
-CREATE DATABASE farming_simulator CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'farm_user'@'localhost' IDENTIFIED BY 'dein_passwort';
-GRANT ALL PRIVILEGES ON farming_simulator.* TO 'farm_user'@'localhost';
+CREATE DATABASE agrar_simulator CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'agrar_user'@'localhost' IDENTIFIED BY 'dein_sicheres_passwort';
+GRANT ALL PRIVILEGES ON agrar_simulator.* TO 'agrar_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-2. **Schema importieren:**
+3. **Schema importieren:**
 ```bash
-mysql -u farm_user -p farming_simulator < sql/install.sql
+mysql -u agrar_user -p agrar_simulator < sql/install.sql
 ```
 
-3. **Konfiguration anpassen:**
-- `config/database.php` - Datenbankzugangsdaten eintragen
+4. **Konfiguration anpassen:**
 
-4. **Webserver konfigurieren:**
-- DocumentRoot auf `public/` setzen
-- mod_rewrite aktivieren
+Bearbeite `config/database.php`:
+```php
+return [
+    'host'     => 'localhost',
+    'database' => 'agrar_simulator',
+    'username' => 'agrar_user',
+    'password' => 'dein_sicheres_passwort',
+    'charset'  => 'utf8mb4',
+];
+```
 
-5. **Cron Jobs einrichten:**
+Bearbeite `config/config.php`:
+```php
+define('BASE_URL', '');  // Leer lassen wenn im Root
+define('DEBUG_MODE', false);  // In Produktion auf false
 ```
-*/5 * * * * php /pfad/zu/farming-simulator/cron/harvest_check.php
-*/5 * * * * php /pfad/zu/farming-simulator/cron/research_check.php
-0 */6 * * * php /pfad/zu/farming-simulator/cron/animal_check.php
-0 * * * * php /pfad/zu/farming-simulator/cron/rankings_update.php
+
+5. **Webserver konfigurieren:**
+
+**Apache:** Setze das Document Root auf den `public/` Ordner.
+
+**Nginx:**
+```nginx
+server {
+    root /var/www/agrar-simulator/public;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
 ```
+
+6. **Cron Jobs einrichten:**
+```cron
+*/5 * * * * php /var/www/agrar-simulator/cron/harvest_check.php
+*/5 * * * * php /var/www/agrar-simulator/cron/research_check.php
+0 */6 * * * php /var/www/agrar-simulator/cron/animal_check.php
+0 * * * * php /var/www/agrar-simulator/cron/rankings_update.php
+```
+
+## Projektstruktur
+
+```
+agrar-simulator/
+├── app/
+│   ├── controllers/     # Controller-Klassen
+│   ├── core/           # Kernklassen (Database, Router, Session)
+│   ├── models/         # Model-Klassen
+│   └── views/          # PHP-Templates
+├── config/
+│   ├── config.php      # Hauptkonfiguration
+│   └── database.php    # Datenbankverbindung
+├── cron/               # Cron-Job-Skripte
+├── logs/               # Log-Dateien
+├── public/             # Document Root
+│   ├── css/           # Stylesheets
+│   ├── js/            # JavaScript
+│   ├── images/        # Bilder
+│   └── index.php      # Entry Point
+└── sql/
+    └── install.sql    # Datenbank-Schema
+```
+
+## API-Endpunkte
+
+Das Spiel bietet eine REST-API fuer AJAX-Interaktionen:
+
+| Endpunkt | Methode | Beschreibung |
+|----------|---------|--------------|
+| `/api/farm/stats` | GET | Farm-Statistiken |
+| `/api/farm/fields` | GET | Alle Felder |
+| `/api/field/plant` | POST | Feld bepflanzen |
+| `/api/field/harvest` | POST | Feld ernten |
+| `/api/market/listings` | GET | Marktangebote |
+| `/api/research/tree` | GET | Forschungsbaum |
+
+## Sicherheit
+
+- **CSRF-Token:** Alle Formulare sind mit CSRF-Tokens geschuetzt
+- **Prepared Statements:** Schutz vor SQL-Injection
+- **Password Hashing:** bcrypt mit Kostenfaktor 12
+- **Input Validation:** Serverseitige Validierung aller Eingaben
+- **XSS-Schutz:** HTML-Escaping aller Ausgaben
+
+## Mitwirken
+
+Beitraege sind willkommen! Bitte erstelle einen Fork und reiche einen Pull Request ein.
+
+1. Fork das Repository
+2. Erstelle einen Feature-Branch (`git checkout -b feature/NeuesFeature`)
+3. Committe deine Aenderungen (`git commit -m 'Neues Feature hinzugefuegt'`)
+4. Push zum Branch (`git push origin feature/NeuesFeature`)
+5. Erstelle einen Pull Request
+
+## Lizenz
+
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) fuer Details.
+
+## Autor
+
+Entwickelt mit Claude Code
 
 ---
 
-## Hinweise
-
-- Das Backend ist vollstaendig funktionsfaehig
-- Alle API-Endpunkte sind implementiert
-- CSS ist responsive und modern gestaltet
-- JavaScript beinhaltet Timer-System und AJAX-Interaktionen
-- CSRF-Schutz ist implementiert
-- Passwort-Hashing mit bcrypt
-- Prepared Statements gegen SQL-Injection
+**Live Demo:** [agrar.sl-wide.de](https://agrar.sl-wide.de)

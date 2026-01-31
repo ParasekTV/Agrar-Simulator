@@ -31,7 +31,7 @@
                     <span class="stat-label">Mitglieder</span>
                 </div>
                 <div class="coop-stat">
-                    <span class="stat-value"><?= number_format($cooperative['treasury'], 0, ',', '.') ?> EUR</span>
+                    <span class="stat-value"><?= number_format($cooperative['treasury'], 0, ',', '.') ?> T</span>
                     <span class="stat-label">Kasse</span>
                 </div>
                 <div class="coop-stat">
@@ -176,7 +176,7 @@
                     <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="amount">Betrag (EUR)</label>
+                            <label for="amount">Betrag (T)</label>
                             <input type="number" name="amount" id="amount" min="100" step="100"
                                    class="form-control" placeholder="1000" required>
                         </div>

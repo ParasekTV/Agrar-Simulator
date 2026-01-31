@@ -56,7 +56,7 @@
                                 <td>
                                     <strong><?= number_format($coop['total_points']) ?></strong>
                                 </td>
-                                <td><?= number_format($coop['treasury'], 0, ',', '.') ?> EUR</td>
+                                <td><?= number_format($coop['treasury'], 0, ',', '.') ?> T</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

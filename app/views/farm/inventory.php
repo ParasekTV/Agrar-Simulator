@@ -107,7 +107,7 @@
                     <input type="number" name="quantity" id="market-quantity" class="form-input" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="market-price">Preis pro Stueck (EUR)</label>
+                    <label for="market-price">Preis pro Stueck (T)</label>
                     <input type="number" name="price" id="market-price" class="form-input" min="0.01" step="0.01" required>
                 </div>
             </div>

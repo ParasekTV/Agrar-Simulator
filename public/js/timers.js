@@ -1,5 +1,5 @@
 /**
- * Landwirtschafts-Simulator - Timer System
+ * Agrar Simulator - Timer System
  */
 
 class GameTimers {

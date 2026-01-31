@@ -9,7 +9,7 @@
         <div class="stat-card">
             <div class="stat-icon">&#128176;</div>
             <div class="stat-info">
-                <span class="stat-value"><?= number_format($farm['money'], 2, ',', '.') ?> EUR</span>
+                <span class="stat-value"><?= number_format($farm['money'], 0, ',', '.') ?> T</span>
                 <span class="stat-label">Guthaben</span>
             </div>
         </div>

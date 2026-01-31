@@ -38,7 +38,7 @@
                             </td>
                             <td><?= htmlspecialchars($purchase['seller_name']) ?></td>
                             <td><?= number_format($purchase['quantity']) ?></td>
-                            <td class="text-danger">-<?= number_format($purchase['total_price'], 2, ',', '.') ?> EUR</td>
+                            <td class="text-danger">-<?= number_format($purchase['total_price'], 0, ',', '.') ?> T</td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -75,7 +75,7 @@
                             </td>
                             <td><?= htmlspecialchars($sale['buyer_name']) ?></td>
                             <td><?= number_format($sale['quantity']) ?></td>
-                            <td class="text-success">+<?= number_format($sale['total_price'], 2, ',', '.') ?> EUR</td>
+                            <td class="text-success">+<?= number_format($sale['total_price'], 0, ',', '.') ?> T</td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

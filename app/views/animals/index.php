@@ -72,7 +72,7 @@
                                 <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                                 <input type="hidden" name="farm_animal_id" value="<?= $animal['id'] ?>">
                                 <button type="submit" class="btn btn-warning btn-sm">
-                                    Fuettern (<?= number_format($animal['feed_cost'] * $animal['quantity'], 0, ',', '.') ?> EUR)
+                                    Fuettern (<?= number_format($animal['feed_cost'] * $animal['quantity'], 0, ',', '.') ?> T)
                                 </button>
                             </form>
                         <?php else: ?>
@@ -114,7 +114,7 @@
                         <option value="">Waehle eine Tierart...</option>
                         <?php foreach ($availableAnimals as $animal): ?>
                             <option value="<?= $animal['id'] ?>" data-cost="<?= $animal['cost'] ?>">
-                                <?= htmlspecialchars($animal['name']) ?> - <?= number_format($animal['cost'], 0, ',', '.') ?> EUR/Stueck
+                                <?= htmlspecialchars($animal['name']) ?> - <?= number_format($animal['cost'], 0, ',', '.') ?> T/Stueck
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -124,7 +124,7 @@
                     <input type="number" name="quantity" id="animal-quantity" class="form-input"
                            min="1" max="100" value="1" required>
                 </div>
-                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 2, ',', '.') ?> EUR</p>
+                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 0, ',', '.') ?> T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeBuyAnimalModal()">Abbrechen</button>

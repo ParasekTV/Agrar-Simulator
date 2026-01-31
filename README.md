@@ -32,6 +32,15 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 - **Ranglisten** - Globale Spieler- und Genossenschafts-Rankings
 - **Woechentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
 
+### Administration
+- **Admin-Panel** - Vollstaendige Verwaltung von Benutzern, Hoefen und Genossenschaften
+- **Benutzer bearbeiten** - Name, E-Mail, Passwort, Geld, Punkte, Level
+- **Genossenschaften verwalten** - Mitglieder entfernen, Kasse anpassen, Limits setzen
+
+## Waehrung
+
+Das Spiel verwendet eine eigene Waehrung: **Agrar Taler (T)**
+
 ## Screenshots
 
 *Screenshots folgen*
@@ -73,7 +82,13 @@ FLUSH PRIVILEGES;
 mysql -u agrar_user -p agrar_simulator < sql/install.sql
 ```
 
-4. **Konfiguration anpassen:**
+4. **Admin-Benutzer erstellen:**
+Nach der Registrierung im Spiel:
+```sql
+UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
+```
+
+5. **Konfiguration anpassen:**
 
 Bearbeite `config/database.php`:
 ```php

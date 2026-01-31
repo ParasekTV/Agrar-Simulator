@@ -85,7 +85,7 @@
                             <?php foreach ($availableCrops as $crop): ?>
                                 <option value="<?= $crop['id'] ?>">
                                     <?= htmlspecialchars($crop['name']) ?>
-                                    - <?= number_format($crop['buy_price'] * $field['size_hectares'], 0, ',', '.') ?> EUR
+                                    - <?= number_format($crop['buy_price'] * $field['size_hectares'], 0, ',', '.') ?> T
                                     (<?= $crop['growth_time_hours'] ?>h Wachstumszeit)
                                 </option>
                             <?php endforeach; ?>

@@ -95,13 +95,13 @@
                         <?php foreach ($availableVehicles as $vehicle): ?>
                             <option value="<?= $vehicle['id'] ?>">
                                 <?= htmlspecialchars($vehicle['name']) ?> -
-                                <?= number_format($vehicle['cost'], 0, ',', '.') ?> EUR
+                                <?= number_format($vehicle['cost'], 0, ',', '.') ?> T
                                 (+<?= $vehicle['efficiency_bonus'] ?>% Effizienz)
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 2, ',', '.') ?> EUR</p>
+                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 0, ',', '.') ?> T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeBuyVehicleModal()">Abbrechen</button>

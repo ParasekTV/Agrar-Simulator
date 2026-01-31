@@ -2,8 +2,8 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>Landwirtschafts-Simulator</h4>
-                <p>Das ultimative Farming-Browsergame</p>
+                <h4>Agrar Simulator</h4>
+                <p>Das ultimative Agrar-Browsergame</p>
             </div>
             <div class="footer-section">
                 <h4>Links</h4>
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <?= date('Y') ?> Landwirtschafts-Simulator Browsergame. Alle Rechte vorbehalten.</p>
+            <p>&copy; <?= date('Y') ?> Agrar Simulator. Alle Rechte vorbehalten.</p>
         </div>
     </div>
 </footer>

@@ -27,7 +27,7 @@
                                     <?php foreach ($availableCrops as $crop): ?>
                                         <option value="<?= $crop['id'] ?>">
                                             <?= htmlspecialchars($crop['name']) ?>
-                                            (<?= number_format($crop['buy_price'] * $field['size_hectares'], 0, ',', '.') ?> EUR)
+                                            (<?= number_format($crop['buy_price'] * $field['size_hectares'], 0, ',', '.') ?> T)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -106,15 +106,15 @@
                 <div class="form-group">
                     <label for="field-size">Feldgroesse (Hektar)</label>
                     <select name="size" id="field-size" class="form-select" required>
-                        <option value="1">1 Hektar - 2.000 EUR</option>
-                        <option value="2">2 Hektar - 4.000 EUR</option>
-                        <option value="3">3 Hektar - 6.000 EUR</option>
-                        <option value="5">5 Hektar - 10.000 EUR</option>
-                        <option value="10">10 Hektar - 20.000 EUR</option>
+                        <option value="1">1 Hektar - 2.000 T</option>
+                        <option value="2">2 Hektar - 4.000 T</option>
+                        <option value="3">3 Hektar - 6.000 T</option>
+                        <option value="5">5 Hektar - 10.000 T</option>
+                        <option value="10">10 Hektar - 20.000 T</option>
                     </select>
                 </div>
-                <p class="form-help">Preis: 2.000 EUR pro Hektar</p>
-                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 2, ',', '.') ?> EUR</p>
+                <p class="form-help">Preis: 2.000 T pro Hektar</p>
+                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 0, ',', '.') ?> T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeBuyFieldModal()">Abbrechen</button>

@@ -33,7 +33,7 @@ class Cooperative
         $farm = new Farm($founderFarmId);
 
         if (!$farm->subtractMoney($cost, "Genossenschaft gegruendet: {$name}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld (5000 EUR benoetigt)'];
+            return ['success' => false, 'message' => 'Nicht genuegend Geld (5000 T benoetigt)'];
         }
 
         // Erstelle Genossenschaft
@@ -430,7 +430,7 @@ class Cooperative
 
         return [
             'success' => true,
-            'message' => "Geraet zurueckgegeben. Gebuehr: {$fee} EUR"
+            'message' => "Geraet zurueckgegeben. Gebuehr: {$fee} T"
         ];
     }
 
@@ -474,7 +474,7 @@ class Cooperative
 
         return [
             'success' => true,
-            'message' => "{$amount} EUR an die Genossenschaft gespendet"
+            'message' => "{$amount} T an die Genossenschaft gespendet"
         ];
     }
 

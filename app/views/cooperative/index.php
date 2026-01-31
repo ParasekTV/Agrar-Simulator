@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="coop-stats">
                     <div class="coop-stat">
-                        <span class="stat-value"><?= number_format($membership['treasury'], 0, ',', '.') ?> EUR</span>
+                        <span class="stat-value"><?= number_format($membership['treasury'], 0, ',', '.') ?> T</span>
                         <span class="stat-label">Kasse</span>
                     </div>
                     <div class="coop-stat">
@@ -148,7 +148,7 @@
                     <label for="coop-description">Beschreibung</label>
                     <textarea name="description" id="coop-description" class="form-input" rows="3"></textarea>
                 </div>
-                <p class="form-help">Gruendungskosten: 5.000 EUR</p>
+                <p class="form-help">Gruendungskosten: 5.000 T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeCreateCoopModal()">Abbrechen</button>
@@ -170,10 +170,10 @@
             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="donate-amount">Betrag (EUR)</label>
+                    <label for="donate-amount">Betrag (T)</label>
                     <input type="number" name="amount" id="donate-amount" class="form-input" min="100" step="100" required>
                 </div>
-                <p class="form-help">Du erhaeltst 1 Beitragspunkt pro 10 EUR.</p>
+                <p class="form-help">Du erhaeltst 1 Beitragspunkt pro 10 T.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeDonateModal()">Abbrechen</button>

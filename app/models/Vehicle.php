@@ -106,7 +106,7 @@ class Vehicle
 
         return [
             'success' => true,
-            'message' => "{$farmVehicle['name']} fuer {$sellPrice} EUR verkauft!",
+            'message' => "{$farmVehicle['name']} fuer {$sellPrice} T verkauft!",
             'income' => $sellPrice
         ];
     }

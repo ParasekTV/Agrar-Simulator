@@ -1,7 +1,7 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <h1>&#127806; Farming Simulator</h1>
+            <h1>&#127806; Agrar Simulator</h1>
             <h2>Anmelden</h2>
         </div>
 

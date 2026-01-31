@@ -53,8 +53,8 @@
                                     </td>
                                     <td><?= htmlspecialchars($listing['seller_name']) ?></td>
                                     <td><?= number_format($listing['quantity']) ?></td>
-                                    <td><?= number_format($listing['price_per_unit'], 2, ',', '.') ?> EUR</td>
-                                    <td><strong><?= number_format($listing['price_per_unit'] * $listing['quantity'], 2, ',', '.') ?> EUR</strong></td>
+                                    <td><?= number_format($listing['price_per_unit'], 0, ',', '.') ?> T</td>
+                                    <td><strong><?= number_format($listing['price_per_unit'] * $listing['quantity'], 0, ',', '.') ?> T</strong></td>
                                     <td>
                                         <button class="btn btn-success btn-sm"
                                                 onclick="showBuyModal(<?= $listing['id'] ?>, '<?= htmlspecialchars($listing['item_name']) ?>', <?= $listing['quantity'] ?>, <?= $listing['price_per_unit'] ?>)">
@@ -91,7 +91,7 @@
                     <div class="my-listing-item <?= $listing['status'] !== 'active' ? 'listing-inactive' : '' ?>">
                         <div class="listing-info">
                             <strong><?= htmlspecialchars($listing['item_name']) ?></strong>
-                            <span><?= $listing['quantity'] ?>x @ <?= number_format($listing['price_per_unit'], 2, ',', '.') ?> EUR</span>
+                            <span><?= $listing['quantity'] ?>x @ <?= number_format($listing['price_per_unit'], 0, ',', '.') ?> T</span>
                             <small class="listing-status status-<?= $listing['status'] ?>">
                                 <?= ucfirst($listing['status']) ?>
                             </small>
@@ -149,7 +149,7 @@
                            min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="listing-price">Preis pro Stueck (EUR)</label>
+                    <label for="listing-price">Preis pro Stueck (T)</label>
                     <input type="number" name="price" id="listing-price" class="form-input"
                            min="0.01" step="0.01" required>
                 </div>
@@ -175,14 +175,14 @@
             <input type="hidden" name="listing_id" id="buy-listing-id">
             <div class="modal-body">
                 <p>Artikel: <strong id="buy-item-name"></strong></p>
-                <p>Preis pro Stueck: <span id="buy-price-per-unit"></span> EUR</p>
+                <p>Preis pro Stueck: <span id="buy-price-per-unit"></span> T</p>
                 <div class="form-group">
                     <label for="buy-quantity">Menge (max: <span id="buy-max-quantity"></span>)</label>
                     <input type="number" name="quantity" id="buy-quantity" class="form-input"
                            min="1" required onchange="updateTotal()">
                 </div>
-                <p class="total-price">Gesamtpreis: <strong id="buy-total">0,00</strong> EUR</p>
-                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 2, ',', '.') ?> EUR</p>
+                <p class="total-price">Gesamtpreis: <strong id="buy-total">0</strong> T</p>
+                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 0, ',', '.') ?> T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeBuyModal()">Abbrechen</button>
@@ -216,7 +216,7 @@ function showBuyModal(listingId, itemName, maxQuantity, pricePerUnit) {
     document.getElementById('buy-listing-id').value = listingId;
     document.getElementById('buy-item-name').textContent = itemName;
     document.getElementById('buy-max-quantity').textContent = maxQuantity;
-    document.getElementById('buy-price-per-unit').textContent = pricePerUnit.toFixed(2).replace('.', ',');
+    document.getElementById('buy-price-per-unit').textContent = Math.round(pricePerUnit);
     document.getElementById('buy-quantity').max = maxQuantity;
     document.getElementById('buy-quantity').value = 1;
     window.buyPricePerUnit = pricePerUnit;
@@ -231,6 +231,6 @@ function closeBuyModal() {
 function updateTotal() {
     const quantity = parseInt(document.getElementById('buy-quantity').value) || 0;
     const total = quantity * window.buyPricePerUnit;
-    document.getElementById('buy-total').textContent = total.toFixed(2).replace('.', ',');
+    document.getElementById('buy-total').textContent = Math.round(total);
 }
 </script>

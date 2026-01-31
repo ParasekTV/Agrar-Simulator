@@ -1,5 +1,5 @@
 /**
- * Landwirtschafts-Simulator - Farm Interaktionen
+ * Agrar Simulator - Farm Interaktionen
  */
 
 class FarmManager {

@@ -1,5 +1,5 @@
 /**
- * Landwirtschafts-Simulator - Haupt-JavaScript
+ * Agrar Simulator - Haupt-JavaScript
  */
 
 // ==========================================
@@ -145,10 +145,7 @@ const API = {
 // ==========================================
 
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR'
-    }).format(amount);
+    return new Intl.NumberFormat('de-DE').format(Math.round(amount)) + ' T';
 }
 
 function formatNumber(num) {

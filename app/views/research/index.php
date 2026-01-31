@@ -78,7 +78,7 @@
                             <div class="research-meta">
                                 <span class="research-cost">
                                     <?php if ($research['cost'] > 0): ?>
-                                        <?= number_format($research['cost'], 0, ',', '.') ?> EUR
+                                        <?= number_format($research['cost'], 0, ',', '.') ?> T
                                     <?php else: ?>
                                         Kostenlos
                                     <?php endif; ?>

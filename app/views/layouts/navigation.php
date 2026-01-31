@@ -3,7 +3,7 @@
         <div class="navbar-brand">
             <a href="<?= BASE_URL ?>/dashboard" class="logo">
                 <span class="logo-icon">&#127806;</span>
-                <span class="logo-text">Farming Simulator</span>
+                <span class="logo-text">Agrar Simulator</span>
             </a>
         </div>
 
@@ -11,7 +11,7 @@
             <div class="navbar-stats">
                 <div class="stat-item">
                     <span class="stat-icon">&#128176;</span>
-                    <span class="stat-value" id="farm-money"><?= number_format($currentFarm['money'], 2, ',', '.') ?> EUR</span>
+                    <span class="stat-value" id="farm-money"><?= number_format($currentFarm['money'], 0, ',', '.') ?> T</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-icon">&#11088;</span>
@@ -39,6 +39,9 @@
                 <li><a href="<?= BASE_URL ?>/cooperative" class="nav-link">Genossenschaft</a></li>
                 <li><a href="<?= BASE_URL ?>/news" class="nav-link">Zeitung</a></li>
                 <li><a href="<?= BASE_URL ?>/rankings" class="nav-link">Rangliste</a></li>
+                <?php if (isset($currentUser) && $currentUser['is_admin']): ?>
+                    <li><a href="<?= BASE_URL ?>/admin" class="nav-link nav-link-admin">Admin</a></li>
+                <?php endif; ?>
                 <li class="nav-divider"></li>
                 <li>
                     <a href="<?= BASE_URL ?>/logout" class="nav-link nav-link-logout">

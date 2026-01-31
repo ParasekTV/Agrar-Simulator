@@ -45,7 +45,7 @@
                             <?php endif; ?>
                             <?php if ($event['money_change'] != 0): ?>
                                 <span class="event-money <?= $event['money_change'] > 0 ? 'positive' : 'negative' ?>">
-                                    <?= $event['money_change'] > 0 ? '+' : '' ?><?= number_format($event['money_change'], 2, ',', '.') ?> EUR
+                                    <?= $event['money_change'] > 0 ? '+' : '' ?><?= number_format($event['money_change'], 0, ',', '.') ?> T
                                 </span>
                             <?php endif; ?>
                         </div>

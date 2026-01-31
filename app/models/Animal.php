@@ -333,7 +333,7 @@ class Animal
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$farmAnimal['name']} fuer {$sellPrice} EUR verkauft!",
+            'message' => "{$quantity}x {$farmAnimal['name']} fuer {$sellPrice} T verkauft!",
             'income' => $sellPrice
         ];
     }

@@ -152,7 +152,7 @@ class Market
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$listing['item_name']} fuer {$totalPrice} EUR gekauft!",
+            'message' => "{$quantity}x {$listing['item_name']} fuer {$totalPrice} T gekauft!",
             'total_price' => $totalPrice
         ];
     }
@@ -369,7 +369,7 @@ class Market
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$inventory['item_name']} fuer {$totalPrice} EUR verkauft!",
+            'message' => "{$quantity}x {$inventory['item_name']} fuer {$totalPrice} T verkauft!",
             'total_price' => $totalPrice
         ];
     }

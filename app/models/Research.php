@@ -256,7 +256,7 @@ class Research
 
         return [
             'success' => true,
-            'message' => "Forschung abgebrochen. {$refund} EUR erstattet.",
+            'message' => "Forschung abgebrochen. {$refund} T erstattet.",
             'refund' => $refund
         ];
     }

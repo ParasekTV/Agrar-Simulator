@@ -1,4 +1,4 @@
--- Landwirtschafts-Simulator Browsergame
+-- Agrar Simulator Browsergame
 -- Komplettes Datenbank-Schema
 
 SET NAMES utf8mb4;
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     is_active BOOLEAN DEFAULT TRUE,
+    is_admin BOOLEAN DEFAULT FALSE,
     INDEX idx_username (username),
     INDEX idx_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

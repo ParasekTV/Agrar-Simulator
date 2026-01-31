@@ -1,6 +1,6 @@
 <?php
 /**
- * Landwirtschafts-Simulator Browsergame
+ * Agrar Simulator Browsergame
  *
  * Entry Point
  */
@@ -92,6 +92,21 @@ $router->post('/news/delete', 'News', 'delete');
 $router->get('/rankings', 'Ranking', 'index');
 $router->get('/rankings/cooperatives', 'Ranking', 'cooperatives');
 $router->get('/rankings/challenges', 'Ranking', 'challenges');
+
+// Admin
+$router->get('/admin', 'Admin', 'index');
+$router->get('/admin/users', 'Admin', 'users');
+$router->get('/admin/users/{id}', 'Admin', 'editUser');
+$router->post('/admin/users/{id}/update', 'Admin', 'updateUser');
+$router->post('/admin/users/{id}/delete', 'Admin', 'deleteUser');
+$router->get('/admin/farms', 'Admin', 'farms');
+$router->get('/admin/farms/{id}', 'Admin', 'editFarm');
+$router->post('/admin/farms/{id}/update', 'Admin', 'updateFarm');
+$router->get('/admin/cooperatives', 'Admin', 'cooperatives');
+$router->get('/admin/cooperatives/{id}', 'Admin', 'editCooperative');
+$router->post('/admin/cooperatives/{id}/update', 'Admin', 'updateCooperative');
+$router->post('/admin/cooperatives/{id}/delete', 'Admin', 'deleteCooperative');
+$router->post('/admin/cooperatives/remove-member', 'Admin', 'removeMember');
 
 // ==========================================
 // API-Routen

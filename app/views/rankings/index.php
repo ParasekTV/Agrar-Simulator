@@ -119,7 +119,7 @@
                                 <span class="level-badge">Lvl <?= $rank['level'] ?></span>
                             </td>
                             <td><?= number_format($rank['total_points']) ?></td>
-                            <td><?= number_format($rank['total_money'], 0, ',', '.') ?> EUR</td>
+                            <td><?= number_format($rank['total_money'], 0, ',', '.') ?> T</td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

@@ -1,8 +1,9 @@
-# Landwirtschafts-Simulator Browsergame - Entwicklungsfortschritt
+# Agrar Simulator Browsergame - Entwicklungsfortschritt
 
 ## Status: FERTIG - Alle Kernfunktionen implementiert
 
 **Letztes Update:** 31.01.2026
+**Waehrung:** Agrar Taler (T)
 
 ---
 
@@ -10,9 +11,10 @@
 
 ### 1. Datenbankstruktur (100%)
 - [x] `sql/install.sql` - Komplettes Datenbankschema
-  - 13+ Haupttabellen
+  - 13+ Haupttabellen mit is_admin Feld
   - Foreign Keys und Indizes
   - Initiale Daten (Crops, Animals, Vehicles, Research, Buildings, Challenges)
+- [x] `sql/update_admin.sql` - Migration fuer Admin-Funktionalitaet
 
 ### 2. Konfiguration (100%)
 - [x] `config/config.php` - Hauptkonfiguration
@@ -49,12 +51,13 @@
 - [x] `app/controllers/CooperativeController.php`
 - [x] `app/controllers/NewsController.php`
 - [x] `app/controllers/RankingController.php`
+- [x] `app/controllers/AdminController.php` - **NEU: Admin-Panel**
 
 ### 6. Views (100%)
 
 **Layouts:**
 - [x] `app/views/layouts/main.php` - Haupt-Layout
-- [x] `app/views/layouts/navigation.php` - Navigation
+- [x] `app/views/layouts/navigation.php` - Navigation (mit Admin-Link)
 - [x] `app/views/layouts/footer.php` - Footer
 
 **Auth:**
@@ -101,6 +104,15 @@
 - [x] `app/views/rankings/cooperatives.php` - Genossenschafts-Rangliste
 - [x] `app/views/rankings/challenges.php` - Woechentliche Herausforderungen
 
+**Admin-Panel:** (NEU)
+- [x] `app/views/admin/index.php` - Admin Dashboard
+- [x] `app/views/admin/users.php` - Benutzer-Liste
+- [x] `app/views/admin/user_edit.php` - Benutzer bearbeiten
+- [x] `app/views/admin/farms.php` - Hoefe-Liste
+- [x] `app/views/admin/farm_edit.php` - Hof bearbeiten
+- [x] `app/views/admin/cooperatives.php` - Genossenschaften-Liste
+- [x] `app/views/admin/cooperative_edit.php` - Genossenschaft bearbeiten
+
 **Fehlerseiten:**
 - [x] `app/views/errors/404.php` - 404-Fehlerseite
 
@@ -122,37 +134,78 @@
 
 ---
 
-## Verzeichnisstruktur
+## Admin-Panel Funktionen
 
-```
-farming-simulator/
-├── app/
-│   ├── controllers/         [10 Dateien]
-│   ├── core/               [6 Dateien]
-│   ├── models/             [10 Dateien]
-│   └── views/
-│       ├── layouts/        [3 Dateien]
-│       ├── auth/           [2 Dateien]
-│       ├── fields/         [2 Dateien]
-│       ├── animals/        [1 Datei]
-│       ├── vehicles/       [1 Datei]
-│       ├── research/       [1 Datei]
-│       ├── market/         [2 Dateien]
-│       ├── farm/           [3 Dateien]
-│       ├── cooperative/    [2 Dateien]
-│       ├── news/           [4 Dateien]
-│       ├── rankings/       [3 Dateien]
-│       └── errors/         [1 Datei]
-├── config/                 [2 Dateien]
-├── cron/                   [4 Dateien]
-├── logs/                   [leer]
-├── public/
-│   ├── css/                [3 Dateien]
-│   ├── js/                 [3 Dateien]
-│   └── images/             [Verzeichnisse erstellt]
-├── sql/                    [1 Datei]
-└── PROGRESS.md
-```
+Das Admin-Panel ermoeglicht vollstaendige Verwaltung:
+
+### Benutzer-Verwaltung
+- Alle Benutzer anzeigen mit Suche
+- Benutzername, E-Mail, Passwort aendern
+- Aktiv/Inaktiv Status setzen
+- Admin-Rechte vergeben/entziehen
+- Farm-Daten bearbeiten (Geld, Punkte, Level)
+- Benutzer loeschen
+
+### Hoefe-Verwaltung
+- Alle Hoefe mit Statistiken
+- Farm-Name, Geld, Punkte, Level bearbeiten
+- Felder, Tiere, Fahrzeuge einsehen
+
+### Genossenschaften-Verwaltung
+- Alle Genossenschaften verwalten
+- Name, Beschreibung, Kasse, Level bearbeiten
+- Mitglieder-Limit anpassen
+- Mitglieder entfernen
+- Genossenschaft loeschen
+
+---
+
+## Geplante Erweiterungen (Zukunft)
+
+### Phase 1: Erweiterte Feldfruchte
+- [ ] Viele neue Feldfruchte (Mais, Sonnenblumen, Kartoffeln, Rueben, etc.)
+- [ ] Feldfruchte muessen erst erforscht werden
+- [ ] Verschiedene Anbauzeiten und Ertraege
+- [ ] Kalk und Duenger fuer Ertragssteigerung
+
+### Phase 2: Erweiterte Tierhaltung
+- [ ] Viel mehr Tierarten (Gaense, Enten, Ziegen, Pferde, Bienen, etc.)
+- [ ] Tiere muessen erforscht werden
+- [ ] Staelle fuer verschiedene Tierarten (erforschbar)
+- [ ] Weiden fuer Weidetiere (erforschbar)
+- [ ] Tierversorgung: Futter, Wasser, Stroh
+- [ ] Mist- und Guelle-Management
+  - Lagerung in Silos/Gruben
+  - Als Duenger auf Feldern nutzbar
+  - Auf Marktplatz verkaufbar
+
+### Phase 3: Echte Traktor-Marken
+- [ ] Bekannte Hersteller (John Deere, Fendt, Case IH, New Holland, Claas, etc.)
+- [ ] Realistische Traktor-Modelle
+- [ ] Traktoren muessen erforscht werden
+- [ ] Unterschiedliche Leistungswerte und Preise
+- [ ] Anbaugeraete passend zu Traktoren
+
+### Phase 4: Hof-Gebaeude
+- [ ] Erforschbare Gebaeude
+- [ ] Scheunen, Silos, Garagen
+- [ ] Lagerhallen fuer Inventar-Erweiterung
+- [ ] Wohnhaus-Upgrades
+
+### Phase 5: Produktionen
+- [ ] Baeckerei (Mehl -> Brot, Broetchen)
+- [ ] Metzgerei (Fleisch -> Wurst, Schinken)
+- [ ] Saegewerk (Holz -> Bretter, Moebel)
+- [ ] Brauerei (Gerste, Hopfen -> Bier)
+- [ ] Winzerei mit Weinberg (Trauben -> Wein)
+- [ ] Molkerei (Milch -> Kaese, Butter, Joghurt)
+- [ ] Oelmuehle (Sonnenblumen, Raps -> Oel)
+
+### Phase 6: Erweiterte Wirtschaft
+- [ ] Variable Verkaufsstellen (Grosshandel, Bauernmarkt, Export)
+- [ ] Saisonale Preisschwankungen
+- [ ] Vertraege mit Abnehmern
+- [ ] Lieferauftraege
 
 ---
 
@@ -160,68 +213,38 @@ farming-simulator/
 
 ### 1. Datenbank erstellen:
 ```sql
-CREATE DATABASE farming_simulator CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'farm_user'@'localhost' IDENTIFIED BY 'dein_passwort';
-GRANT ALL PRIVILEGES ON farming_simulator.* TO 'farm_user'@'localhost';
+CREATE DATABASE agrar_simulator CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'agrar_user'@'localhost' IDENTIFIED BY 'dein_passwort';
+GRANT ALL PRIVILEGES ON agrar_simulator.* TO 'agrar_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
 ### 2. Schema importieren:
 ```bash
-mysql -u farm_user -p farming_simulator < sql/install.sql
+mysql -u agrar_user -p agrar_simulator < sql/install.sql
 ```
 
-### 3. Konfiguration anpassen:
+### 3. Admin-Benutzer erstellen:
+Nach der Registrierung in der Datenbank:
+```sql
+UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
+```
+
+### 4. Konfiguration anpassen:
 - `config/database.php` - Datenbankzugangsdaten eintragen
 - `config/config.php` - BASE_URL anpassen
 
-### 4. Webserver konfigurieren:
+### 5. Webserver konfigurieren:
 - DocumentRoot auf `public/` setzen
 - mod_rewrite aktivieren (Apache) oder entsprechende Nginx-Konfiguration
 
-### 5. Cron Jobs einrichten:
+### 6. Cron Jobs einrichten:
 ```
-*/5 * * * * php /pfad/zu/farming-simulator/cron/harvest_check.php
-*/5 * * * * php /pfad/zu/farming-simulator/cron/research_check.php
-0 */6 * * * php /pfad/zu/farming-simulator/cron/animal_check.php
-0 * * * * php /pfad/zu/farming-simulator/cron/rankings_update.php
+*/5 * * * * php /pfad/zu/agrar-simulator/cron/harvest_check.php
+*/5 * * * * php /pfad/zu/agrar-simulator/cron/research_check.php
+0 */6 * * * php /pfad/zu/agrar-simulator/cron/animal_check.php
+0 * * * * php /pfad/zu/agrar-simulator/cron/rankings_update.php
 ```
-
----
-
-## Spielfunktionen
-
-### Implementierte Features:
-- **Benutzerverwaltung:** Registrierung, Login, Logout, Taeglicher Login-Bonus
-- **Farm-Management:** Geld, Punkte, Level-System, Inventar
-- **Felder:** Kaufen, Bepflanzen, Ernten, Duengen
-- **Tiere:** Kaufen, Fuettern, Produkte sammeln, Verkaufen
-- **Fahrzeuge:** Kaufen, Reparieren, Nutzen, Verleihen
-- **Forschung:** Forschungsbaum mit Abhaengigkeiten, Boni freischalten
-- **Marktplatz:** Angebote erstellen, Kaufen, NPC-Verkauf, Handelshistorie
-- **Genossenschaften:** Gruenden, Beitreten, Ausruestung teilen, Spenden
-- **Forum:** Beitraege, Kommentare, Likes, Kategorien, Suche
-- **Ranglisten:** Spieler, Genossenschaften, Woechentliche Herausforderungen
-
-### Sicherheitsfeatures:
-- CSRF-Token-Schutz
-- Passwort-Hashing mit bcrypt (cost 12)
-- Prepared Statements gegen SQL-Injection
-- Input-Validierung und -Sanitisierung (XSS-Schutz)
-- Rate Limiting fuer API-Aufrufe
-
----
-
-## Optionale Erweiterungen
-
-Falls gewuenscht, koennen folgende Erweiterungen hinzugefuegt werden:
-
-1. **Grafiken:** Bilder/Icons fuer Crops, Animals, Vehicles, Buildings
-2. **Sound-Effekte:** Audio-Feedback fuer Aktionen
-3. **Weitere Inhalte:** Mehr Forschungen, Herausforderungen, Tiere, Pflanzen
-4. **Chat-System:** Echtzeit-Chat zwischen Spielern
-5. **Mobile App:** PWA oder native App
-6. **Admin-Panel:** Verwaltungsoberflaeche fuer Spieladministratoren
 
 ---
 
@@ -232,6 +255,7 @@ Falls gewuenscht, koennen folgende Erweiterungen hinzugefuegt werden:
 - **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
 - **Sicherheit:** PDO, bcrypt, CSRF-Tokens
 - **Responsive:** Mobile-first Design
+- **Waehrung:** Agrar Taler (T)
 
 ---
 

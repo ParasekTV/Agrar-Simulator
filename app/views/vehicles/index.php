@@ -89,9 +89,9 @@
             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="vehicle-type">Fahrzeug waehlen</label>
+                    <label for="vehicle-type">Fahrzeug wählen</label>
                     <select name="vehicle_id" id="vehicle-type" class="form-select" required>
-                        <option value="">Waehle ein Fahrzeug...</option>
+                        <option value="">Wähle ein Fahrzeug...</option>
                         <?php foreach ($availableVehicles as $vehicle): ?>
                             <option value="<?= $vehicle['id'] ?>">
                                 <?= htmlspecialchars($vehicle['name']) ?> -

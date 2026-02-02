@@ -14,26 +14,26 @@ class Cooperative
     }
 
     /**
-     * Gruendet eine neue Genossenschaft
+     * Gründet eine neue Genossenschaft
      */
     public function create(int $founderFarmId, string $name, string $description = ''): array
     {
-        // Pruefe ob bereits Mitglied einer Genossenschaft
+        // Prüfe ob bereits Mitglied einer Genossenschaft
         if ($this->getMembership($founderFarmId)) {
             return ['success' => false, 'message' => 'Du bist bereits Mitglied einer Genossenschaft'];
         }
 
-        // Pruefe ob Name verfuegbar
+        // Prüfe ob Name verfügbar
         if ($this->db->exists('cooperatives', 'name = ?', [$name])) {
             return ['success' => false, 'message' => 'Name bereits vergeben'];
         }
 
-        // Gruendungskosten
+        // Gründungskosten
         $cost = 5000;
         $farm = new Farm($founderFarmId);
 
-        if (!$farm->subtractMoney($cost, "Genossenschaft gegruendet: {$name}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld (5000 T benoetigt)'];
+        if (!$farm->subtractMoney($cost, "Genossenschaft gegründet: {$name}")) {
+            return ['success' => false, 'message' => 'Nicht genügend Geld (5000 T benötigt)'];
         }
 
         // Erstelle Genossenschaft
@@ -43,14 +43,14 @@ class Cooperative
             'description' => $description
         ]);
 
-        // Fuege Gruender als Mitglied hinzu
+        // Füge Gründer als Mitglied hinzu
         $this->db->insert('cooperative_members', [
             'cooperative_id' => $coopId,
             'farm_id' => $founderFarmId,
             'role' => 'founder'
         ]);
 
-        $farm->addPoints(100, "Genossenschaft gegruendet: {$name}");
+        $farm->addPoints(100, "Genossenschaft gegründet: {$name}");
 
         Logger::info('Cooperative created', [
             'coop_id' => $coopId,
@@ -60,7 +60,7 @@ class Cooperative
 
         return [
             'success' => true,
-            'message' => "Genossenschaft '{$name}' gegruendet!",
+            'message' => "Genossenschaft '{$name}' gegründet!",
             'cooperative_id' => $coopId
         ];
     }
@@ -70,7 +70,7 @@ class Cooperative
      */
     public function join(int $farmId, int $cooperativeId): array
     {
-        // Pruefe ob bereits Mitglied einer Genossenschaft
+        // Prüfe ob bereits Mitglied einer Genossenschaft
         if ($this->getMembership($farmId)) {
             return ['success' => false, 'message' => 'Du bist bereits Mitglied einer Genossenschaft'];
         }
@@ -82,14 +82,14 @@ class Cooperative
             return ['success' => false, 'message' => 'Genossenschaft nicht gefunden'];
         }
 
-        // Pruefe Mitgliederlimit
+        // Prüfe Mitgliederlimit
         $memberCount = $this->db->count('cooperative_members', 'cooperative_id = ?', [$cooperativeId]);
 
         if ($memberCount >= $coop['member_limit']) {
             return ['success' => false, 'message' => 'Genossenschaft ist voll'];
         }
 
-        // Fuege Mitglied hinzu
+        // Füge Mitglied hinzu
         $this->db->insert('cooperative_members', [
             'cooperative_id' => $cooperativeId,
             'farm_id' => $farmId,
@@ -111,7 +111,7 @@ class Cooperative
     }
 
     /**
-     * Verlaesst eine Genossenschaft
+     * Verlässt eine Genossenschaft
      */
     public function leave(int $farmId): array
     {
@@ -121,12 +121,12 @@ class Cooperative
             return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
         }
 
-        // Gruender kann nicht verlassen (muss aufloesen)
+        // Gründer kann nicht verlassen (muss auflösen)
         if ($membership['role'] === 'founder') {
-            return ['success' => false, 'message' => 'Gruender koennen die Genossenschaft nicht verlassen. Loese sie auf oder uebertrage die Gruenderrolle.'];
+            return ['success' => false, 'message' => 'Gründer können die Genossenschaft nicht verlassen. Löse sie auf oder übertrage die Gründerrolle.'];
         }
 
-        // Entferne geteilte Geraete
+        // Entferne geteilte Geräte
         $this->db->delete('cooperative_shared_equipment', 'owner_farm_id = ?', [$farmId]);
 
         // Entferne Mitgliedschaft
@@ -144,19 +144,19 @@ class Cooperative
     }
 
     /**
-     * Loest eine Genossenschaft auf
+     * Löst eine Genossenschaft auf
      */
     public function dissolve(int $farmId): array
     {
         $membership = $this->getMembership($farmId);
 
         if (!$membership || $membership['role'] !== 'founder') {
-            return ['success' => false, 'message' => 'Nur der Gruender kann die Genossenschaft aufloesen'];
+            return ['success' => false, 'message' => 'Nur der Gründer kann die Genossenschaft auflösen'];
         }
 
         $coop = $this->db->fetchOne('SELECT * FROM cooperatives WHERE id = ?', [$membership['cooperative_id']]);
 
-        // Verteile Treasury gleichmaessig
+        // Verteile Treasury gleichmäßig
         if ($coop['treasury'] > 0) {
             $memberCount = $this->db->count('cooperative_members', 'cooperative_id = ?', [$coop['id']]);
             $share = $coop['treasury'] / $memberCount;
@@ -168,11 +168,11 @@ class Cooperative
 
             foreach ($members as $member) {
                 $farm = new Farm($member['farm_id']);
-                $farm->addMoney($share, "Genossenschaft aufgeloest: {$coop['name']}");
+                $farm->addMoney($share, "Genossenschaft aufgelöst: {$coop['name']}");
             }
         }
 
-        // Loesche Genossenschaft (CASCADE loescht Mitglieder und geteilte Geraete)
+        // Lösche Genossenschaft (CASCADE löscht Mitglieder und geteilte Geräte)
         $this->db->delete('cooperatives', 'id = ?', [$coop['id']]);
 
         Logger::info('Cooperative dissolved', [
@@ -182,12 +182,12 @@ class Cooperative
 
         return [
             'success' => true,
-            'message' => "Genossenschaft '{$coop['name']}' aufgeloest"
+            'message' => "Genossenschaft '{$coop['name']}' aufgelöst"
         ];
     }
 
     /**
-     * Gibt die Mitgliedschaft einer Farm zurueck
+     * Gibt die Mitgliedschaft einer Farm zurück
      */
     public function getMembership(int $farmId): ?array
     {
@@ -201,7 +201,7 @@ class Cooperative
     }
 
     /**
-     * Gibt alle Genossenschaften zurueck
+     * Gibt alle Genossenschaften zurück
      */
     public function getAll(): array
     {
@@ -216,7 +216,7 @@ class Cooperative
     }
 
     /**
-     * Gibt Details einer Genossenschaft zurueck
+     * Gibt Details einer Genossenschaft zurück
      */
     public function getDetails(int $cooperativeId): ?array
     {
@@ -242,7 +242,7 @@ class Cooperative
             [$cooperativeId]
         );
 
-        // Hole geteilte Geraete
+        // Hole geteilte Geräte
         $coop['shared_equipment'] = $this->db->fetchAll(
             "SELECT cse.*, v.name as vehicle_name, v.type, f.farm_name as owner_name
              FROM cooperative_shared_equipment cse
@@ -257,7 +257,7 @@ class Cooperative
     }
 
     /**
-     * Teilt ein Geraet mit der Genossenschaft
+     * Teilt ein Gerät mit der Genossenschaft
      */
     public function shareEquipment(int $farmId, int $farmVehicleId, float $feePerHour = 0): array
     {
@@ -267,7 +267,7 @@ class Cooperative
             return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
         }
 
-        // Pruefe ob Fahrzeug existiert
+        // Prüfe ob Fahrzeug existiert
         $vehicle = $this->db->fetchOne(
             "SELECT fv.*, v.name
              FROM farm_vehicles fv
@@ -280,12 +280,12 @@ class Cooperative
             return ['success' => false, 'message' => 'Fahrzeug nicht gefunden'];
         }
 
-        // Pruefe ob bereits geteilt
+        // Prüfe ob bereits geteilt
         if ($this->db->exists('cooperative_shared_equipment', 'farm_vehicle_id = ?', [$farmVehicleId])) {
             return ['success' => false, 'message' => 'Fahrzeug bereits geteilt'];
         }
 
-        // Fuege zu geteilten Geraeten hinzu
+        // Füge zu geteilten Geräten hinzu
         $this->db->insert('cooperative_shared_equipment', [
             'cooperative_id' => $membership['cooperative_id'],
             'farm_vehicle_id' => $farmVehicleId,
@@ -306,7 +306,7 @@ class Cooperative
     }
 
     /**
-     * Nimmt ein Geraet aus der Teilung
+     * Nimmt ein Gerät aus der Teilung
      */
     public function unshareEquipment(int $farmId, int $sharedEquipmentId): array
     {
@@ -316,23 +316,23 @@ class Cooperative
         );
 
         if (!$equipment) {
-            return ['success' => false, 'message' => 'Geteiltes Geraet nicht gefunden'];
+            return ['success' => false, 'message' => 'Geteiltes Gerät nicht gefunden'];
         }
 
         if (!$equipment['available']) {
-            return ['success' => false, 'message' => 'Geraet ist aktuell verliehen'];
+            return ['success' => false, 'message' => 'Gerät ist aktuell verliehen'];
         }
 
         $this->db->delete('cooperative_shared_equipment', 'id = ?', [$sharedEquipmentId]);
 
         return [
             'success' => true,
-            'message' => 'Geraet nicht mehr geteilt'
+            'message' => 'Gerät nicht mehr geteilt'
         ];
     }
 
     /**
-     * Leiht ein Geraet aus
+     * Leiht ein Gerät aus
      */
     public function borrowEquipment(int $farmId, int $sharedEquipmentId): array
     {
@@ -352,15 +352,15 @@ class Cooperative
         );
 
         if (!$equipment) {
-            return ['success' => false, 'message' => 'Geraet nicht verfuegbar'];
+            return ['success' => false, 'message' => 'Gerät nicht verfügbar'];
         }
 
         if ($equipment['owner_farm_id'] === $farmId) {
-            return ['success' => false, 'message' => 'Du kannst dein eigenes Geraet nicht ausleihen'];
+            return ['success' => false, 'message' => 'Du kannst dein eigenes Gerät nicht ausleihen'];
         }
 
-        // Markiere als nicht verfuegbar
-        $this->db->update('cooperative_shared_equipment', ['available' => false], 'id = :id', ['id' => $sharedEquipmentId]);
+        // Markiere als nicht verfügbar
+        $this->db->update('cooperative_shared_equipment', ['available' => 0], 'id = :id', ['id' => $sharedEquipmentId]);
 
         // Erstelle Ausleih-Log
         $this->db->insert('equipment_lending_log', [
@@ -380,7 +380,7 @@ class Cooperative
     }
 
     /**
-     * Gibt ein ausgeliehenes Geraet zurueck
+     * Gibt ein ausgeliehenes Gerät zurück
      */
     public function returnEquipment(int $farmId, int $sharedEquipmentId, float $hoursUsed): array
     {
@@ -397,18 +397,18 @@ class Cooperative
             return ['success' => false, 'message' => 'Keine aktive Ausleihe gefunden'];
         }
 
-        // Berechne Gebuehr
+        // Berechne Gebühr
         $fee = $lending['lending_fee_per_hour'] * $hoursUsed;
 
         if ($fee > 0) {
             $borrowerFarm = new Farm($farmId);
-            if (!$borrowerFarm->subtractMoney($fee, 'Ausleihgebuehr')) {
-                return ['success' => false, 'message' => 'Nicht genuegend Geld fuer Ausleihgebuehr'];
+            if (!$borrowerFarm->subtractMoney($fee, 'Ausleihgebühr')) {
+                return ['success' => false, 'message' => 'Nicht genügend Geld für Ausleihgebühr'];
             }
 
-            // Zahle an Eigentuemer
+            // Zahle an Eigentümer
             $ownerFarm = new Farm($lending['owner_farm_id']);
-            $ownerFarm->addMoney($fee, 'Ausleihgebuehr erhalten');
+            $ownerFarm->addMoney($fee, 'Ausleihgebühr erhalten');
         }
 
         // Aktualisiere Log
@@ -418,8 +418,8 @@ class Cooperative
             'fee_paid' => $fee
         ], 'id = :id', ['id' => $lending['id']]);
 
-        // Markiere als verfuegbar
-        $this->db->update('cooperative_shared_equipment', ['available' => true], 'id = :id', ['id' => $sharedEquipmentId]);
+        // Markiere als verfügbar
+        $this->db->update('cooperative_shared_equipment', ['available' => 1], 'id = :id', ['id' => $sharedEquipmentId]);
 
         Logger::info('Equipment returned', [
             'farm_id' => $farmId,
@@ -430,7 +430,7 @@ class Cooperative
 
         return [
             'success' => true,
-            'message' => "Geraet zurueckgegeben. Gebuehr: {$fee} T"
+            'message' => "Gerät zurückgegeben. Gebühr: {$fee} T"
         ];
     }
 
@@ -448,23 +448,23 @@ class Cooperative
         $farm = new Farm($farmId);
 
         if (!$farm->subtractMoney($amount, "Spende an Genossenschaft")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld'];
         }
 
-        // Erhoehe Treasury
+        // Erhöhe Treasury
         $this->db->query(
             'UPDATE cooperatives SET treasury = treasury + ? WHERE id = ?',
             [$amount, $membership['cooperative_id']]
         );
 
-        // Erhoehe Beitragspunkte
+        // Erhöhe Beitragspunkte
         $contributionPoints = (int) ($amount / 10);
         $this->db->query(
             'UPDATE cooperative_members SET contribution_points = contribution_points + ? WHERE farm_id = ?',
             [$contributionPoints, $farmId]
         );
 
-        // Erhoehe Genossenschaftspunkte
+        // Erhöhe Genossenschaftspunkte
         $this->db->query(
             'UPDATE cooperatives SET total_points = total_points + ? WHERE id = ?',
             [$contributionPoints, $membership['cooperative_id']]
@@ -479,7 +479,7 @@ class Cooperative
     }
 
     /**
-     * Befoerdert ein Mitglied zum Admin
+     * Befördert ein Mitglied zum Admin
      */
     public function promoteToAdmin(int $promoterFarmId, int $targetFarmId): array
     {
@@ -499,14 +499,14 @@ class Cooperative
         }
 
         if ($targetMembership['role'] !== 'member') {
-            return ['success' => false, 'message' => 'Kann nur normale Mitglieder befoerdern'];
+            return ['success' => false, 'message' => 'Kann nur normale Mitglieder befördern'];
         }
 
         $this->db->update('cooperative_members', ['role' => 'admin'], 'id = :id', ['id' => $targetMembership['id']]);
 
         return [
             'success' => true,
-            'message' => 'Mitglied zum Admin befoerdert'
+            'message' => 'Mitglied zum Admin befördert'
         ];
     }
 }

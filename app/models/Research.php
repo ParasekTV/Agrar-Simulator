@@ -25,7 +25,7 @@ class Research
             return ['success' => false, 'message' => 'Forschung nicht gefunden'];
         }
 
-        // Pruefe ob bereits erforscht
+        // Prüfe ob bereits erforscht
         $existing = $this->db->fetchOne(
             'SELECT * FROM farm_research WHERE farm_id = ? AND research_id = ?',
             [$farmId, $researchId]
@@ -36,21 +36,21 @@ class Research
                 return ['success' => false, 'message' => 'Bereits erforscht'];
             }
             if ($existing['status'] === 'in_progress') {
-                return ['success' => false, 'message' => 'Forschung laeuft bereits'];
+                return ['success' => false, 'message' => 'Forschung läuft bereits'];
             }
         }
 
-        // Pruefe ob bereits eine Forschung laeuft
+        // Prüfe ob bereits eine Forschung läuft
         $activeResearch = $this->db->fetchOne(
             'SELECT * FROM farm_research WHERE farm_id = ? AND status = ?',
             [$farmId, 'in_progress']
         );
 
         if ($activeResearch) {
-            return ['success' => false, 'message' => 'Es laeuft bereits eine Forschung'];
+            return ['success' => false, 'message' => 'Es läuft bereits eine Forschung'];
         }
 
-        // Pruefe Voraussetzung
+        // Prüfe Voraussetzung
         if ($research['prerequisite_id']) {
             $prerequisite = $this->db->fetchOne(
                 'SELECT * FROM farm_research WHERE farm_id = ? AND research_id = ? AND status = ?',
@@ -58,11 +58,11 @@ class Research
             );
 
             if (!$prerequisite) {
-                return ['success' => false, 'message' => 'Voraussetzung nicht erfuellt'];
+                return ['success' => false, 'message' => 'Voraussetzung nicht erfüllt'];
             }
         }
 
-        // Pruefe Level-Anforderung
+        // Prüfe Level-Anforderung
         $farm = new Farm($farmId);
         $farmData = $farm->getData();
 
@@ -70,10 +70,10 @@ class Research
             return ['success' => false, 'message' => "Level {$research['level_required']} erforderlich"];
         }
 
-        // Pruefe und ziehe Kosten ab
+        // Prüfe und ziehe Kosten ab
         if ($research['cost'] > 0) {
             if (!$farm->subtractMoney($research['cost'], "Forschung: {$research['name']}")) {
-                return ['success' => false, 'message' => 'Nicht genuegend Geld'];
+                return ['success' => false, 'message' => 'Nicht genügend Geld'];
             }
         }
 
@@ -99,7 +99,7 @@ class Research
     }
 
     /**
-     * Gibt den Forschungsbaum zurueck
+     * Gibt den Forschungsbaum zurück
      */
     public function getTree(int $farmId): array
     {
@@ -118,7 +118,7 @@ class Research
             $farmResearchLookup[$fr['research_id']] = $fr;
         }
 
-        // Fuege Status hinzu
+        // Füge Status hinzu
         foreach ($allResearch as &$research) {
             $farmData = $farmResearchLookup[$research['id']] ?? null;
 
@@ -132,7 +132,7 @@ class Research
                 $research['completed_at'] = null;
             }
 
-            // Pruefe ob freischaltbar
+            // Prüfe ob freischaltbar
             $research['unlockable'] = $this->isUnlockable($research, $farmResearchLookup, $farmId);
         }
 
@@ -146,7 +146,7 @@ class Research
     }
 
     /**
-     * Prueft ob eine Forschung freischaltbar ist
+     * Prüft ob eine Forschung freischaltbar ist
      */
     private function isUnlockable(array $research, array $farmResearchLookup, int $farmId): bool
     {
@@ -155,7 +155,7 @@ class Research
             return false;
         }
 
-        // Pruefe Voraussetzung
+        // Prüfe Voraussetzung
         if ($research['prerequisite_id']) {
             $prereq = $farmResearchLookup[$research['prerequisite_id']] ?? null;
             if (!$prereq || $prereq['status'] !== 'completed') {
@@ -163,7 +163,7 @@ class Research
             }
         }
 
-        // Pruefe Level
+        // Prüfe Level
         $farm = new Farm($farmId);
         $farmData = $farm->getData();
 
@@ -175,7 +175,7 @@ class Research
     }
 
     /**
-     * Gibt aktive Forschung zurueck
+     * Gibt aktive Forschung zurück
      */
     public function getActive(int $farmId): ?array
     {
@@ -189,7 +189,7 @@ class Research
     }
 
     /**
-     * Schliesst Forschung ab (fuer Cron)
+     * Schließt Forschung ab (für Cron)
      */
     public static function completeResearch(): int
     {
@@ -262,7 +262,7 @@ class Research
     }
 
     /**
-     * Gibt abgeschlossene Forschungen zurueck
+     * Gibt abgeschlossene Forschungen zurück
      */
     public function getCompleted(int $farmId): array
     {
@@ -277,7 +277,7 @@ class Research
     }
 
     /**
-     * Gibt verbleibende Zeit fuer aktive Forschung zurueck
+     * Gibt verbleibende Zeit für aktive Forschung zurück
      */
     public function getRemainingTime(int $farmId): ?array
     {

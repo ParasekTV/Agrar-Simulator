@@ -217,7 +217,7 @@ class MarketController extends Controller
     }
 
     /**
-     * API: Gibt Marktangebote zurueck
+     * API: Gibt Marktangebote zurück
      */
     public function listingsApi(): array
     {

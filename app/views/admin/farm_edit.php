@@ -1,6 +1,6 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin/farms" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/admin/farms" class="btn btn-outline">&larr; Zurück</a>
         <h1><?= htmlspecialchars($farm['farm_name']) ?></h1>
     </div>
 
@@ -89,9 +89,9 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Groesse</th>
+                            <th>Größe</th>
                             <th>Status</th>
-                            <th>Bodenqualitaet</th>
+                            <th>Bodenqualität</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -1,6 +1,6 @@
 <div class="cooperative-detail-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/cooperative" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/cooperative" class="btn btn-outline">&larr; Zurück</a>
         <h1><?= htmlspecialchars($cooperative['name']) ?></h1>
     </div>
 
@@ -36,7 +36,7 @@
                 </div>
                 <div class="coop-stat">
                     <span class="stat-value"><?= date('d.m.Y', strtotime($cooperative['created_at'])) ?></span>
-                    <span class="stat-label">Gegruendet</span>
+                    <span class="stat-label">Gegründet</span>
                 </div>
             </div>
 
@@ -46,9 +46,9 @@
                     <div class="action-buttons">
                         <button class="btn btn-outline" onclick="openEditModal()">Beschreibung bearbeiten</button>
                         <form action="<?= BASE_URL ?>/cooperative/dissolve" method="POST" class="inline-form"
-                              onsubmit="return confirm('Genossenschaft wirklich aufloesen? Dies kann nicht rueckgaengig gemacht werden!')">
+                              onsubmit="return confirm('Genossenschaft wirklich auflösen? Dies kann nicht rückgängig gemacht werden!')">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                            <button type="submit" class="btn btn-danger">Genossenschaft aufloesen</button>
+                            <button type="submit" class="btn btn-danger">Genossenschaft auflösen</button>
                         </form>
                     </div>
                 </div>
@@ -109,15 +109,15 @@
         </div>
     </div>
 
-    <!-- Geteilte Ausruestung -->
+    <!-- Geteilte Ausrüstung -->
     <div class="card mt-4">
         <div class="card-header">
-            <h3>Geteilte Ausruestung</h3>
+            <h3>Geteilte Ausrüstung</h3>
         </div>
         <div class="card-body">
             <?php if (empty($sharedEquipment)): ?>
                 <div class="empty-state">
-                    <p class="text-muted">Keine geteilte Ausruestung verfuegbar.</p>
+                    <p class="text-muted">Keine geteilte Ausrüstung verfügbar.</p>
                 </div>
             <?php else: ?>
                 <div class="equipment-grid">
@@ -137,7 +137,7 @@
                                         <form action="<?= BASE_URL ?>/cooperative/return-equipment" method="POST">
                                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                                             <input type="hidden" name="vehicle_id" value="<?= $equipment['vehicle_id'] ?>">
-                                            <button type="submit" class="btn btn-sm btn-primary">Zurueckgeben</button>
+                                            <button type="submit" class="btn btn-sm btn-primary">Zurückgeben</button>
                                         </form>
                                     <?php else: ?>
                                         <span class="status-badge borrowed">Ausgeliehen</span>

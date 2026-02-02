@@ -1,6 +1,6 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurück</a>
         <h1>Benutzer verwalten</h1>
     </div>
 
@@ -14,7 +14,7 @@
                            value="<?= htmlspecialchars($search) ?>">
                     <button type="submit" class="btn btn-primary">Suchen</button>
                     <?php if ($search): ?>
-                        <a href="<?= BASE_URL ?>/admin/users" class="btn btn-outline">Zuruecksetzen</a>
+                        <a href="<?= BASE_URL ?>/admin/users" class="btn btn-outline">Zurücksetzen</a>
                     <?php endif; ?>
                 </div>
             </form>

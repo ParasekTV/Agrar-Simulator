@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1>Agrargenossenschaften</h1>
         <?php if (!$membership): ?>
-            <button class="btn btn-primary" onclick="showCreateCoopModal()">Genossenschaft gruenden</button>
+            <button class="btn btn-primary" onclick="showCreateCoopModal()">Genossenschaft gründen</button>
         <?php endif; ?>
     </div>
 
@@ -67,10 +67,10 @@
                     </tbody>
                 </table>
 
-                <!-- Geteilte Geraete -->
-                <h4 class="mt-4">Geteilte Geraete</h4>
+                <!-- Geteilte Geräte -->
+                <h4 class="mt-4">Geteilte Geräte</h4>
                 <?php if (empty($coopDetails['shared_equipment'])): ?>
-                    <p class="text-muted">Keine geteilten Geraete.</p>
+                    <p class="text-muted">Keine geteilten Geräte.</p>
                 <?php else: ?>
                     <div class="shared-equipment">
                         <?php foreach ($coopDetails['shared_equipment'] as $equipment): ?>
@@ -78,7 +78,7 @@
                                 <span class="equipment-name"><?= htmlspecialchars($equipment['vehicle_name']) ?></span>
                                 <span class="equipment-owner">von <?= htmlspecialchars($equipment['owner_name']) ?></span>
                                 <span class="equipment-status <?= $equipment['available'] ? 'available' : 'in-use' ?>">
-                                    <?= $equipment['available'] ? 'Verfuegbar' : 'Verliehen' ?>
+                                    <?= $equipment['available'] ? 'Verfügbar' : 'Verliehen' ?>
                                 </span>
                                 <?php if ($equipment['available'] && $equipment['owner_farm_id'] !== Session::getFarmId()): ?>
                                     <form action="<?= BASE_URL ?>/cooperative/borrow-equipment" method="POST" class="inline-form">
@@ -100,7 +100,7 @@
                 <div class="empty-state">
                     <span class="empty-icon">&#127968;</span>
                     <h3>Keine Genossenschaften vorhanden</h3>
-                    <p>Sei der Erste und gruende eine!</p>
+                    <p>Sei der Erste und gründe eine!</p>
                 </div>
             <?php else: ?>
                 <?php foreach ($cooperatives as $coop): ?>
@@ -129,12 +129,12 @@
     <?php endif; ?>
 </div>
 
-<!-- Modal: Genossenschaft gruenden -->
+<!-- Modal: Genossenschaft gründen -->
 <div class="modal" id="create-coop-modal">
     <div class="modal-backdrop" onclick="closeCreateCoopModal()"></div>
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Genossenschaft gruenden</h3>
+            <h3>Genossenschaft gründen</h3>
             <button class="modal-close" onclick="closeCreateCoopModal()">&times;</button>
         </div>
         <form action="<?= BASE_URL ?>/cooperative/create" method="POST">
@@ -148,11 +148,11 @@
                     <label for="coop-description">Beschreibung</label>
                     <textarea name="description" id="coop-description" class="form-input" rows="3"></textarea>
                 </div>
-                <p class="form-help">Gruendungskosten: 5.000 T</p>
+                <p class="form-help">Gründungskosten: 5.000 T</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeCreateCoopModal()">Abbrechen</button>
-                <button type="submit" class="btn btn-primary">Gruenden</button>
+                <button type="submit" class="btn btn-primary">Gründen</button>
             </div>
         </form>
     </div>
@@ -173,7 +173,7 @@
                     <label for="donate-amount">Betrag (T)</label>
                     <input type="number" name="amount" id="donate-amount" class="form-input" min="100" step="100" required>
                 </div>
-                <p class="form-help">Du erhaeltst 1 Beitragspunkt pro 10 T.</p>
+                <p class="form-help">Du erhältst 1 Beitragspunkt pro 10 T.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeDonateModal()">Abbrechen</button>

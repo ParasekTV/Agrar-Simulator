@@ -1,0 +1,20 @@
+RewriteEngine On
+RewriteBase /
+
+# Verhindere Zugriff auf sensible Verzeichnisse
+RewriteRule ^(\.\./)*(config|app|cron|sql|logs)/.*$ - [F,L]
+
+# Verhindere Zugriff auf .git
+RewriteRule ^\.git - [F,L]
+
+# Verhindere Zugriff auf .env und andere dotfiles
+RewriteRule ^\.(?!well-known) - [F,L]
+
+# Statische Dateien direkt ausliefern
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Leite alle anderen Anfragen zu index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

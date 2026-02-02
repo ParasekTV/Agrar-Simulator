@@ -24,14 +24,14 @@ class Market
         int $quantity,
         float $pricePerUnit
     ): array {
-        // Pruefe Inventar
+        // Prüfe Inventar
         $inventory = $this->db->fetchOne(
             'SELECT * FROM inventory WHERE farm_id = ? AND item_type = ? AND item_id = ?',
             [$farmId, $itemType, $itemId]
         );
 
         if (!$inventory || $inventory['quantity'] < $quantity) {
-            return ['success' => false, 'message' => 'Nicht genuegend im Inventar'];
+            return ['success' => false, 'message' => 'Nicht genügend im Inventar'];
         }
 
         // Ziehe vom Inventar ab
@@ -39,7 +39,7 @@ class Market
             'quantity' => $inventory['quantity'] - $quantity
         ], 'id = :id', ['id' => $inventory['id']]);
 
-        // Erstelle Angebot (7 Tage gueltig)
+        // Erstelle Angebot (7 Tage gültig)
         $expiresAt = date('Y-m-d H:i:s', strtotime('+7 days'));
 
         $listingId = $this->db->insert('market_listings', [
@@ -77,33 +77,33 @@ class Market
         );
 
         if (!$listing) {
-            return ['success' => false, 'message' => 'Angebot nicht gefunden oder nicht mehr verfuegbar'];
+            return ['success' => false, 'message' => 'Angebot nicht gefunden oder nicht mehr verfügbar'];
         }
 
-        // Pruefe ob Kaeufer nicht Verkaeufer ist
+        // Prüfe ob Käufer nicht Verkäufer ist
         if ($listing['seller_farm_id'] === $buyerFarmId) {
             return ['success' => false, 'message' => 'Du kannst nicht von dir selbst kaufen'];
         }
 
-        // Pruefe Menge
+        // Prüfe Menge
         if ($listing['quantity'] < $quantity) {
-            return ['success' => false, 'message' => 'Nicht genuegend verfuegbar'];
+            return ['success' => false, 'message' => 'Nicht genügend verfügbar'];
         }
 
         // Berechne Gesamtpreis
         $totalPrice = $listing['price_per_unit'] * $quantity;
 
-        // Pruefe und ziehe Geld ab
+        // Prüfe und ziehe Geld ab
         $buyerFarm = new Farm($buyerFarmId);
         if (!$buyerFarm->subtractMoney($totalPrice, "Marktkauf: {$listing['item_name']}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld'];
         }
 
-        // Fuege Geld zum Verkaeufer hinzu
+        // Füge Geld zum Verkäufer hinzu
         $sellerFarm = new Farm($listing['seller_farm_id']);
         $sellerFarm->addMoney($totalPrice, "Marktverkauf: {$listing['item_name']}");
 
-        // Fuege Items zum Kaeufer-Inventar hinzu
+        // Füge Items zum Käufer-Inventar hinzu
         $this->addToInventory(
             $buyerFarmId,
             $listing['item_type'],
@@ -136,7 +136,7 @@ class Market
             [$totalPrice, $listing['seller_farm_id']]
         );
 
-        // Punkte fuer Verkaeufer
+        // Punkte für Verkäufer
         $salesPoints = (int) floor($totalPrice / 100) * POINTS_SALE_PER_100;
         if ($salesPoints > 0) {
             $sellerFarm->addPoints($salesPoints, 'Marktverkauf');
@@ -152,7 +152,7 @@ class Market
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$listing['item_name']} fuer {$totalPrice} T gekauft!",
+            'message' => "{$quantity}x {$listing['item_name']} für {$totalPrice} T gekauft!",
             'total_price' => $totalPrice
         ];
     }
@@ -171,7 +171,7 @@ class Market
             return ['success' => false, 'message' => 'Angebot nicht gefunden'];
         }
 
-        // Fuege Items zurueck zum Inventar
+        // Füge Items zurück zum Inventar
         $this->addToInventory(
             $farmId,
             $listing['item_type'],
@@ -190,12 +190,12 @@ class Market
 
         return [
             'success' => true,
-            'message' => 'Angebot storniert. Waren zurueck im Inventar.'
+            'message' => 'Angebot storniert. Waren zurück im Inventar.'
         ];
     }
 
     /**
-     * Fuegt Items zum Inventar hinzu
+     * Fügt Items zum Inventar hinzu
      */
     private function addToInventory(int $farmId, string $itemType, int $itemId, string $itemName, int $quantity): void
     {
@@ -220,7 +220,7 @@ class Market
     }
 
     /**
-     * Gibt aktive Marktangebote zurueck
+     * Gibt aktive Marktangebote zurück
      */
     public function getListings(
         ?string $itemType = null,
@@ -268,7 +268,7 @@ class Market
     }
 
     /**
-     * Gibt eigene Angebote zurueck
+     * Gibt eigene Angebote zurück
      */
     public function getMyListings(int $farmId): array
     {
@@ -281,7 +281,7 @@ class Market
     }
 
     /**
-     * Gibt Kaufhistorie zurueck
+     * Gibt Kaufhistorie zurück
      */
     public function getPurchaseHistory(int $farmId, int $limit = 20): array
     {
@@ -298,7 +298,7 @@ class Market
     }
 
     /**
-     * Gibt Verkaufshistorie zurueck
+     * Gibt Verkaufshistorie zurück
      */
     public function getSalesHistory(int $farmId, int $limit = 20): array
     {
@@ -326,7 +326,7 @@ class Market
         );
 
         if (!$inventory || $inventory['quantity'] < $quantity) {
-            return ['success' => false, 'message' => 'Nicht genuegend im Inventar'];
+            return ['success' => false, 'message' => 'Nicht genügend im Inventar'];
         }
 
         // Hole Basispreis
@@ -350,7 +350,7 @@ class Market
             'quantity' => $inventory['quantity'] - $quantity
         ], 'id = :id', ['id' => $inventory['id']]);
 
-        // Fuege Geld hinzu
+        // Füge Geld hinzu
         $farm = new Farm($farmId);
         $farm->addMoney($totalPrice, "Direktverkauf: {$inventory['item_name']}");
 
@@ -369,13 +369,13 @@ class Market
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$inventory['item_name']} fuer {$totalPrice} T verkauft!",
+            'message' => "{$quantity}x {$inventory['item_name']} für {$totalPrice} T verkauft!",
             'total_price' => $totalPrice
         ];
     }
 
     /**
-     * Bereinigt abgelaufene Angebote (fuer Cron)
+     * Bereinigt abgelaufene Angebote (für Cron)
      */
     public static function cleanupExpired(): int
     {
@@ -389,7 +389,7 @@ class Market
 
         $count = 0;
         foreach ($expired as $listing) {
-            // Fuege Items zurueck zum Inventar
+            // Füge Items zurück zum Inventar
             $existing = $db->fetchOne(
                 'SELECT * FROM inventory WHERE farm_id = ? AND item_type = ? AND item_id = ?',
                 [$listing['seller_farm_id'], $listing['item_type'], $listing['item_id']]

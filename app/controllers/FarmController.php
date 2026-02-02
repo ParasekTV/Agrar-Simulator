@@ -33,7 +33,7 @@ class FarmController extends Controller
     }
 
     /**
-     * Zeigt die Farm-Uebersicht
+     * Zeigt die Farm-Übersicht
      */
     public function overview(): void
     {
@@ -110,7 +110,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Farm-Statistiken zurueck
+     * API: Gibt Farm-Statistiken zurück
      */
     public function statsApi(): array
     {
@@ -125,7 +125,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Farm-Daten zurueck
+     * API: Gibt Farm-Daten zurück
      */
     public function dataApi(): array
     {
@@ -143,7 +143,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Felder zurueck
+     * API: Gibt Felder zurück
      */
     public function fieldsApi(): array
     {
@@ -158,7 +158,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Tiere zurueck
+     * API: Gibt Tiere zurück
      */
     public function animalsApi(): array
     {
@@ -173,7 +173,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Fahrzeuge zurueck
+     * API: Gibt Fahrzeuge zurück
      */
     public function vehiclesApi(): array
     {
@@ -188,7 +188,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Inventar zurueck
+     * API: Gibt Inventar zurück
      */
     public function inventoryApi(): array
     {
@@ -207,7 +207,7 @@ class FarmController extends Controller
     }
 
     /**
-     * API: Gibt Events zurueck
+     * API: Gibt Events zurück
      */
     public function eventsApi(): array
     {

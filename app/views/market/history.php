@@ -1,20 +1,20 @@
 <div class="market-history-page">
     <div class="page-header">
         <h1>Handelshistorie</h1>
-        <a href="<?= BASE_URL ?>/market" class="btn btn-outline">Zurueck zum Marktplatz</a>
+        <a href="<?= BASE_URL ?>/market" class="btn btn-outline">Zurück zum Marktplatz</a>
     </div>
 
     <div class="history-tabs">
-        <button class="tab active" onclick="showTab('purchases')">Einkaeufe</button>
-        <button class="tab" onclick="showTab('sales')">Verkaeufe</button>
+        <button class="tab active" onclick="showTab('purchases')">Einkäufe</button>
+        <button class="tab" onclick="showTab('sales')">Verkäufe</button>
     </div>
 
-    <!-- Einkaeufe -->
+    <!-- Einkäufe -->
     <div class="history-section" id="purchases-section">
-        <h3>Meine Einkaeufe</h3>
+        <h3>Meine Einkäufe</h3>
         <?php if (empty($purchases)): ?>
             <div class="empty-state">
-                <p class="text-muted">Noch keine Einkaeufe getaetigt.</p>
+                <p class="text-muted">Noch keine Einkäufe getätigt.</p>
             </div>
         <?php else: ?>
             <table class="table">
@@ -22,7 +22,7 @@
                     <tr>
                         <th>Datum</th>
                         <th>Artikel</th>
-                        <th>Verkaeufer</th>
+                        <th>Verkäufer</th>
                         <th>Menge</th>
                         <th>Gesamtpreis</th>
                     </tr>
@@ -46,12 +46,12 @@
         <?php endif; ?>
     </div>
 
-    <!-- Verkaeufe -->
+    <!-- Verkäufe -->
     <div class="history-section" id="sales-section" style="display: none;">
-        <h3>Meine Verkaeufe</h3>
+        <h3>Meine Verkäufe</h3>
         <?php if (empty($sales)): ?>
             <div class="empty-state">
-                <p class="text-muted">Noch keine Verkaeufe getaetigt.</p>
+                <p class="text-muted">Noch keine Verkäufe getätigt.</p>
             </div>
         <?php else: ?>
             <table class="table">
@@ -59,7 +59,7 @@
                     <tr>
                         <th>Datum</th>
                         <th>Artikel</th>
-                        <th>Kaeufer</th>
+                        <th>Käufer</th>
                         <th>Menge</th>
                         <th>Einnahmen</th>
                     </tr>

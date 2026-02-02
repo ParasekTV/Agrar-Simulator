@@ -1,6 +1,6 @@
 <div class="field-detail-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/fields" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/fields" class="btn btn-outline">&larr; Zurück</a>
         <h1>Feld #<?= $field['id'] ?></h1>
     </div>
 
@@ -26,11 +26,11 @@
 
         <div class="field-stats">
             <div class="stat-row">
-                <span class="stat-label">Groesse</span>
+                <span class="stat-label">Größe</span>
                 <span class="stat-value"><?= $field['size_hectares'] ?> Hektar</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">Bodenqualitaet</span>
+                <span class="stat-label">Bodenqualität</span>
                 <div class="stat-bar">
                     <div class="progress-bar">
                         <div class="progress-bar-fill <?= $field['soil_quality'] < 60 ? 'bg-warning' : '' ?>"
@@ -79,9 +79,9 @@
                     <input type="hidden" name="field_id" value="<?= $field['id'] ?>">
 
                     <div class="form-group">
-                        <label for="crop">Pflanze auswaehlen</label>
+                        <label for="crop">Pflanze auswählen</label>
                         <select name="crop_id" id="crop" class="form-select" required>
-                            <option value="">Waehle eine Frucht...</option>
+                            <option value="">Wähle eine Frucht...</option>
                             <?php foreach ($availableCrops as $crop): ?>
                                 <option value="<?= $crop['id'] ?>">
                                     <?= htmlspecialchars($crop['name']) ?>
@@ -100,7 +100,7 @@
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                         <input type="hidden" name="field_id" value="<?= $field['id'] ?>">
                         <button type="submit" class="btn btn-outline btn-block">
-                            Boden duengen (+20% Qualitaet)
+                            Boden düngen (+20% Qualität)
                         </button>
                     </form>
                 <?php endif; ?>

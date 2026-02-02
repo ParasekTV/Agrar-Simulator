@@ -14,7 +14,7 @@ class Ranking
     }
 
     /**
-     * Gibt die globale Rangliste zurueck
+     * Gibt die globale Rangliste zurück
      */
     public function getGlobalRanking(int $page = 1, int $perPage = 50): array
     {
@@ -29,7 +29,7 @@ class Ranking
              LIMIT {$perPage} OFFSET {$offset}"
         );
 
-        // Fuege Rang hinzu
+        // Füge Rang hinzu
         foreach ($rankings as $index => &$rank) {
             $rank['position'] = $offset + $index + 1;
         }
@@ -46,7 +46,7 @@ class Ranking
     }
 
     /**
-     * Gibt die Genossenschafts-Rangliste zurueck
+     * Gibt die Genossenschafts-Rangliste zurück
      */
     public function getCooperativeRanking(int $limit = 50): array
     {
@@ -62,7 +62,7 @@ class Ranking
     }
 
     /**
-     * Gibt den Rang einer Farm zurueck
+     * Gibt den Rang einer Farm zurück
      */
     public function getFarmRank(int $farmId): array
     {
@@ -112,7 +112,7 @@ class Ranking
     }
 
     /**
-     * Gibt die Top-Farmen nach verschiedenen Kriterien zurueck
+     * Gibt die Top-Farmen nach verschiedenen Kriterien zurück
      */
     public function getTopBy(string $criteria, int $limit = 10): array
     {
@@ -134,7 +134,7 @@ class Ranking
     }
 
     /**
-     * Gibt aktive woechentliche Herausforderungen zurueck
+     * Gibt aktive wöchentliche Herausforderungen zurück
      */
     public function getActiveChallenges(): array
     {
@@ -148,7 +148,7 @@ class Ranking
     }
 
     /**
-     * Gibt den Fortschritt bei Herausforderungen zurueck
+     * Gibt den Fortschritt bei Herausforderungen zurück
      */
     public function getChallengeProgress(int $farmId): array
     {
@@ -201,7 +201,7 @@ class Ranking
                     // Herausforderung abgeschlossen
                     $this->db->update('challenge_progress', [
                         'current_value' => $newValue,
-                        'completed' => true,
+                        'completed' => 1,
                         'completed_at' => date('Y-m-d H:i:s')
                     ], 'id = :id', ['id' => $progress['id']]);
 
@@ -224,7 +224,7 @@ class Ranking
                     'challenge_id' => $challenge['id'],
                     'farm_id' => $farmId,
                     'current_value' => $value,
-                    'completed' => $value >= $challenge['target_value']
+                    'completed' => ($value >= $challenge['target_value']) ? 1 : 0
                 ]);
 
                 if ($value >= $challenge['target_value']) {
@@ -236,7 +236,7 @@ class Ranking
     }
 
     /**
-     * Gibt die Bestenliste einer Herausforderung zurueck
+     * Gibt die Bestenliste einer Herausforderung zurück
      */
     public function getChallengeLeaderboard(int $challengeId, int $limit = 20): array
     {
@@ -252,7 +252,7 @@ class Ranking
     }
 
     /**
-     * Erstellt eine neue woechentliche Herausforderung
+     * Erstellt eine neue wöchentliche Herausforderung
      */
     public function createChallenge(
         string $name,
@@ -290,7 +290,7 @@ class Ranking
     }
 
     /**
-     * Gibt Statistiken fuer das Dashboard zurueck
+     * Gibt Statistiken für das Dashboard zurück
      */
     public function getDashboardStats(): array
     {

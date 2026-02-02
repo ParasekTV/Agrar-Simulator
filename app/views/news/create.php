@@ -1,7 +1,7 @@
 <div class="create-post-page">
     <div class="page-header">
         <h1>Neuer Beitrag</h1>
-        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">Zurueck</a>
+        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">Zurück</a>
     </div>
 
     <div class="card">
@@ -13,13 +13,13 @@
                     <label for="title">Titel</label>
                     <input type="text" name="title" id="title" class="form-input"
                            required minlength="5" maxlength="200"
-                           placeholder="Gib deinem Beitrag einen aussagekraeftigen Titel">
+                           placeholder="Gib deinem Beitrag einen aussagekräftigen Titel">
                 </div>
 
                 <div class="form-group">
                     <label for="category">Kategorie</label>
                     <select name="category" id="category" class="form-select" required>
-                        <option value="">Waehle eine Kategorie...</option>
+                        <option value="">Wähle eine Kategorie...</option>
                         <?php foreach ($categories as $key => $name): ?>
                             <option value="<?= $key ?>"><?= $name ?></option>
                         <?php endforeach; ?>
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Veroeffentlichen</button>
+                    <button type="submit" class="btn btn-primary">Veröffentlichen</button>
                     <a href="<?= BASE_URL ?>/news" class="btn btn-outline">Abbrechen</a>
                 </div>
             </form>

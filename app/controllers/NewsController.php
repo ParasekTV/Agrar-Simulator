@@ -7,7 +7,7 @@
 class NewsController extends Controller
 {
     /**
-     * Zeigt Beitrags-Uebersicht
+     * Zeigt Beitrags-Übersicht
      */
     public function index(): void
     {
@@ -30,7 +30,9 @@ class NewsController extends Controller
             'popularPosts' => $newsModel->getPopular(5),
             'category' => $category,
             'categories' => [
-                'announcement' => 'Ankuendigungen',
+                'changelog' => 'Changelog',
+                'admin_news' => 'News',
+                'announcement' => 'Ankündigungen',
                 'market' => 'Markt',
                 'cooperative' => 'Genossenschaften',
                 'tips' => 'Tipps & Tricks',
@@ -65,7 +67,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Zeigt Formular fuer neuen Beitrag
+     * Zeigt Formular für neuen Beitrag
      */
     public function create(): void
     {
@@ -74,7 +76,9 @@ class NewsController extends Controller
         $data = [
             'title' => 'Neuer Beitrag',
             'categories' => [
-                'announcement' => 'Ankuendigungen',
+                'changelog' => 'Changelog',
+                'admin_news' => 'News',
+                'announcement' => 'Ankündigungen',
                 'market' => 'Markt',
                 'cooperative' => 'Genossenschaften',
                 'tips' => 'Tipps & Tricks',
@@ -131,7 +135,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Fuegt Kommentar hinzu (POST)
+     * Fügt Kommentar hinzu (POST)
      */
     public function comment(): void
     {
@@ -182,7 +186,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Loescht einen Beitrag (POST)
+     * Löscht einen Beitrag (POST)
      */
     public function delete(): void
     {
@@ -235,7 +239,7 @@ class NewsController extends Controller
     }
 
     /**
-     * API: Gibt Beitraege zurueck
+     * API: Gibt Beiträge zurück
      */
     public function postsApi(): array
     {

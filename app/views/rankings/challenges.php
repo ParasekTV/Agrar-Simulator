@@ -1,6 +1,6 @@
 <div class="challenges-page">
     <div class="page-header">
-        <h1>Woechentliche Herausforderungen</h1>
+        <h1>Wöchentliche Herausforderungen</h1>
         <div class="page-actions">
             <a href="<?= BASE_URL ?>/rankings" class="btn btn-outline">Rangliste</a>
             <a href="<?= BASE_URL ?>/rankings/cooperatives" class="btn btn-outline">Genossenschaften</a>
@@ -11,7 +11,7 @@
         <div class="empty-state">
             <span class="empty-icon">&#127942;</span>
             <h3>Keine aktiven Herausforderungen</h3>
-            <p>Aktuell gibt es keine aktiven Herausforderungen. Schau spaeter wieder vorbei!</p>
+            <p>Aktuell gibt es keine aktiven Herausforderungen. Schau später wieder vorbei!</p>
         </div>
     <?php else: ?>
         <div class="challenges-container">

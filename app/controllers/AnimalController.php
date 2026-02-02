@@ -2,12 +2,12 @@
 /**
  * Animal Controller
  *
- * Verwaltet Tiere, Fuetterung und Produktsammlung.
+ * Verwaltet Tiere, Fütterung und Produktsammlung.
  */
 class AnimalController extends Controller
 {
     /**
-     * Zeigt Tier-Uebersicht
+     * Zeigt Tier-Übersicht
      */
     public function index(): void
     {
@@ -71,7 +71,7 @@ class AnimalController extends Controller
     }
 
     /**
-     * Fuettert Tiere (POST)
+     * Füttert Tiere (POST)
      */
     public function feed(): void
     {
@@ -192,7 +192,7 @@ class AnimalController extends Controller
     }
 
     /**
-     * API: Fuettert Tiere
+     * API: Füttert Tiere
      */
     public function feedApi(): array
     {
@@ -257,7 +257,7 @@ class AnimalController extends Controller
     }
 
     /**
-     * API: Gibt verfuegbare Tiere zum Kauf zurueck
+     * API: Gibt verfügbare Tiere zum Kauf zurück
      */
     public function availableApi(): array
     {

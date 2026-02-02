@@ -1,7 +1,7 @@
 <div class="dashboard">
     <div class="page-header">
         <h1>Willkommen auf <?= htmlspecialchars($farm['farm_name']) ?>!</h1>
-        <p class="text-muted">Uebersicht deiner Farm</p>
+        <p class="text-muted">Übersicht deiner Farm</p>
     </div>
 
     <!-- Statistiken -->
@@ -43,7 +43,7 @@
     </div>
 
     <div class="dashboard-grid">
-        <!-- Felder-Uebersicht -->
+        <!-- Felder-Übersicht -->
         <div class="card">
             <div class="card-header">
                 <h3>Meine Felder</h3>
@@ -107,7 +107,7 @@
         <!-- Herausforderungen -->
         <div class="card">
             <div class="card-header">
-                <h3>Woechentliche Herausforderungen</h3>
+                <h3>Wöchentliche Herausforderungen</h3>
                 <a href="<?= BASE_URL ?>/rankings/challenges" class="btn btn-sm btn-outline">Alle</a>
             </div>
             <div class="card-body">

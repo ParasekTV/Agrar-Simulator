@@ -62,7 +62,7 @@ class Session
     }
 
     /**
-     * Prueft ob ein Session-Wert existiert
+     * Prüft ob ein Session-Wert existiert
      */
     public static function has(string $key): bool
     {
@@ -80,7 +80,7 @@ class Session
     }
 
     /**
-     * Zerstoert die Session komplett
+     * Zerstört die Session komplett
      */
     public static function destroy(): void
     {
@@ -166,7 +166,7 @@ class Session
     }
 
     /**
-     * Prueft ob eine Flash-Nachricht existiert
+     * Prüft ob eine Flash-Nachricht existiert
      */
     public static function hasFlash(string $key): bool
     {
@@ -175,7 +175,7 @@ class Session
     }
 
     /**
-     * Holt alle Flash-Nachrichten und loescht sie
+     * Holt alle Flash-Nachrichten und löscht sie
      */
     public static function getAllFlashes(): array
     {
@@ -188,7 +188,7 @@ class Session
     }
 
     /**
-     * Prueft ob der Benutzer eingeloggt ist
+     * Prüft ob der Benutzer eingeloggt ist
      */
     public static function isLoggedIn(): bool
     {

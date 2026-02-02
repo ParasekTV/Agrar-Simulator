@@ -16,11 +16,11 @@
                 <?php endforeach; ?>
             </div>
 
-            <!-- Beitraege -->
+            <!-- Beiträge -->
             <?php if (empty($posts)): ?>
                 <div class="empty-state">
                     <span class="empty-icon">&#128240;</span>
-                    <h3>Keine Beitraege</h3>
+                    <h3>Keine Beiträge</h3>
                     <p>Sei der Erste und schreibe einen Beitrag!</p>
                 </div>
             <?php else: ?>
@@ -82,14 +82,14 @@
                 </div>
             </div>
 
-            <!-- Beliebte Beitraege -->
+            <!-- Beliebte Beiträge -->
             <div class="card">
                 <div class="card-header">
                     <h4>Beliebt</h4>
                 </div>
                 <div class="card-body">
                     <?php if (empty($popularPosts)): ?>
-                        <p class="text-muted">Keine beliebten Beitraege.</p>
+                        <p class="text-muted">Keine beliebten Beiträge.</p>
                     <?php else: ?>
                         <ul class="sidebar-posts">
                             <?php foreach ($popularPosts as $post): ?>

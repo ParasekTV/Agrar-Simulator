@@ -1,7 +1,9 @@
 <div class="auth-container">
+    <div class="auth-logo">
+        <img src="<?= BASE_URL ?>/img/logo_lsbg.png" alt="LSBG Agrar Simulator Logo">
+    </div>
     <div class="auth-card">
         <div class="auth-header">
-            <h1>&#127806; Agrar Simulator</h1>
             <h2>Anmelden</h2>
         </div>
 

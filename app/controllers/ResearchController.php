@@ -86,7 +86,7 @@ class ResearchController extends Controller
     }
 
     /**
-     * API: Gibt den Forschungsbaum zurueck
+     * API: Gibt den Forschungsbaum zurück
      */
     public function treeApi(): array
     {
@@ -133,7 +133,7 @@ class ResearchController extends Controller
     }
 
     /**
-     * API: Gibt den aktuellen Forschungsfortschritt zurueck
+     * API: Gibt den aktuellen Forschungsfortschritt zurück
      */
     public function progressApi(): array
     {
@@ -152,7 +152,7 @@ class ResearchController extends Controller
     }
 
     /**
-     * API: Schliesst Forschung ab (manueller Check)
+     * API: Schließt Forschung ab (manueller Check)
      */
     public function completeApi(): array
     {
@@ -160,7 +160,7 @@ class ResearchController extends Controller
             return $this->jsonError('Nicht eingeloggt', 401);
         }
 
-        // Pruefe ob Forschung fertig ist
+        // Prüfe ob Forschung fertig ist
         $count = Research::completeResearch();
 
         if ($count > 0) {

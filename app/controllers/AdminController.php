@@ -2,12 +2,12 @@
 /**
  * Admin Controller
  *
- * Verwaltungsoberflaeche fuer Administratoren.
+ * Verwaltungsoberfläche für Administratoren.
  */
 class AdminController extends Controller
 {
     /**
-     * Prueft Admin-Berechtigung
+     * Prüft Admin-Berechtigung
      */
     private function requireAdmin(): void
     {
@@ -138,7 +138,7 @@ class AdminController extends Controller
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect("/admin/users/{$id}");
         }
 
@@ -164,7 +164,7 @@ class AdminController extends Controller
             ], 'user_id = :user_id', ['user_id' => $id]);
         }
 
-        // Passwort aendern wenn angegeben
+        // Passwort ändern wenn angegeben
         if (!empty($data['new_password'])) {
             $hash = password_hash($data['new_password'], PASSWORD_BCRYPT, ['cost' => 12]);
             $this->db->update('users', ['password_hash' => $hash], 'id = :id', ['id' => $id]);
@@ -177,24 +177,24 @@ class AdminController extends Controller
     }
 
     /**
-     * Benutzer loeschen
+     * Benutzer löschen
      */
     public function deleteUser(int $id): void
     {
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect('/admin/users');
         }
 
-        // Verhindere Selbstloeschung
+        // Verhindere Selbstlöschung
         if ($id === Session::getUserId()) {
-            Session::setFlash('error', 'Du kannst dich nicht selbst loeschen', 'danger');
+            Session::setFlash('error', 'Du kannst dich nicht selbst löschen', 'danger');
             $this->redirect('/admin/users');
         }
 
-        // Loesche zugehoerige Daten
+        // Lösche zugehörige Daten
         $farm = $this->db->fetchOne('SELECT id FROM farms WHERE user_id = ?', [$id]);
         if ($farm) {
             $this->db->delete('fields', 'farm_id = :id', ['id' => $farm['id']]);
@@ -210,7 +210,7 @@ class AdminController extends Controller
 
         Logger::info('Admin deleted user', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
 
-        Session::setFlash('success', 'Benutzer geloescht', 'success');
+        Session::setFlash('success', 'Benutzer gelöscht', 'success');
         $this->redirect('/admin/users');
     }
 
@@ -240,7 +240,7 @@ class AdminController extends Controller
         );
 
         $this->renderWithLayout('admin/farms', [
-            'title' => 'Hoefe verwalten',
+            'title' => 'Höfe verwalten',
             'farms' => $farms,
             'page' => $page,
             'totalPages' => ceil($total / $perPage),
@@ -268,7 +268,7 @@ class AdminController extends Controller
             $this->redirect('/admin/farms');
         }
 
-        // Hole zusaetzliche Daten
+        // Hole zusätzliche Daten
         $fields = $this->db->fetchAll('SELECT * FROM fields WHERE farm_id = ?', [$id]);
         $animals = $this->db->fetchAll(
             'SELECT fa.*, a.name as animal_name
@@ -302,7 +302,7 @@ class AdminController extends Controller
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect("/admin/farms/{$id}");
         }
 
@@ -385,7 +385,7 @@ class AdminController extends Controller
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect("/admin/cooperatives/{$id}");
         }
 
@@ -406,14 +406,14 @@ class AdminController extends Controller
     }
 
     /**
-     * Genossenschaft loeschen
+     * Genossenschaft löschen
      */
     public function deleteCooperative(int $id): void
     {
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect('/admin/cooperatives');
         }
 
@@ -423,7 +423,7 @@ class AdminController extends Controller
 
         Logger::info('Admin deleted cooperative', ['admin_id' => Session::getUserId(), 'coop_id' => $id]);
 
-        Session::setFlash('success', 'Genossenschaft geloescht', 'success');
+        Session::setFlash('success', 'Genossenschaft gelöscht', 'success');
         $this->redirect('/admin/cooperatives');
     }
 
@@ -435,7 +435,7 @@ class AdminController extends Controller
         $this->requireAdmin();
 
         if (!$this->validateCsrf()) {
-            Session::setFlash('error', 'Ungueltige Anfrage', 'danger');
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
             $this->redirect('/admin/cooperatives');
         }
 
@@ -450,5 +450,149 @@ class AdminController extends Controller
 
         Session::setFlash('success', 'Mitglied entfernt', 'success');
         $this->redirect("/admin/cooperatives/{$coopId}");
+    }
+
+    // ==========================================
+    // NEWS/CHANGELOG-VERWALTUNG
+    // ==========================================
+
+    /**
+     * News-Liste für Admin
+     */
+    public function news(): void
+    {
+        $this->requireAdmin();
+
+        $newsModel = new News();
+        $result = $newsModel->getAdminPosts();
+
+        $this->renderWithLayout('admin/news', [
+            'title' => 'News & Changelog verwalten',
+            'posts' => $result['posts'],
+            'page' => $result['page'],
+            'totalPages' => $result['total_pages'],
+            'total' => $result['total']
+        ]);
+    }
+
+    /**
+     * Neuen News-Beitrag erstellen - Formular
+     */
+    public function createNews(): void
+    {
+        $this->requireAdmin();
+
+        $this->renderWithLayout('admin/news_create', [
+            'title' => 'News/Changelog erstellen'
+        ]);
+    }
+
+    /**
+     * News-Beitrag speichern
+     */
+    public function storeNews(): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect('/admin/news/create');
+        }
+
+        $data = $this->getPostData();
+
+        $newsModel = new News();
+        $result = $newsModel->createAdminPost(
+            Session::getUserId(),
+            $data['title'],
+            $data['content'],
+            $data['category'],
+            isset($data['is_pinned'])
+        );
+
+        if ($result['success']) {
+            Session::setFlash('success', $result['message'], 'success');
+            $this->redirect('/admin/news');
+        } else {
+            Session::setFlash('error', $result['message'], 'danger');
+            $this->redirect('/admin/news/create');
+        }
+    }
+
+    /**
+     * News-Beitrag bearbeiten - Formular
+     */
+    public function editNews(int $id): void
+    {
+        $this->requireAdmin();
+
+        $post = $this->db->fetchOne(
+            'SELECT * FROM news_posts WHERE id = ? AND is_admin_post = 1',
+            [$id]
+        );
+
+        if (!$post) {
+            Session::setFlash('error', 'Beitrag nicht gefunden', 'danger');
+            $this->redirect('/admin/news');
+        }
+
+        $this->renderWithLayout('admin/news_edit', [
+            'title' => 'News/Changelog bearbeiten',
+            'post' => $post
+        ]);
+    }
+
+    /**
+     * News-Beitrag aktualisieren
+     */
+    public function updateNews(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/news/{$id}");
+        }
+
+        $data = $this->getPostData();
+
+        $newsModel = new News();
+        $result = $newsModel->updateAdminPost(
+            $id,
+            $data['title'],
+            $data['content'],
+            $data['category'],
+            isset($data['is_pinned'])
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+        $this->redirect("/admin/news/{$id}");
+    }
+
+    /**
+     * News-Beitrag löschen
+     */
+    public function deleteNews(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect('/admin/news');
+        }
+
+        $newsModel = new News();
+        $result = $newsModel->deleteAdminPost($id);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+        $this->redirect('/admin/news');
     }
 }

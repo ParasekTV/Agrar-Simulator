@@ -7,7 +7,7 @@
         <div class="empty-state">
             <span class="empty-icon">&#128196;</span>
             <h3>Keine Ereignisse</h3>
-            <p>Hier werden alle Aktivitaeten auf deiner Farm protokolliert.</p>
+            <p>Hier werden alle Aktivitäten auf deiner Farm protokolliert.</p>
         </div>
     <?php else: ?>
         <div class="events-timeline">

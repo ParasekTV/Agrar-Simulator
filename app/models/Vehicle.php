@@ -2,7 +2,7 @@
 /**
  * Vehicle Model
  *
- * Verwaltet Fahrzeuge und Geraete.
+ * Verwaltet Fahrzeuge und Geräte.
  */
 class Vehicle
 {
@@ -25,7 +25,7 @@ class Vehicle
             return ['success' => false, 'message' => 'Fahrzeug nicht gefunden'];
         }
 
-        // Pruefe Forschungsanforderung
+        // Prüfe Forschungsanforderung
         if ($vehicle['required_research_id']) {
             $farm = new Farm($farmId);
             if (!$farm->hasResearch($vehicle['required_research_id'])) {
@@ -33,10 +33,10 @@ class Vehicle
             }
         }
 
-        // Pruefe und ziehe Geld ab
+        // Prüfe und ziehe Geld ab
         $farm = new Farm($farmId);
         if (!$farm->subtractMoney($vehicle['cost'], "Fahrzeugkauf: {$vehicle['name']}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld'];
         }
 
         // Erstelle Fahrzeug-Eintrag
@@ -77,7 +77,7 @@ class Vehicle
             return ['success' => false, 'message' => 'Fahrzeug nicht gefunden'];
         }
 
-        // Pruefe ob verliehen
+        // Prüfe ob verliehen
         $isLent = $this->db->exists(
             'cooperative_shared_equipment',
             'farm_vehicle_id = ? AND available = FALSE',
@@ -95,7 +95,7 @@ class Vehicle
         $farm = new Farm($farmId);
         $farm->addMoney($sellPrice, "Fahrzeugverkauf: {$farmVehicle['name']}");
 
-        // Loesche Fahrzeug
+        // Lösche Fahrzeug
         $this->db->delete('farm_vehicles', 'id = ?', [$farmVehicleId]);
 
         Logger::info('Vehicle sold', [
@@ -106,7 +106,7 @@ class Vehicle
 
         return [
             'success' => true,
-            'message' => "{$farmVehicle['name']} fuer {$sellPrice} T verkauft!",
+            'message' => "{$farmVehicle['name']} für {$sellPrice} T verkauft!",
             'income' => $sellPrice
         ];
     }
@@ -139,7 +139,7 @@ class Vehicle
 
         $farm = new Farm($farmId);
         if (!$farm->subtractMoney($repairCost, "Reparatur: {$farmVehicle['name']}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld fuer Reparatur'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld für Reparatur'];
         }
 
         $this->db->update('farm_vehicles', ['condition_percent' => 100], 'id = :id', ['id' => $farmVehicleId]);
@@ -157,7 +157,7 @@ class Vehicle
     }
 
     /**
-     * Gibt verfuegbare Fahrzeuge zum Kauf zurueck
+     * Gibt verfügbare Fahrzeuge zum Kauf zurück
      */
     public function getAvailableVehicles(int $farmId): array
     {
@@ -172,7 +172,7 @@ class Vehicle
     }
 
     /**
-     * Gibt Fahrzeuge einer Farm zurueck
+     * Gibt Fahrzeuge einer Farm zurück
      */
     public function getFarmVehicles(int $farmId): array
     {
@@ -198,7 +198,7 @@ class Vehicle
     }
 
     /**
-     * Nutzt ein Fahrzeug (erhoehe Stunden, reduziere Zustand)
+     * Nutzt ein Fahrzeug (erhöhe Stunden, reduziere Zustand)
      */
     public function use(int $farmVehicleId, int $hours = 1): void
     {
@@ -239,7 +239,7 @@ class Vehicle
 
         return [
             'success' => true,
-            'message' => $available ? 'Fahrzeug zum Verleihen freigegeben' : 'Fahrzeug nicht mehr zum Verleihen verfuegbar'
+            'message' => $available ? 'Fahrzeug zum Verleihen freigegeben' : 'Fahrzeug nicht mehr zum Verleihen verfügbar'
         ];
     }
 }

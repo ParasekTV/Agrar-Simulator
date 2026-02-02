@@ -29,7 +29,7 @@ class Database
             );
         } catch (PDOException $e) {
             Logger::error('Database connection failed', ['error' => $e->getMessage()]);
-            die('Datenbankverbindung fehlgeschlagen. Bitte versuche es spaeter erneut.');
+            die('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.');
         }
     }
 
@@ -54,7 +54,7 @@ class Database
     }
 
     /**
-     * Fuehrt eine vorbereitete Abfrage aus
+     * Führt eine vorbereitete Abfrage aus
      */
     public function query(string $sql, array $params = []): PDOStatement
     {
@@ -89,7 +89,7 @@ class Database
     }
 
     /**
-     * Fuegt einen neuen Datensatz ein
+     * Fügt einen neuen Datensatz ein
      */
     public function insert(string $table, array $data): int
     {
@@ -104,7 +104,7 @@ class Database
     }
 
     /**
-     * Aktualisiert Datensaetze
+     * Aktualisiert Datensätze
      */
     public function update(string $table, array $data, string $where, array $whereParams = []): int
     {
@@ -114,7 +114,7 @@ class Database
         }
         $setClause = implode(', ', $set);
 
-        // Praefixiere Data-Keys um Konflikte mit Where-Params zu vermeiden
+        // Präfixiere Data-Keys um Konflikte mit Where-Params zu vermeiden
         $prefixedData = [];
         foreach ($data as $key => $value) {
             $prefixedData["set_{$key}"] = $value;
@@ -127,7 +127,7 @@ class Database
     }
 
     /**
-     * Loescht Datensaetze
+     * Löscht Datensätze
      */
     public function delete(string $table, string $where, array $params = []): int
     {
@@ -144,7 +144,7 @@ class Database
     }
 
     /**
-     * Bestaetigt eine Transaktion
+     * Bestätigt eine Transaktion
      */
     public function commit(): bool
     {
@@ -152,7 +152,7 @@ class Database
     }
 
     /**
-     * Macht eine Transaktion rueckgaengig
+     * Macht eine Transaktion rückgängig
      */
     public function rollback(): bool
     {
@@ -160,7 +160,7 @@ class Database
     }
 
     /**
-     * Prueft ob ein Datensatz existiert
+     * Prüft ob ein Datensatz existiert
      */
     public function exists(string $table, string $where, array $params = []): bool
     {
@@ -169,7 +169,7 @@ class Database
     }
 
     /**
-     * Zaehlt Datensaetze
+     * Zählt Datensätze
      */
     public function count(string $table, string $where = '1=1', array $params = []): int
     {

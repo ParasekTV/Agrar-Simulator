@@ -1,7 +1,9 @@
 <div class="auth-container">
+    <div class="auth-logo">
+        <img src="<?= BASE_URL ?>/img/logo_lsbg.png" alt="LSBG Agrar Simulator Logo">
+    </div>
     <div class="auth-card">
         <div class="auth-header">
-            <h1>&#127806; Agrar Simulator</h1>
             <h2>Registrieren</h2>
         </div>
 
@@ -30,7 +32,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password_confirm">Passwort bestaetigen</label>
+                <label for="password_confirm">Passwort bestätigen</label>
                 <input type="password" id="password_confirm" name="password_confirm" required
                        placeholder="Passwort wiederholen">
             </div>
@@ -42,7 +44,7 @@
                 <small>Gib deiner Farm einen Namen!</small>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Farm gruenden</button>
+            <button type="submit" class="btn btn-primary btn-block">Farm gründen</button>
         </form>
 
         <div class="auth-footer">

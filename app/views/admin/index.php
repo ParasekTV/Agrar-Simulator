@@ -23,7 +23,7 @@
             <div class="stat-icon">&#127968;</div>
             <div class="stat-info">
                 <span class="stat-value"><?= number_format($stats['farms']) ?></span>
-                <span class="stat-label">Hoefe</span>
+                <span class="stat-label">Höfe</span>
             </div>
         </div>
         <div class="admin-stat-card">
@@ -57,10 +57,13 @@
                 &#128100; Benutzer verwalten
             </a>
             <a href="<?= BASE_URL ?>/admin/farms" class="btn btn-primary btn-lg">
-                &#127968; Hoefe verwalten
+                &#127968; Höfe verwalten
             </a>
             <a href="<?= BASE_URL ?>/admin/cooperatives" class="btn btn-primary btn-lg">
                 &#129309; Genossenschaften verwalten
+            </a>
+            <a href="<?= BASE_URL ?>/admin/news" class="btn btn-primary btn-lg">
+                &#128240; News & Changelog
             </a>
         </div>
     </div>

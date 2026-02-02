@@ -12,7 +12,7 @@
         <form action="<?= BASE_URL ?>/market" method="GET" class="filter-form">
             <select name="type" class="form-select">
                 <option value="">Alle Kategorien</option>
-                <option value="crop" <?= ($filter['type'] ?? '') === 'crop' ? 'selected' : '' ?>>Feldfruchte</option>
+                <option value="crop" <?= ($filter['type'] ?? '') === 'crop' ? 'selected' : '' ?>>Feldfrüchte</option>
                 <option value="animal_product" <?= ($filter['type'] ?? '') === 'animal_product' ? 'selected' : '' ?>>Tierprodukte</option>
                 <option value="material" <?= ($filter['type'] ?? '') === 'material' ? 'selected' : '' ?>>Materialien</option>
             </select>
@@ -36,9 +36,9 @@
                         <thead>
                             <tr>
                                 <th>Artikel</th>
-                                <th>Verkaeufer</th>
+                                <th>Verkäufer</th>
                                 <th>Menge</th>
-                                <th>Preis/Stueck</th>
+                                <th>Preis/Stück</th>
                                 <th>Gesamt</th>
                                 <th>Aktion</th>
                             </tr>
@@ -122,23 +122,23 @@
             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Artikel waehlen</label>
+                    <label>Artikel wählen</label>
                     <select name="item_type" id="listing-item-type" class="form-select" required onchange="updateItemList()">
-                        <option value="">Kategorie waehlen...</option>
-                        <option value="crop">Feldfruchte</option>
+                        <option value="">Kategorie wählen...</option>
+                        <option value="crop">Feldfrüchte</option>
                         <option value="animal_product">Tierprodukte</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Artikel</label>
                     <select name="item_id" id="listing-item-id" class="form-select" required>
-                        <option value="">Erst Kategorie waehlen...</option>
+                        <option value="">Erst Kategorie wählen...</option>
                         <?php foreach ($inventory as $item): ?>
                             <option value="<?= $item['item_id'] ?>"
                                     data-type="<?= $item['item_type'] ?>"
                                     data-max="<?= $item['quantity'] ?>"
                                     style="display: none;">
-                                <?= htmlspecialchars($item['item_name']) ?> (<?= $item['quantity'] ?> verfuegbar)
+                                <?= htmlspecialchars($item['item_name']) ?> (<?= $item['quantity'] ?> verfügbar)
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -149,7 +149,7 @@
                            min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="listing-price">Preis pro Stueck (T)</label>
+                    <label for="listing-price">Preis pro Stück (T)</label>
                     <input type="number" name="price" id="listing-price" class="form-input"
                            min="0.01" step="0.01" required>
                 </div>
@@ -175,7 +175,7 @@
             <input type="hidden" name="listing_id" id="buy-listing-id">
             <div class="modal-body">
                 <p>Artikel: <strong id="buy-item-name"></strong></p>
-                <p>Preis pro Stueck: <span id="buy-price-per-unit"></span> T</p>
+                <p>Preis pro Stück: <span id="buy-price-per-unit"></span> T</p>
                 <div class="form-group">
                     <label for="buy-quantity">Menge (max: <span id="buy-max-quantity"></span>)</label>
                     <input type="number" name="quantity" id="buy-quantity" class="form-input"

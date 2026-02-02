@@ -7,7 +7,7 @@
 class FieldController extends Controller
 {
     /**
-     * Zeigt Feld-Uebersicht
+     * Zeigt Feld-Übersicht
      */
     public function index(): void
     {
@@ -21,6 +21,8 @@ class FieldController extends Controller
             'title' => 'Felder',
             'fields' => $farm->getFields(),
             'availableCrops' => $fieldModel->getAvailableCrops($farmId),
+            'availableFertilizers' => $fieldModel->getAvailableFertilizers($farmId),
+            'availableLimeTypes' => $fieldModel->getAvailableLimeTypes($farmId),
             'farm' => $farm->getData()
         ];
 
@@ -47,7 +49,9 @@ class FieldController extends Controller
         $data = [
             'title' => "Feld #{$id}",
             'field' => $field,
-            'availableCrops' => $fieldModel->getAvailableCrops($farmId)
+            'availableCrops' => $fieldModel->getAvailableCrops($farmId),
+            'availableFertilizers' => $fieldModel->getAvailableFertilizers($farmId),
+            'availableLimeTypes' => $fieldModel->getAvailableLimeTypes($farmId)
         ];
 
         $this->renderWithLayout('fields/show', $data);
@@ -153,8 +157,8 @@ class FieldController extends Controller
         $validator
             ->required('size')
             ->numeric('size')
-            ->min('size', 1, 'Mindestgroesse: 1 Hektar')
-            ->max('size', 10, 'Maximalgroesse: 10 Hektar');
+            ->min('size', 1, 'Mindestgröße: 1 Hektar')
+            ->max('size', 10, 'Maximalgröße: 10 Hektar');
 
         if (!$validator->isValid()) {
             Session::setFlash('error', $validator->getFirstError(), 'danger');
@@ -174,7 +178,7 @@ class FieldController extends Controller
     }
 
     /**
-     * Duengt ein Feld (POST)
+     * Düngt ein Feld mit Basis-Dünger (POST) - Legacy
      */
     public function fertilize(): void
     {
@@ -189,6 +193,90 @@ class FieldController extends Controller
 
         $fieldModel = new Field();
         $result = $fieldModel->fertilize((int) $data['field_id'], $this->getFarmId());
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields');
+    }
+
+    /**
+     * Wendet erweiterten Dünger an (POST)
+     */
+    public function applyFertilizer(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields');
+        }
+
+        $data = $this->getPostData();
+
+        $validator = new Validator($data);
+        $validator
+            ->required('field_id')
+            ->required('fertilizer_type_id')
+            ->numeric('field_id')
+            ->numeric('fertilizer_type_id');
+
+        if (!$validator->isValid()) {
+            Session::setFlash('error', $validator->getFirstError(), 'danger');
+            $this->redirect('/fields');
+        }
+
+        $fieldModel = new Field();
+        $result = $fieldModel->applyFertilizer(
+            (int) $data['field_id'],
+            (int) $data['fertilizer_type_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields');
+    }
+
+    /**
+     * Wendet Kalk an (POST)
+     */
+    public function lime(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields');
+        }
+
+        $data = $this->getPostData();
+
+        $validator = new Validator($data);
+        $validator
+            ->required('field_id')
+            ->required('lime_type_id')
+            ->numeric('field_id')
+            ->numeric('lime_type_id');
+
+        if (!$validator->isValid()) {
+            Session::setFlash('error', $validator->getFirstError(), 'danger');
+            $this->redirect('/fields');
+        }
+
+        $fieldModel = new Field();
+        $result = $fieldModel->applyLime(
+            (int) $data['field_id'],
+            (int) $data['lime_type_id'],
+            $this->getFarmId()
+        );
 
         Session::setFlash(
             $result['success'] ? 'success' : 'error',
@@ -260,7 +348,7 @@ class FieldController extends Controller
     }
 
     /**
-     * API: Gibt ein einzelnes Feld zurueck
+     * API: Gibt ein einzelnes Feld zurück
      */
     public function getApi(int $id): array
     {
@@ -291,7 +379,7 @@ class FieldController extends Controller
         $size = (float) ($data['size'] ?? 1);
 
         if ($size < 1 || $size > 10) {
-            return $this->jsonError('Feldgroesse muss zwischen 1 und 10 Hektar liegen');
+            return $this->jsonError('Feldgröße muss zwischen 1 und 10 Hektar liegen');
         }
 
         $fieldModel = new Field();

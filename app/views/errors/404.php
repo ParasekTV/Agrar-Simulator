@@ -42,8 +42,8 @@
     <div class="error-container">
         <div class="error-icon">&#127806;</div>
         <h1>404</h1>
-        <p>Diese Seite wurde nicht gefunden.<br>Vielleicht wurde sie von Kuehen gefressen?</p>
-        <a href="<?= BASE_URL ?>/dashboard" class="btn">Zurueck zur Farm</a>
+        <p>Diese Seite wurde nicht gefunden.<br>Vielleicht wurde sie von Kühen gefressen?</p>
+        <a href="<?= BASE_URL ?>/dashboard" class="btn">Zurück zur Farm</a>
     </div>
 </body>
 </html>

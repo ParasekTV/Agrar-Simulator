@@ -82,8 +82,8 @@ class AuthController extends Controller
             ->email('email')
             ->required('password', 'Passwort erforderlich')
             ->minLength('password', 8, 'Passwort muss mindestens 8 Zeichen lang sein')
-            ->required('password_confirm', 'Passwort-Bestaetigung erforderlich')
-            ->matches('password_confirm', 'password', 'Passwoerter stimmen nicht ueberein')
+            ->required('password_confirm', 'Passwort-Bestätigung erforderlich')
+            ->matches('password_confirm', 'password', 'Passwörter stimmen nicht überein')
             ->required('farm_name', 'Farm-Name erforderlich')
             ->minLength('farm_name', 3, 'Farm-Name muss mindestens 3 Zeichen lang sein')
             ->maxLength('farm_name', 50, 'Farm-Name darf maximal 50 Zeichen lang sein');
@@ -128,7 +128,7 @@ class AuthController extends Controller
     }
 
     /**
-     * API: Prueft Login-Status
+     * API: Prüft Login-Status
      */
     public function checkApi(): array
     {

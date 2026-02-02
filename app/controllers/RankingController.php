@@ -53,7 +53,7 @@ class RankingController extends Controller
     }
 
     /**
-     * Zeigt woechentliche Herausforderungen
+     * Zeigt wöchentliche Herausforderungen
      */
     public function challenges(): void
     {
@@ -62,13 +62,13 @@ class RankingController extends Controller
         $rankingModel = new Ranking();
         $challenges = $rankingModel->getChallengeProgress($this->getFarmId());
 
-        // Hole Bestenlisten fuer jede Herausforderung
+        // Hole Bestenlisten für jede Herausforderung
         foreach ($challenges as &$challenge) {
             $challenge['leaderboard'] = $rankingModel->getChallengeLeaderboard($challenge['id'], 10);
         }
 
         $data = [
-            'title' => 'Woechentliche Herausforderungen',
+            'title' => 'Wöchentliche Herausforderungen',
             'challenges' => $challenges
         ];
 
@@ -76,7 +76,7 @@ class RankingController extends Controller
     }
 
     /**
-     * API: Gibt globale Rangliste zurueck
+     * API: Gibt globale Rangliste zurück
      */
     public function globalApi(): array
     {
@@ -92,7 +92,7 @@ class RankingController extends Controller
     }
 
     /**
-     * API: Gibt Genossenschafts-Rangliste zurueck
+     * API: Gibt Genossenschafts-Rangliste zurück
      */
     public function cooperativesApi(): array
     {
@@ -108,7 +108,7 @@ class RankingController extends Controller
     }
 
     /**
-     * API: Gibt woechentliche Herausforderungen zurueck
+     * API: Gibt wöchentliche Herausforderungen zurück
      */
     public function weeklyApi(): array
     {

@@ -25,7 +25,7 @@ class Animal
             return ['success' => false, 'message' => 'Tier nicht gefunden'];
         }
 
-        // Pruefe Forschungsanforderung
+        // Prüfe Forschungsanforderung
         if ($animal['required_research_id']) {
             $farm = new Farm($farmId);
             if (!$farm->hasResearch($animal['required_research_id'])) {
@@ -36,20 +36,20 @@ class Animal
         // Berechne Kosten
         $totalCost = $animal['cost'] * $quantity;
 
-        // Pruefe und ziehe Geld ab
+        // Prüfe und ziehe Geld ab
         $farm = new Farm($farmId);
         if (!$farm->subtractMoney($totalCost, "Tierkauf: {$quantity}x {$animal['name']}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld'];
         }
 
-        // Pruefe ob bereits Tiere dieser Art vorhanden
+        // Prüfe ob bereits Tiere dieser Art vorhanden
         $existing = $this->db->fetchOne(
             'SELECT * FROM farm_animals WHERE farm_id = ? AND animal_id = ?',
             [$farmId, $animalId]
         );
 
         if ($existing) {
-            // Erhoehe Anzahl
+            // Erhöhe Anzahl
             $this->db->update('farm_animals', [
                 'quantity' => $existing['quantity'] + $quantity
             ], 'id = :id', ['id' => $existing['id']]);
@@ -79,7 +79,7 @@ class Animal
     }
 
     /**
-     * Fuettert Tiere
+     * Füttert Tiere
      */
     public function feed(int $farmAnimalId, int $farmId): array
     {
@@ -99,13 +99,13 @@ class Animal
         // Berechne Futterkosten
         $totalCost = $farmAnimal['feed_cost'] * $farmAnimal['quantity'];
 
-        // Pruefe und ziehe Geld ab
+        // Prüfe und ziehe Geld ab
         $farm = new Farm($farmId);
         if (!$farm->subtractMoney($totalCost, "Futter: {$farmAnimal['name']}")) {
-            return ['success' => false, 'message' => 'Nicht genuegend Geld fuer Futter'];
+            return ['success' => false, 'message' => 'Nicht genügend Geld für Futter'];
         }
 
-        // Aktualisiere Fuetterungszeit und verbessere Gesundheit/Glueck
+        // Aktualisiere Fütterungszeit und verbessere Gesundheit/Glück
         $newHealth = min(100, $farmAnimal['health_status'] + 10);
         $newHappiness = min(100, $farmAnimal['happiness'] + 15);
 
@@ -122,7 +122,7 @@ class Animal
 
         return [
             'success' => true,
-            'message' => "{$farmAnimal['name']} gefuettert!",
+            'message' => "{$farmAnimal['name']} gefüttert!",
             'cost' => $totalCost,
             'new_health' => $newHealth,
             'new_happiness' => $newHappiness
@@ -148,7 +148,7 @@ class Animal
             return ['success' => false, 'message' => 'Tiere nicht gefunden'];
         }
 
-        // Pruefe ob Produktion bereit
+        // Prüfe ob Produktion bereit
         if ($farmAnimal['last_collection']) {
             $lastCollection = strtotime($farmAnimal['last_collection']);
             $readyAt = $lastCollection + ($farmAnimal['production_time_hours'] * 3600);
@@ -159,12 +159,12 @@ class Animal
                 $minutes = floor(($remaining % 3600) / 60);
                 return [
                     'success' => false,
-                    'message' => "Noch {$hours}h {$minutes}m bis zur naechsten Produktion"
+                    'message' => "Noch {$hours}h {$minutes}m bis zur nächsten Produktion"
                 ];
             }
         }
 
-        // Berechne Produktion (mit Gluecks-Bonus)
+        // Berechne Produktion (mit Glücks-Bonus)
         $happinessMultiplier = $farmAnimal['happiness'] / 100;
         $baseProduction = $farmAnimal['production_quantity'] * $farmAnimal['quantity'];
         $actualProduction = (int) ceil($baseProduction * $happinessMultiplier);
@@ -178,10 +178,10 @@ class Animal
         $sellPrice = $product ? $product['base_sell_price'] : 10;
         $productName = $farmAnimal['production_item'];
 
-        // Fuege zum Inventar hinzu
+        // Füge zum Inventar hinzu
         $this->addToInventory($farmId, $farmAnimal['animal_id'], $productName, $actualProduction);
 
-        // Aktualisiere Sammelzeit und reduziere Glueck leicht
+        // Aktualisiere Sammelzeit und reduziere Glück leicht
         $newHappiness = max(50, $farmAnimal['happiness'] - 5);
 
         $this->db->update('farm_animals', [
@@ -210,7 +210,7 @@ class Animal
     }
 
     /**
-     * Fuegt Produkte zum Inventar hinzu
+     * Fügt Produkte zum Inventar hinzu
      */
     private function addToInventory(int $farmId, int $animalId, string $productName, int $quantity): void
     {
@@ -235,7 +235,7 @@ class Animal
     }
 
     /**
-     * Gibt verfuegbare Tiere zum Kauf zurueck
+     * Gibt verfügbare Tiere zum Kauf zurück
      */
     public function getAvailableAnimals(int $farmId): array
     {
@@ -250,7 +250,7 @@ class Animal
     }
 
     /**
-     * Gibt Tiere einer Farm mit Produktionsstatus zurueck
+     * Gibt Tiere einer Farm mit Produktionsstatus zurück
      */
     public function getFarmAnimalsWithStatus(int $farmId): array
     {
@@ -275,7 +275,7 @@ class Animal
                 $animal['production_ready_at'] = null;
             }
 
-            // Berechne Fuetterungsstatus (alle 24h)
+            // Berechne Fütterungsstatus (alle 24h)
             if ($animal['last_feeding']) {
                 $lastFeeding = strtotime($animal['last_feeding']);
                 $feedingNeeded = $lastFeeding + (24 * 3600);
@@ -306,7 +306,7 @@ class Animal
         }
 
         if ($farmAnimal['quantity'] < $quantity) {
-            return ['success' => false, 'message' => 'Nicht genuegend Tiere'];
+            return ['success' => false, 'message' => 'Nicht genügend Tiere'];
         }
 
         // Verkaufspreis: 50% des Kaufpreises
@@ -315,7 +315,7 @@ class Animal
         $farm = new Farm($farmId);
         $farm->addMoney($sellPrice, "Tierverkauf: {$quantity}x {$farmAnimal['name']}");
 
-        // Reduziere oder loesche Tiere
+        // Reduziere oder lösche Tiere
         if ($farmAnimal['quantity'] === $quantity) {
             $this->db->delete('farm_animals', 'id = ?', [$farmAnimalId]);
         } else {
@@ -333,19 +333,19 @@ class Animal
 
         return [
             'success' => true,
-            'message' => "{$quantity}x {$farmAnimal['name']} fuer {$sellPrice} T verkauft!",
+            'message' => "{$quantity}x {$farmAnimal['name']} für {$sellPrice} T verkauft!",
             'income' => $sellPrice
         ];
     }
 
     /**
-     * Aktualisiert Tier-Gesundheit (fuer Cron)
+     * Aktualisiert Tier-Gesundheit (für Cron)
      */
     public static function updateAnimalHealth(): void
     {
         $db = Database::getInstance();
 
-        // Reduziere Gesundheit und Glueck bei nicht gefuetterten Tieren
+        // Reduziere Gesundheit und Glück bei nicht gefütterten Tieren
         $db->query(
             "UPDATE farm_animals
              SET health_status = GREATEST(10, health_status - 5),

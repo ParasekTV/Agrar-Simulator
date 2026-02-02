@@ -1,6 +1,6 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin/cooperatives" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/admin/cooperatives" class="btn btn-outline">&larr; Zurück</a>
         <h1><?= htmlspecialchars($coop['name']) ?></h1>
     </div>
 
@@ -59,7 +59,7 @@
             <div class="card-body">
                 <div class="info-list">
                     <div class="info-item">
-                        <span class="info-label">Gegruendet:</span>
+                        <span class="info-label">Gegründet:</span>
                         <span class="info-value"><?= date('d.m.Y H:i', strtotime($coop['created_at'])) ?></span>
                     </div>
                     <div class="info-item">
@@ -73,10 +73,10 @@
                 <div class="danger-zone">
                     <h4>Gefahrenzone</h4>
                     <form action="<?= BASE_URL ?>/admin/cooperatives/<?= $coop['id'] ?>/delete" method="POST"
-                          onsubmit="return confirm('Genossenschaft wirklich loeschen? Alle Mitglieder werden entfernt!')">
+                          onsubmit="return confirm('Genossenschaft wirklich löschen? Alle Mitglieder werden entfernt!')">
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                         <button type="submit" class="btn btn-danger btn-block">
-                            Genossenschaft loeschen
+                            Genossenschaft löschen
                         </button>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
                                 <td><?= number_format($member['points']) ?></td>
                                 <td>
                                     <?php if ($member['role'] === 'founder'): ?>
-                                        <span class="badge badge-founder">Gruender</span>
+                                        <span class="badge badge-founder">Gründer</span>
                                     <?php else: ?>
                                         Mitglied
                                     <?php endif; ?>

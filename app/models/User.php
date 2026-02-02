@@ -18,12 +18,12 @@ class User
      */
     public function register(string $username, string $email, string $password, string $farmName): array
     {
-        // Pruefe ob Username bereits existiert
+        // Prüfe ob Username bereits existiert
         if ($this->usernameExists($username)) {
             return ['success' => false, 'message' => 'Benutzername bereits vergeben'];
         }
 
-        // Pruefe ob Email bereits existiert
+        // Prüfe ob Email bereits existiert
         if ($this->emailExists($email)) {
             return ['success' => false, 'message' => 'E-Mail-Adresse bereits registriert'];
         }
@@ -122,12 +122,12 @@ class User
             return ['success' => false, 'message' => 'Benutzername oder Passwort falsch'];
         }
 
-        // Pruefe ob Account aktiv ist
+        // Prüfe ob Account aktiv ist
         if (!$user['is_active']) {
             return ['success' => false, 'message' => 'Account ist deaktiviert'];
         }
 
-        // Pruefe Passwort
+        // Prüfe Passwort
         if (!password_verify($password, $user['password_hash'])) {
             return ['success' => false, 'message' => 'Benutzername oder Passwort falsch'];
         }
@@ -146,14 +146,14 @@ class User
         Session::set('farm_id', $farm['id']);
         Session::set('username', $user['username']);
 
-        // Punkte fuer taeglichen Login
+        // Punkte für täglichen Login
         $this->checkDailyLogin($farm['id']);
 
         Logger::info('User logged in', ['user_id' => $user['id']]);
 
         return [
             'success' => true,
-            'message' => 'Willkommen zurueck!',
+            'message' => 'Willkommen zurück!',
             'user' => $user,
             'farm' => $farm
         ];
@@ -170,13 +170,13 @@ class User
     }
 
     /**
-     * Prueft taeglichen Login-Bonus
+     * Prüft täglichen Login-Bonus
      */
     private function checkDailyLogin(int $farmId): void
     {
         $lastEvent = $this->db->fetchOne(
             "SELECT * FROM game_events
-             WHERE farm_id = ? AND event_type = 'points' AND description LIKE 'Taeglicher Login%'
+             WHERE farm_id = ? AND event_type = 'points' AND description LIKE 'Täglicher Login%'
              AND DATE(created_at) = CURDATE()",
             [$farmId]
         );
@@ -191,7 +191,7 @@ class User
             $this->db->insert('game_events', [
                 'farm_id' => $farmId,
                 'event_type' => 'points',
-                'description' => 'Taeglicher Login-Bonus',
+                'description' => 'Täglicher Login-Bonus',
                 'points_earned' => POINTS_DAILY_LOGIN
             ]);
         }
@@ -214,7 +214,7 @@ class User
     }
 
     /**
-     * Prueft ob Username existiert
+     * Prüft ob Username existiert
      */
     public function usernameExists(string $username): bool
     {
@@ -222,7 +222,7 @@ class User
     }
 
     /**
-     * Prueft ob Email existiert
+     * Prüft ob Email existiert
      */
     public function emailExists(string $email): bool
     {
@@ -245,7 +245,7 @@ class User
     }
 
     /**
-     * Aendert das Passwort
+     * Ändert das Passwort
      */
     public function changePassword(int $userId, string $currentPassword, string $newPassword): array
     {
@@ -265,6 +265,6 @@ class User
 
         Logger::info('Password changed', ['user_id' => $userId]);
 
-        return ['success' => true, 'message' => 'Passwort erfolgreich geaendert'];
+        return ['success' => true, 'message' => 'Passwort erfolgreich geändert'];
     }
 }

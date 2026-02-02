@@ -7,7 +7,7 @@
 class CooperativeController extends Controller
 {
     /**
-     * Zeigt Genossenschaften-Uebersicht
+     * Zeigt Genossenschaften-Übersicht
      */
     public function index(): void
     {
@@ -56,7 +56,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * Gruendet eine Genossenschaft (POST)
+     * Gründet eine Genossenschaft (POST)
      */
     public function create(): void
     {
@@ -135,7 +135,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * Verlaesst die Genossenschaft (POST)
+     * Verlässt die Genossenschaft (POST)
      */
     public function leave(): void
     {
@@ -185,7 +185,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * Teilt ein Geraet (POST)
+     * Teilt ein Gerät (POST)
      */
     public function shareEquipment(): void
     {
@@ -215,7 +215,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * Leiht ein Geraet aus (POST)
+     * Leiht ein Gerät aus (POST)
      */
     public function borrowEquipment(): void
     {
@@ -244,7 +244,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * Gibt ein ausgeliehenes Geraet zurueck (POST)
+     * Gibt ein ausgeliehenes Gerät zurück (POST)
      */
     public function returnEquipment(): void
     {
@@ -274,7 +274,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * API: Gibt Genossenschaften zurueck
+     * API: Gibt Genossenschaften zurück
      */
     public function listApi(): array
     {
@@ -291,7 +291,7 @@ class CooperativeController extends Controller
     }
 
     /**
-     * API: Gibt Mitglieder einer Genossenschaft zurueck
+     * API: Gibt Mitglieder einer Genossenschaft zurück
      */
     public function membersApi(int $id): array
     {

@@ -1,7 +1,7 @@
 <div class="research-page">
     <div class="page-header">
         <h1>Forschungslabor</h1>
-        <p class="text-muted">Erforsche neue Technologien und erweitere deine Moeglichkeiten</p>
+        <p class="text-muted">Erforsche neue Technologien und erweitere deine Möglichkeiten</p>
     </div>
 
     <?php if ($activeResearch): ?>
@@ -34,7 +34,7 @@
                         <form action="<?= BASE_URL ?>/research/cancel" method="POST" class="mt-2">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                             <button type="submit" class="btn btn-outline btn-sm"
-                                    onclick="return confirm('Wirklich abbrechen? Du erhaeltst nur 50% der Kosten zurueck.')">
+                                    onclick="return confirm('Wirklich abbrechen? Du erhältst nur 50% der Kosten zurück.')">
                                 Abbrechen
                             </button>
                         </form>
@@ -53,7 +53,7 @@
                         'crops' => 'Pflanzenanbau',
                         'animals' => 'Viehzucht',
                         'vehicles' => 'Fahrzeuge',
-                        'buildings' => 'Gebaeude',
+                        'buildings' => 'Gebäude',
                         'efficiency' => 'Effizienz'
                     ];
                     echo $categoryNames[$category] ?? ucfirst($category);
@@ -69,7 +69,7 @@
                                 <?php elseif ($research['status'] === 'in_progress'): ?>
                                     <span class="badge badge-warning">In Arbeit</span>
                                 <?php elseif ($research['unlockable']): ?>
-                                    <span class="badge badge-info">Verfuegbar</span>
+                                    <span class="badge badge-info">Verfügbar</span>
                                 <?php else: ?>
                                     <span class="badge badge-secondary">Gesperrt</span>
                                 <?php endif; ?>
@@ -88,7 +88,7 @@
                             </div>
                             <?php if ($research['level_required'] > 1): ?>
                                 <div class="research-requirement">
-                                    Benoetigt Level <?= $research['level_required'] ?>
+                                    Benötigt Level <?= $research['level_required'] ?>
                                 </div>
                             <?php endif; ?>
                             <?php if ($research['unlockable'] && !$activeResearch): ?>

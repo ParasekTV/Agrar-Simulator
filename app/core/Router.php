@@ -2,7 +2,7 @@
 /**
  * Router
  *
- * Einfaches URL-Routing fuer die Anwendung.
+ * Einfaches URL-Routing für die Anwendung.
  */
 class Router
 {
@@ -65,13 +65,13 @@ class Router
         $uri = $this->getUri();
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Pruefe API-Routen zuerst
+        // Prüfe API-Routen zuerst
         if (str_starts_with($uri, '/api/')) {
             $this->handleApiRequest($uri, $method);
             return;
         }
 
-        // Pruefe normale Routen
+        // Prüfe normale Routen
         foreach ($this->routes as $route) {
             if ($route['method'] !== $method) {
                 continue;

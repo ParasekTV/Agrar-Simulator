@@ -11,7 +11,7 @@
         <div class="empty-state">
             <span class="empty-icon">&#127968;</span>
             <h3>Keine Genossenschaften</h3>
-            <p>Es gibt noch keine Genossenschaften. Gruende die Erste!</p>
+            <p>Es gibt noch keine Genossenschaften. Gründe die Erste!</p>
             <a href="<?= BASE_URL ?>/cooperative" class="btn btn-primary">Zur Genossenschaft</a>
         </div>
     <?php else: ?>

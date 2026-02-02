@@ -20,7 +20,7 @@
                     </div>
                     <div class="rank-stat">
                         <span class="stat-value"><?= number_format($myRank['total_money'] ?? 0, 0, ',', '.') ?></span>
-                        <span class="stat-label">Vermoegen</span>
+                        <span class="stat-label">Vermögen</span>
                     </div>
                     <div class="rank-stat">
                         <span class="stat-value"><?= number_format($myRank['total_sales_value'] ?? 0, 0, ',', '.') ?></span>
@@ -47,11 +47,11 @@
         </div>
     </div>
 
-    <!-- Woechentliche Herausforderungen -->
+    <!-- Wöchentliche Herausforderungen -->
     <?php if (!empty($challenges)): ?>
         <div class="card mt-4">
             <div class="card-header">
-                <h3>Woechentliche Herausforderungen</h3>
+                <h3>Wöchentliche Herausforderungen</h3>
             </div>
             <div class="card-body">
                 <div class="challenges-grid">
@@ -94,7 +94,7 @@
                         <th>Spieler</th>
                         <th>Level</th>
                         <th>Punkte</th>
-                        <th>Vermoegen</th>
+                        <th>Vermögen</th>
                     </tr>
                 </thead>
                 <tbody>

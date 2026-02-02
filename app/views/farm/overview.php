@@ -107,14 +107,14 @@
             </div>
         </div>
 
-        <!-- Gebaeude -->
+        <!-- Gebäude -->
         <div class="card">
             <div class="card-header">
-                <h3>Gebaeude (<?= $stats['buildings'] ?>)</h3>
+                <h3>Gebäude (<?= $stats['buildings'] ?>)</h3>
             </div>
             <div class="card-body">
                 <?php if (empty($buildings)): ?>
-                    <p class="text-muted">Keine Gebaeude vorhanden.</p>
+                    <p class="text-muted">Keine Gebäude vorhanden.</p>
                 <?php else: ?>
                     <ul class="building-list">
                         <?php foreach ($buildings as $building): ?>

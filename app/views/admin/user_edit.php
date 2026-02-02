@@ -1,6 +1,6 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin/users" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/admin/users" class="btn btn-outline">&larr; Zurück</a>
         <h1>Benutzer #<?= $user['id'] ?> bearbeiten</h1>
     </div>
 
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="new_password">Neues Passwort (leer lassen = nicht aendern)</label>
+                        <label for="new_password">Neues Passwort (leer lassen = nicht ändern)</label>
                         <input type="password" id="new_password" name="new_password" class="form-control"
                                placeholder="Neues Passwort eingeben...">
                     </div>
@@ -114,10 +114,10 @@
                 <div class="danger-zone">
                     <h4>Gefahrenzone</h4>
                     <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/delete" method="POST"
-                          onsubmit="return confirm('Benutzer wirklich loeschen? Diese Aktion kann nicht rueckgaengig gemacht werden!')">
+                          onsubmit="return confirm('Benutzer wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!')">
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                         <button type="submit" class="btn btn-danger btn-block">
-                            Benutzer loeschen
+                            Benutzer löschen
                         </button>
                     </form>
                 </div>

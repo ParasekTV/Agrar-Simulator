@@ -1,6 +1,6 @@
 <div class="post-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">&larr; Zurück</a>
     </div>
 
     <article class="post-detail">
@@ -29,10 +29,10 @@
                 </form>
                 <?php if ($post['author_farm_id'] === Session::getFarmId()): ?>
                     <form action="<?= BASE_URL ?>/news/delete" method="POST" class="inline-form"
-                          onsubmit="return confirm('Wirklich loeschen?')">
+                          onsubmit="return confirm('Wirklich löschen?')">
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                        <button type="submit" class="btn btn-outline btn-danger">Loeschen</button>
+                        <button type="submit" class="btn btn-outline btn-danger">Löschen</button>
                     </form>
                 <?php endif; ?>
             </div>

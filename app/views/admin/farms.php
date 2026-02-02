@@ -1,12 +1,12 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurueck</a>
-        <h1>Hoefe verwalten</h1>
+        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurück</a>
+        <h1>Höfe verwalten</h1>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h3><?= number_format($total) ?> Hoefe</h3>
+            <h3><?= number_format($total) ?> Höfe</h3>
         </div>
         <div class="card-body">
             <table class="table">

@@ -46,7 +46,7 @@
                             <span class="stat-value"><?= $animal['health_status'] ?>%</span>
                         </div>
                         <div class="animal-stat">
-                            <span class="stat-label">Glueck</span>
+                            <span class="stat-label">Glück</span>
                             <div class="progress-bar progress-bar-sm">
                                 <div class="progress-bar-fill <?= $animal['happiness'] < 50 ? 'bg-danger' : ($animal['happiness'] < 75 ? 'bg-warning' : '') ?>"
                                      style="width: <?= $animal['happiness'] ?>%"></div>
@@ -72,11 +72,11 @@
                                 <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                                 <input type="hidden" name="farm_animal_id" value="<?= $animal['id'] ?>">
                                 <button type="submit" class="btn btn-warning btn-sm">
-                                    Fuettern (<?= number_format($animal['feed_cost'] * $animal['quantity'], 0, ',', '.') ?> T)
+                                    Füttern (<?= number_format($animal['feed_cost'] * $animal['quantity'], 0, ',', '.') ?> T)
                                 </button>
                             </form>
                         <?php else: ?>
-                            <button class="btn btn-outline btn-sm" disabled>Gefuettert</button>
+                            <button class="btn btn-outline btn-sm" disabled>Gefüttert</button>
                         <?php endif; ?>
 
                         <?php if ($animal['production_ready']): ?>
@@ -111,10 +111,10 @@
                 <div class="form-group">
                     <label for="animal-type">Tierart</label>
                     <select name="animal_id" id="animal-type" class="form-select" required>
-                        <option value="">Waehle eine Tierart...</option>
+                        <option value="">Wähle eine Tierart...</option>
                         <?php foreach ($availableAnimals as $animal): ?>
                             <option value="<?= $animal['id'] ?>" data-cost="<?= $animal['cost'] ?>">
-                                <?= htmlspecialchars($animal['name']) ?> - <?= number_format($animal['cost'], 0, ',', '.') ?> T/Stueck
+                                <?= htmlspecialchars($animal['name']) ?> - <?= number_format($animal['cost'], 0, ',', '.') ?> T/Stück
                             </option>
                         <?php endforeach; ?>
                     </select>

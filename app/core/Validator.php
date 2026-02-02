@@ -86,7 +86,7 @@ class Validator
     }
 
     /**
-     * Prueft ob ein Wert erforderlich ist
+     * Prüft ob ein Wert erforderlich ist
      */
     public function required(string $field, string $message = null): self
     {
@@ -100,7 +100,7 @@ class Validator
     }
 
     /**
-     * Prueft minimale Laenge
+     * Prüft minimale Länge
      */
     public function minLength(string $field, int $min, string $message = null): self
     {
@@ -114,7 +114,7 @@ class Validator
     }
 
     /**
-     * Prueft maximale Laenge
+     * Prüft maximale Länge
      */
     public function maxLength(string $field, int $max, string $message = null): self
     {
@@ -128,21 +128,21 @@ class Validator
     }
 
     /**
-     * Prueft auf gueltige E-Mail
+     * Prüft auf gültige E-Mail
      */
     public function email(string $field, string $message = null): self
     {
         $value = $this->data[$field] ?? '';
 
         if (!self::validateEmail($value)) {
-            $this->errors[$field] = $message ?? "Bitte gib eine gueltige E-Mail-Adresse ein";
+            $this->errors[$field] = $message ?? "Bitte gib eine gültige E-Mail-Adresse ein";
         }
 
         return $this;
     }
 
     /**
-     * Prueft auf gueltigen Benutzernamen
+     * Prüft auf gültigen Benutzernamen
      */
     public function username(string $field, string $message = null): self
     {
@@ -156,7 +156,7 @@ class Validator
     }
 
     /**
-     * Prueft ob Werte uebereinstimmen
+     * Prüft ob Werte übereinstimmen
      */
     public function matches(string $field, string $otherField, string $message = null): self
     {
@@ -164,14 +164,14 @@ class Validator
         $otherValue = $this->data[$otherField] ?? '';
 
         if ($value !== $otherValue) {
-            $this->errors[$field] = $message ?? "{$field} stimmt nicht ueberein";
+            $this->errors[$field] = $message ?? "{$field} stimmt nicht überein";
         }
 
         return $this;
     }
 
     /**
-     * Prueft auf numerischen Wert
+     * Prüft auf numerischen Wert
      */
     public function numeric(string $field, string $message = null): self
     {
@@ -185,7 +185,7 @@ class Validator
     }
 
     /**
-     * Prueft Minimalwert
+     * Prüft Minimalwert
      */
     public function min(string $field, float $min, string $message = null): self
     {
@@ -199,7 +199,7 @@ class Validator
     }
 
     /**
-     * Prueft Maximalwert
+     * Prüft Maximalwert
      */
     public function max(string $field, float $max, string $message = null): self
     {
@@ -213,14 +213,14 @@ class Validator
     }
 
     /**
-     * Prueft ob Wert in Liste enthalten ist
+     * Prüft ob Wert in Liste enthalten ist
      */
     public function in(string $field, array $allowed, string $message = null): self
     {
         $value = $this->data[$field] ?? '';
 
         if (!in_array($value, $allowed, true)) {
-            $this->errors[$field] = $message ?? "{$field} hat einen ungueltigen Wert";
+            $this->errors[$field] = $message ?? "{$field} hat einen ungültigen Wert";
         }
 
         return $this;
@@ -241,7 +241,7 @@ class Validator
     }
 
     /**
-     * Prueft ob Validierung erfolgreich war
+     * Prüft ob Validierung erfolgreich war
      */
     public function isValid(): bool
     {
@@ -249,7 +249,7 @@ class Validator
     }
 
     /**
-     * Gibt Fehler zurueck
+     * Gibt Fehler zurück
      */
     public function getErrors(): array
     {
@@ -257,7 +257,7 @@ class Validator
     }
 
     /**
-     * Gibt ersten Fehler zurueck
+     * Gibt ersten Fehler zurück
      */
     public function getFirstError(): ?string
     {
@@ -265,7 +265,7 @@ class Validator
     }
 
     /**
-     * Fuegt manuell einen Fehler hinzu
+     * Fügt manuell einen Fehler hinzu
      */
     public function addError(string $field, string $message): self
     {

@@ -2,7 +2,7 @@
 /**
  * Base Controller
  *
- * Basis-Klasse fuer alle Controller.
+ * Basis-Klasse für alle Controller.
  */
 abstract class Controller
 {
@@ -18,7 +18,7 @@ abstract class Controller
      */
     protected function render(string $view, array $data = []): void
     {
-        // Extrahiere Daten fuer die View
+        // Extrahiere Daten für die View
         extract($data);
 
         // Hole CSRF-Token
@@ -42,7 +42,7 @@ abstract class Controller
      */
     protected function renderWithLayout(string $view, array $data = [], string $layout = 'main'): void
     {
-        // Extrahiere Daten fuer die View
+        // Extrahiere Daten für die View
         extract($data);
 
         // Hole CSRF-Token
@@ -117,7 +117,7 @@ abstract class Controller
     }
 
     /**
-     * Prueft ob Benutzer eingeloggt ist
+     * Prüft ob Benutzer eingeloggt ist
      */
     protected function requireAuth(): void
     {
@@ -128,7 +128,7 @@ abstract class Controller
     }
 
     /**
-     * Prueft ob Benutzer Gaeste ist
+     * Prüft ob Benutzer Gäste ist
      */
     protected function requireGuest(): void
     {

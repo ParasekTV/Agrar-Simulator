@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1>Inventar</h1>
         <div class="storage-info">
-            <span>Lagerkapazitaet: <?= number_format($storageUsed) ?> / <?= number_format($storageCapacity) ?></span>
+            <span>Lagerkapazität: <?= number_format($storageUsed) ?> / <?= number_format($storageCapacity) ?></span>
             <div class="progress-bar" style="width: 200px;">
                 <div class="progress-bar-fill <?= ($storageUsed / max(1, $storageCapacity)) > 0.9 ? 'bg-warning' : '' ?>"
                      style="width: <?= min(100, ($storageUsed / max(1, $storageCapacity)) * 100) ?>%"></div>
@@ -14,7 +14,7 @@
         <div class="empty-state">
             <span class="empty-icon">&#128230;</span>
             <h3>Inventar ist leer</h3>
-            <p>Ernte Feldfruchte oder sammle Tierprodukte!</p>
+            <p>Ernte Feldfrüchte oder sammle Tierprodukte!</p>
         </div>
     <?php else: ?>
         <div class="inventory-categories">
@@ -24,7 +24,7 @@
                 $grouped[$item['item_type']][] = $item;
             }
             $typeNames = [
-                'crop' => 'Feldfruchte',
+                'crop' => 'Feldfrüchte',
                 'animal_product' => 'Tierprodukte',
                 'material' => 'Materialien',
                 'fuel' => 'Kraftstoff'
@@ -107,7 +107,7 @@
                     <input type="number" name="quantity" id="market-quantity" class="form-input" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="market-price">Preis pro Stueck (T)</label>
+                    <label for="market-price">Preis pro Stück (T)</label>
                     <input type="number" name="price" id="market-price" class="form-input" min="0.01" step="0.01" required>
                 </div>
             </div>

@@ -2,12 +2,12 @@
 /**
  * Vehicle Controller
  *
- * Verwaltet Fahrzeuge und Geraete.
+ * Verwaltet Fahrzeuge und Geräte.
  */
 class VehicleController extends Controller
 {
     /**
-     * Zeigt Fahrzeug-Uebersicht
+     * Zeigt Fahrzeug-Übersicht
      */
     public function index(): void
     {
@@ -176,7 +176,7 @@ class VehicleController extends Controller
     }
 
     /**
-     * API: Gibt verfuegbare Fahrzeuge zum Kauf zurueck
+     * API: Gibt verfügbare Fahrzeuge zum Kauf zurück
      */
     public function availableApi(): array
     {

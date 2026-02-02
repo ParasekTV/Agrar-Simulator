@@ -40,6 +40,8 @@ $router->post('/fields/plant', 'Field', 'plant');
 $router->post('/fields/harvest', 'Field', 'harvest');
 $router->post('/fields/buy', 'Field', 'buy');
 $router->post('/fields/fertilize', 'Field', 'fertilize');
+$router->post('/fields/apply-fertilizer', 'Field', 'applyFertilizer');
+$router->post('/fields/lime', 'Field', 'lime');
 
 // Tiere
 $router->get('/animals', 'Animal', 'index');
@@ -107,6 +109,14 @@ $router->get('/admin/cooperatives/{id}', 'Admin', 'editCooperative');
 $router->post('/admin/cooperatives/{id}/update', 'Admin', 'updateCooperative');
 $router->post('/admin/cooperatives/{id}/delete', 'Admin', 'deleteCooperative');
 $router->post('/admin/cooperatives/remove-member', 'Admin', 'removeMember');
+
+// Admin News/Changelog
+$router->get('/admin/news', 'Admin', 'news');
+$router->get('/admin/news/create', 'Admin', 'createNews');
+$router->post('/admin/news/store', 'Admin', 'storeNews');
+$router->get('/admin/news/{id}', 'Admin', 'editNews');
+$router->post('/admin/news/{id}/update', 'Admin', 'updateNews');
+$router->post('/admin/news/{id}/delete', 'Admin', 'deleteNews');
 
 // ==========================================
 // API-Routen

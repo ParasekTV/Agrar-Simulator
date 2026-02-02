@@ -18,7 +18,7 @@ class Farm
     }
 
     /**
-     * Laedt die Farm-Daten aus der Datenbank
+     * Lädt die Farm-Daten aus der Datenbank
      */
     private function loadFarmData(): void
     {
@@ -30,7 +30,7 @@ class Farm
     }
 
     /**
-     * Gibt die Farm-Daten zurueck
+     * Gibt die Farm-Daten zurück
      */
     public function getData(): ?array
     {
@@ -38,7 +38,7 @@ class Farm
     }
 
     /**
-     * Gibt die Farm-ID zurueck
+     * Gibt die Farm-ID zurück
      */
     public function getId(): int
     {
@@ -46,7 +46,7 @@ class Farm
     }
 
     /**
-     * Fuegt Geld hinzu
+     * Fügt Geld hinzu
      */
     public function addMoney(float $amount, string $reason = ''): float
     {
@@ -75,7 +75,7 @@ class Farm
     }
 
     /**
-     * Prueft ob genuegend Geld vorhanden ist
+     * Prüft ob genügend Geld vorhanden ist
      */
     public function hasMoney(float $amount): bool
     {
@@ -83,7 +83,7 @@ class Farm
     }
 
     /**
-     * Fuegt Punkte hinzu
+     * Fügt Punkte hinzu
      */
     public function addPoints(int $points, string $reason = ''): int
     {
@@ -100,7 +100,7 @@ class Farm
     }
 
     /**
-     * Prueft und fuehrt Level-Up durch
+     * Prüft und führt Level-Up durch
      */
     private function checkLevelUp(): void
     {
@@ -147,7 +147,7 @@ class Farm
     }
 
     /**
-     * Gibt alle Felder der Farm zurueck
+     * Gibt alle Felder der Farm zurück
      */
     public function getFields(): array
     {
@@ -160,7 +160,7 @@ class Farm
     }
 
     /**
-     * Gibt alle Tiere der Farm zurueck
+     * Gibt alle Tiere der Farm zurück
      */
     public function getAnimals(): array
     {
@@ -173,7 +173,7 @@ class Farm
     }
 
     /**
-     * Gibt alle Fahrzeuge der Farm zurueck
+     * Gibt alle Fahrzeuge der Farm zurück
      */
     public function getVehicles(): array
     {
@@ -185,7 +185,7 @@ class Farm
     }
 
     /**
-     * Gibt alle Gebaeude der Farm zurueck
+     * Gibt alle Gebäude der Farm zurück
      */
     public function getBuildings(): array
     {
@@ -197,7 +197,7 @@ class Farm
     }
 
     /**
-     * Gibt das Inventar der Farm zurueck
+     * Gibt das Inventar der Farm zurück
      */
     public function getInventory(): array
     {
@@ -206,7 +206,7 @@ class Farm
     }
 
     /**
-     * Gibt die abgeschlossenen Forschungen zurueck
+     * Gibt die abgeschlossenen Forschungen zurück
      */
     public function getCompletedResearch(): array
     {
@@ -218,7 +218,7 @@ class Farm
     }
 
     /**
-     * Gibt die aktive Forschung zurueck
+     * Gibt die aktive Forschung zurück
      */
     public function getActiveResearch(): ?array
     {
@@ -231,7 +231,7 @@ class Farm
     }
 
     /**
-     * Prueft ob eine Forschung abgeschlossen ist
+     * Prüft ob eine Forschung abgeschlossen ist
      */
     public function hasResearch(int $researchId): bool
     {
@@ -243,7 +243,7 @@ class Farm
     }
 
     /**
-     * Gibt die letzten Events zurueck
+     * Gibt die letzten Events zurück
      */
     public function getRecentEvents(int $limit = 10): array
     {
@@ -255,7 +255,7 @@ class Farm
     }
 
     /**
-     * Gibt Statistiken der Farm zurueck
+     * Gibt Statistiken der Farm zurück
      */
     public function getStats(): array
     {
@@ -303,7 +303,7 @@ class Farm
     }
 
     /**
-     * Berechnet die Gesamtlagerkapazitaet
+     * Berechnet die Gesamtlagerkapazität
      */
     public function getTotalStorageCapacity(): int
     {
@@ -324,7 +324,7 @@ class Farm
     }
 
     /**
-     * Gibt benoetigte Punkte fuer naechstes Level zurueck
+     * Gibt benötigte Punkte für nächstes Level zurück
      */
     public function getPointsForNextLevel(): int
     {

@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <a href="<?= BASE_URL ?>/dashboard" class="logo">
-                <span class="logo-icon">&#127806;</span>
+                <img src="<?= BASE_URL ?>/img/logo_lsbg.png" alt="LSBG" class="logo-img">
                 <span class="logo-text">Agrar Simulator</span>
             </a>
         </div>

@@ -1,6 +1,6 @@
 <div class="admin-page">
     <div class="page-header">
-        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurueck</a>
+        <a href="<?= BASE_URL ?>/admin" class="btn btn-outline">&larr; Zurück</a>
         <h1>Genossenschaften verwalten</h1>
     </div>
 
@@ -17,11 +17,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Gruender</th>
+                            <th>Gründer</th>
                             <th>Mitglieder</th>
                             <th>Level</th>
                             <th>Kasse</th>
-                            <th>Gegruendet</th>
+                            <th>Gegründet</th>
                             <th>Aktionen</th>
                         </tr>
                     </thead>

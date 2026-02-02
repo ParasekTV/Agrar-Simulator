@@ -2,7 +2,7 @@
 /**
  * News Model
  *
- * Verwaltet Forum/Zeitungs-Beitraege.
+ * Verwaltet Forum/Zeitungs-Beiträge.
  */
 class News
 {
@@ -29,7 +29,7 @@ class News
 
         $allowedCategories = ['announcement', 'market', 'cooperative', 'tips', 'offtopic'];
         if (!in_array($category, $allowedCategories)) {
-            return ['success' => false, 'message' => 'Ungueltige Kategorie'];
+            return ['success' => false, 'message' => 'Ungültige Kategorie'];
         }
 
         $postId = $this->db->insert('news_posts', [
@@ -40,7 +40,7 @@ class News
         ]);
 
         $farm = new Farm($farmId);
-        $farm->addPoints(5, 'Beitrag veroeffentlicht');
+        $farm->addPoints(5, 'Beitrag veröffentlicht');
 
         Logger::info('News post created', [
             'farm_id' => $farmId,
@@ -49,13 +49,138 @@ class News
 
         return [
             'success' => true,
-            'message' => 'Beitrag veroeffentlicht',
+            'message' => 'Beitrag veröffentlicht',
             'post_id' => $postId
         ];
     }
 
     /**
-     * Gibt Beitraege zurueck
+     * Erstellt einen Admin-Beitrag (News/Changelog)
+     */
+    public function createAdminPost(int $adminUserId, string $title, string $content, string $category, bool $pinned = false): array
+    {
+        // Validierung
+        if (strlen($title) < 3 || strlen($title) > 200) {
+            return ['success' => false, 'message' => 'Titel muss zwischen 3 und 200 Zeichen lang sein'];
+        }
+
+        if (strlen($content) < 10) {
+            return ['success' => false, 'message' => 'Inhalt muss mindestens 10 Zeichen lang sein'];
+        }
+
+        $allowedCategories = ['changelog', 'admin_news'];
+        if (!in_array($category, $allowedCategories)) {
+            return ['success' => false, 'message' => 'Ungültige Kategorie für Admin-Posts'];
+        }
+
+        $postId = $this->db->insert('news_posts', [
+            'author_farm_id' => null,
+            'admin_user_id' => $adminUserId,
+            'title' => Validator::sanitizeString($title),
+            'content' => $content, // HTML erlaubt für Admin-Posts
+            'category' => $category,
+            'is_admin_post' => 1,
+            'is_pinned' => $pinned ? 1 : 0
+        ]);
+
+        Logger::info('Admin news post created', [
+            'admin_user_id' => $adminUserId,
+            'post_id' => $postId,
+            'category' => $category
+        ]);
+
+        // Discord Webhook senden
+        $this->sendToDiscord($title, $content, $category, $pinned);
+
+        return [
+            'success' => true,
+            'message' => 'Admin-Beitrag veröffentlicht',
+            'post_id' => $postId
+        ];
+    }
+
+    /**
+     * Aktualisiert einen Admin-Beitrag
+     */
+    public function updateAdminPost(int $postId, string $title, string $content, string $category, bool $pinned = false): array
+    {
+        $post = $this->db->fetchOne('SELECT * FROM news_posts WHERE id = ? AND is_admin_post = 1', [$postId]);
+
+        if (!$post) {
+            return ['success' => false, 'message' => 'Admin-Beitrag nicht gefunden'];
+        }
+
+        $this->db->update('news_posts', [
+            'title' => Validator::sanitizeString($title),
+            'content' => $content,
+            'category' => $category,
+            'is_pinned' => $pinned ? 1 : 0
+        ], 'id = :id', ['id' => $postId]);
+
+        Logger::info('Admin news post updated', ['post_id' => $postId]);
+
+        return [
+            'success' => true,
+            'message' => 'Beitrag aktualisiert'
+        ];
+    }
+
+    /**
+     * Löscht einen Admin-Beitrag
+     */
+    public function deleteAdminPost(int $postId): array
+    {
+        $post = $this->db->fetchOne('SELECT * FROM news_posts WHERE id = ? AND is_admin_post = 1', [$postId]);
+
+        if (!$post) {
+            return ['success' => false, 'message' => 'Admin-Beitrag nicht gefunden'];
+        }
+
+        // Lösche Kommentare und Likes
+        $this->db->delete('news_comments', 'post_id = :id', ['id' => $postId]);
+        $this->db->delete('post_likes', 'post_id = :id', ['id' => $postId]);
+        $this->db->delete('news_posts', 'id = :id', ['id' => $postId]);
+
+        Logger::info('Admin news post deleted', ['post_id' => $postId]);
+
+        return [
+            'success' => true,
+            'message' => 'Beitrag gelöscht'
+        ];
+    }
+
+    /**
+     * Gibt alle Admin-Beiträge zurück
+     */
+    public function getAdminPosts(int $page = 1, int $perPage = 20): array
+    {
+        $offset = ($page - 1) * $perPage;
+
+        $posts = $this->db->fetchAll(
+            "SELECT np.*, u.username as admin_name,
+                    (SELECT COUNT(*) FROM news_comments WHERE post_id = np.id) as comment_count
+             FROM news_posts np
+             LEFT JOIN users u ON np.admin_user_id = u.id
+             WHERE np.is_admin_post = 1
+             ORDER BY np.created_at DESC
+             LIMIT {$perPage} OFFSET {$offset}"
+        );
+
+        $total = (int) $this->db->fetchColumn(
+            "SELECT COUNT(*) FROM news_posts WHERE is_admin_post = 1"
+        );
+
+        return [
+            'posts' => $posts,
+            'total' => $total,
+            'page' => $page,
+            'per_page' => $perPage,
+            'total_pages' => ceil($total / $perPage)
+        ];
+    }
+
+    /**
+     * Gibt Beiträge zurück
      */
     public function getPosts(
         ?string $category = null,
@@ -73,10 +198,12 @@ class News
         $whereClause = implode(' AND ', $conditions);
         $offset = ($page - 1) * $perPage;
 
-        $sql = "SELECT np.*, f.farm_name as author_name,
+        $sql = "SELECT np.*,
+                       COALESCE(f.farm_name, CONCAT('Admin: ', u.username)) as author_name,
                        (SELECT COUNT(*) FROM news_comments WHERE post_id = np.id) as comment_count
                 FROM news_posts np
-                JOIN farms f ON np.author_farm_id = f.id
+                LEFT JOIN farms f ON np.author_farm_id = f.id
+                LEFT JOIN users u ON np.admin_user_id = u.id
                 WHERE {$whereClause}
                 ORDER BY np.is_pinned DESC, np.created_at DESC
                 LIMIT {$perPage} OFFSET {$offset}";
@@ -96,14 +223,16 @@ class News
     }
 
     /**
-     * Gibt einen einzelnen Beitrag zurueck
+     * Gibt einen einzelnen Beitrag zurück
      */
     public function getPost(int $postId): ?array
     {
         $post = $this->db->fetchOne(
-            "SELECT np.*, f.farm_name as author_name
+            "SELECT np.*,
+                    COALESCE(f.farm_name, CONCAT('Admin: ', u.username)) as author_name
              FROM news_posts np
-             JOIN farms f ON np.author_farm_id = f.id
+             LEFT JOIN farms f ON np.author_farm_id = f.id
+             LEFT JOIN users u ON np.admin_user_id = u.id
              WHERE np.id = ?",
             [$postId]
         );
@@ -112,7 +241,7 @@ class News
             return null;
         }
 
-        // Erhoehe Views
+        // Erhöhe Views
         $this->db->query('UPDATE news_posts SET views = views + 1 WHERE id = ?', [$postId]);
 
         // Hole Kommentare
@@ -133,7 +262,7 @@ class News
      */
     public function createComment(int $postId, int $farmId, string $content): array
     {
-        // Pruefe ob Post existiert
+        // Prüfe ob Post existiert
         if (!$this->db->exists('news_posts', 'id = ?', [$postId])) {
             return ['success' => false, 'message' => 'Beitrag nicht gefunden'];
         }
@@ -156,7 +285,7 @@ class News
 
         return [
             'success' => true,
-            'message' => 'Kommentar veroeffentlicht',
+            'message' => 'Kommentar veröffentlicht',
             'comment_id' => $commentId
         ];
     }
@@ -166,7 +295,7 @@ class News
      */
     public function likePost(int $postId, int $farmId): array
     {
-        // Pruefe ob bereits geliked
+        // Prüfe ob bereits geliked
         $existing = $this->db->fetchOne(
             'SELECT * FROM post_likes WHERE post_id = ? AND farm_id = ?',
             [$postId, $farmId]
@@ -191,7 +320,7 @@ class News
     }
 
     /**
-     * Loescht einen Beitrag
+     * Löscht einen Beitrag
      */
     public function deletePost(int $postId, int $farmId): array
     {
@@ -211,11 +340,11 @@ class News
             'post_id' => $postId
         ]);
 
-        return ['success' => true, 'message' => 'Beitrag geloescht'];
+        return ['success' => true, 'message' => 'Beitrag gelöscht'];
     }
 
     /**
-     * Loescht einen Kommentar
+     * Löscht einen Kommentar
      */
     public function deleteComment(int $commentId, int $farmId): array
     {
@@ -230,11 +359,11 @@ class News
 
         $this->db->delete('news_comments', 'id = ?', [$commentId]);
 
-        return ['success' => true, 'message' => 'Kommentar geloescht'];
+        return ['success' => true, 'message' => 'Kommentar gelöscht'];
     }
 
     /**
-     * Gibt Beitraege eines Benutzers zurueck
+     * Gibt Beiträge eines Benutzers zurück
      */
     public function getUserPosts(int $farmId, int $limit = 10): array
     {
@@ -252,7 +381,7 @@ class News
      */
     public function pinPost(int $postId, bool $pinned = true): array
     {
-        $this->db->update('news_posts', ['is_pinned' => $pinned], 'id = :id', ['id' => $postId]);
+        $this->db->update('news_posts', ['is_pinned' => $pinned ? 1 : 0], 'id = :id', ['id' => $postId]);
 
         return [
             'success' => true,
@@ -261,7 +390,7 @@ class News
     }
 
     /**
-     * Gibt die beliebtesten Beitraege zurueck
+     * Gibt die beliebtesten Beiträge zurück
      */
     public function getPopular(int $limit = 5): array
     {
@@ -276,7 +405,7 @@ class News
     }
 
     /**
-     * Gibt die neuesten Beitraege zurueck
+     * Gibt die neuesten Beiträge zurück
      */
     public function getRecent(int $limit = 5): array
     {
@@ -291,7 +420,7 @@ class News
     }
 
     /**
-     * Sucht nach Beitraegen
+     * Sucht nach Beiträgen
      */
     public function search(string $query, int $page = 1, int $perPage = 20): array
     {
@@ -320,5 +449,19 @@ class News
             'per_page' => $perPage,
             'total_pages' => ceil($total / $perPage)
         ];
+    }
+
+    /**
+     * Sendet einen Beitrag an Discord via Webhook
+     */
+    private function sendToDiscord(string $title, string $content, string $category, bool $pinned): void
+    {
+        try {
+            $discord = new DiscordWebhook();
+            $discord->sendNewsPost($title, $content, $category, $pinned);
+        } catch (\Exception $e) {
+            // Fehler beim Discord-Senden sollte den Beitrag nicht blockieren
+            Logger::error('Discord Webhook failed', ['error' => $e->getMessage()]);
+        }
     }
 }

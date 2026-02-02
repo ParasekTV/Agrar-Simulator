@@ -1,7 +1,7 @@
 <div class="news-search-page">
     <div class="page-header">
         <h1>Forum durchsuchen</h1>
-        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">&larr; Zurueck zum Forum</a>
+        <a href="<?= BASE_URL ?>/news" class="btn btn-outline">&larr; Zurück zum Forum</a>
     </div>
 
     <!-- Suchformular -->
@@ -33,7 +33,7 @@
                     <select name="sort" class="form-select">
                         <option value="relevance" <?= ($sort ?? 'relevance') === 'relevance' ? 'selected' : '' ?>>Relevanz</option>
                         <option value="newest" <?= ($sort ?? '') === 'newest' ? 'selected' : '' ?>>Neueste zuerst</option>
-                        <option value="oldest" <?= ($sort ?? '') === 'oldest' ? 'selected' : '' ?>>Aelteste zuerst</option>
+                        <option value="oldest" <?= ($sort ?? '') === 'oldest' ? 'selected' : '' ?>>Älteste zuerst</option>
                         <option value="most_liked" <?= ($sort ?? '') === 'most_liked' ? 'selected' : '' ?>>Beliebteste</option>
                     </select>
                 </div>
@@ -47,9 +47,9 @@
             <div class="results-header">
                 <h3>
                     <?php if (!empty($results)): ?>
-                        <?= count($results) ?> Ergebnis<?= count($results) !== 1 ? 'se' : '' ?> fuer "<?= htmlspecialchars($query) ?>"
+                        <?= count($results) ?> Ergebnis<?= count($results) !== 1 ? 'se' : '' ?> für "<?= htmlspecialchars($query) ?>"
                     <?php else: ?>
-                        Keine Ergebnisse fuer "<?= htmlspecialchars($query) ?>"
+                        Keine Ergebnisse für "<?= htmlspecialchars($query) ?>"
                     <?php endif; ?>
                 </h3>
             </div>
@@ -57,7 +57,7 @@
             <?php if (empty($results)): ?>
                 <div class="empty-state">
                     <span class="empty-icon">&#128269;</span>
-                    <h3>Keine Beitraege gefunden</h3>
+                    <h3>Keine Beiträge gefunden</h3>
                     <p>Versuche andere Suchbegriffe oder erweitere deine Suche.</p>
                 </div>
             <?php else: ?>
@@ -129,14 +129,14 @@
         <div class="search-hints">
             <h3>Suchtipps</h3>
             <ul>
-                <li>Verwende spezifische Begriffe fuer bessere Ergebnisse</li>
-                <li>Suche nach Nutzernamen um Beitraege eines Spielers zu finden</li>
+                <li>Verwende spezifische Begriffe für bessere Ergebnisse</li>
+                <li>Suche nach Nutzernamen um Beiträge eines Spielers zu finden</li>
                 <li>Filtere nach Kategorie um die Suche einzugrenzen</li>
             </ul>
 
             <h4>Beliebte Themen</h4>
             <div class="popular-tags">
-                <a href="<?= BASE_URL ?>/news/search?q=Anfaenger" class="tag">Anfaenger</a>
+                <a href="<?= BASE_URL ?>/news/search?q=Anfänger" class="tag">Anfänger</a>
                 <a href="<?= BASE_URL ?>/news/search?q=Handel" class="tag">Handel</a>
                 <a href="<?= BASE_URL ?>/news/search?q=Ernte" class="tag">Ernte</a>
                 <a href="<?= BASE_URL ?>/news/search?q=Genossenschaft" class="tag">Genossenschaft</a>

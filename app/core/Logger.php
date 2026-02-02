@@ -2,7 +2,7 @@
 /**
  * Logger
  *
- * Einfaches Logging-System fuer Fehler und Events.
+ * Einfaches Logging-System für Fehler und Events.
  */
 class Logger
 {

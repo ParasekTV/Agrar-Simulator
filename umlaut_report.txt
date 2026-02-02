@@ -1,0 +1,463 @@
+==========================================================
+UMLAUT-ERSETZUNGEN BERICHT
+Generiert: 2026-01-31
+==========================================================
+
+Gefundene potentielle Umlaut-Ersetzungen in PHP-Dateien
+(ae -> ä, oe -> ö, ue -> ü)
+
+Hinweis: Folgende Wörter sind KEINE Fehler:
+- "Neues", "Neuer", "Neueste" (korrekt)
+- "Bauernzeitung" (korrekt)
+- "query", "require", "value", "true", "false" (Code/Englisch)
+- "querySelectorAll", "urlencode" (JavaScript/PHP)
+- "Kraftstoff" (korrekt)
+
+==========================================================
+DATEI: app/core/Validator.php
+----------------------------------------------------------
+Zeile  89 | Prueft           -> Prüft
+Zeile 103 | Prueft, Laenge   -> Prüft, Länge
+Zeile 117 | Prueft, Laenge   -> Prüft, Länge
+Zeile 131 | Prueft, gueltige -> Prüft, gültige
+Zeile 138 | gueltige         -> gültige
+Zeile 145 | Prueft, gueltigen -> Prüft, gültigen
+Zeile 159 | Prueft, uebereinstimmen -> Prüft, übereinstimmen
+Zeile 167 | ueberein         -> überein
+Zeile 174 | Prueft           -> Prüft
+Zeile 188 | Prueft           -> Prüft
+Zeile 202 | Prueft           -> Prüft
+Zeile 216 | Prueft           -> Prüft
+Zeile 223 | ungueltigen      -> ungültigen
+Zeile 244 | Prueft           -> Prüft
+Zeile 252 | zurueck          -> zurück
+Zeile 260 | zurueck          -> zurück
+Zeile 268 | Fuegt            -> Fügt
+
+==========================================================
+DATEI: app/core/Session.php
+----------------------------------------------------------
+Zeile  65 | Prueft           -> Prüft
+Zeile  83 | Zerstoert        -> Zerstört
+Zeile 169 | Prueft           -> Prüft
+Zeile 178 | loescht          -> löscht
+Zeile 191 | Prueft           -> Prüft
+
+==========================================================
+DATEI: app/core/Router.php
+----------------------------------------------------------
+Zeile   5 | fuer             -> für
+Zeile  68 | Pruefe           -> Prüfe
+Zeile  74 | Pruefe           -> Prüfe
+
+==========================================================
+DATEI: app/core/Logger.php
+----------------------------------------------------------
+Zeile   5 | fuer             -> für
+
+==========================================================
+DATEI: app/core/Database.php
+----------------------------------------------------------
+Zeile  32 | spaeter          -> später
+Zeile  57 | Fuehrt           -> Führt
+Zeile  92 | Fuegt            -> Fügt
+Zeile 107 | Datensaetze      -> Datensätze
+Zeile 117 | Praefixiere      -> Präfixiere
+Zeile 130 | Loescht, Datensaetze -> Löscht, Datensätze
+Zeile 147 | Bestaetigt       -> Bestätigt
+Zeile 155 | rueckgaengig     -> rückgängig
+Zeile 163 | Prueft           -> Prüft
+Zeile 172 | Zaehlt, Datensaetze -> Zählt, Datensätze
+
+==========================================================
+DATEI: app/core/Controller.php
+----------------------------------------------------------
+Zeile   5 | fuer             -> für
+Zeile  21 | fuer             -> für
+Zeile  45 | fuer             -> für
+Zeile 120 | Prueft           -> Prüft
+Zeile 131 | Prueft, Gaeste   -> Prüft, Gäste
+
+==========================================================
+DATEI: app/models/Vehicle.php
+----------------------------------------------------------
+Zeile   5 | Geraete          -> Geräte
+Zeile  28 | Pruefe           -> Prüfe
+Zeile  36 | Pruefe           -> Prüfe
+Zeile  39 | genuegend        -> genügend
+Zeile  80 | Pruefe           -> Prüfe
+Zeile  98 | Loesche          -> Lösche
+Zeile 109 | fuer             -> für
+Zeile 142 | genuegend, fuer  -> genügend, für
+Zeile 160 | verfuegbare, zurueck -> verfügbare, zurück
+Zeile 175 | zurueck          -> zurück
+Zeile 201 | erhoehe          -> erhöhe
+Zeile 242 | verfuegbar       -> verfügbar
+
+==========================================================
+DATEI: app/models/User.php
+----------------------------------------------------------
+Zeile  21 | Pruefe           -> Prüfe
+Zeile  26 | Pruefe           -> Prüfe
+Zeile 125 | Pruefe           -> Prüfe
+Zeile 130 | Pruefe           -> Prüfe
+Zeile 149 | fuer, taeglichen -> für, täglichen
+Zeile 156 | zurueck          -> zurück
+Zeile 173 | Prueft, taeglichen -> Prüft, täglichen
+Zeile 179 | Taeglicher       -> Täglicher
+Zeile 194 | Taeglicher       -> Täglicher
+Zeile 217 | Prueft           -> Prüft
+Zeile 225 | Prueft           -> Prüft
+Zeile 248 | Aendert          -> Ändert
+Zeile 268 | geaendert        -> geändert
+
+==========================================================
+DATEI: app/models/Research.php
+----------------------------------------------------------
+Zeile  28 | Pruefe           -> Prüfe
+Zeile  39 | laeuft           -> läuft
+Zeile  43 | Pruefe, laeuft   -> Prüfe, läuft
+Zeile  50 | laeuft           -> läuft
+Zeile  53 | Pruefe           -> Prüfe
+Zeile  61 | erfuellt         -> erfüllt
+Zeile  65 | Pruefe           -> Prüfe
+Zeile  73 | Pruefe           -> Prüfe
+Zeile  76 | genuegend        -> genügend
+Zeile 102 | zurueck          -> zurück
+Zeile 121 | Fuege            -> Füge
+Zeile 135 | Pruefe           -> Prüfe
+Zeile 149 | Prueft           -> Prüft
+Zeile 158 | Pruefe           -> Prüfe
+Zeile 166 | Pruefe           -> Prüfe
+Zeile 178 | zurueck          -> zurück
+Zeile 192 | fuer             -> für
+Zeile 265 | zurueck          -> zurück
+Zeile 280 | fuer             -> für
+
+==========================================================
+DATEI: app/models/Ranking.php
+----------------------------------------------------------
+Zeile  17 | zurueck          -> zurück
+Zeile  32 | Fuege            -> Füge
+Zeile  49 | zurueck          -> zurück
+Zeile  65 | zurueck          -> zurück
+Zeile 115 | zurueck          -> zurück
+Zeile 137 | woechentliche, zurueck -> wöchentliche, zurück
+Zeile 151 | zurueck          -> zurück
+Zeile 239 | zurueck          -> zurück
+Zeile 255 | woechentliche    -> wöchentliche
+Zeile 293 | fuer             -> für
+
+==========================================================
+DATEI: app/models/Farm.php
+----------------------------------------------------------
+Zeile  21 | Laedt            -> Lädt
+Zeile  33 | zurueck          -> zurück
+Zeile  41 | zurueck          -> zurück
+Zeile  49 | Fuegt            -> Fügt
+Zeile  78 | Prueft, genuegend -> Prüft, genügend
+Zeile  86 | Fuegt            -> Fügt
+Zeile 103 | Prueft, fuehrt   -> Prüft, führt
+Zeile 150 | zurueck          -> zurück
+Zeile 163 | zurueck          -> zurück
+Zeile 176 | zurueck          -> zurück
+Zeile 188 | Gebaeude, zurueck -> Gebäude, zurück
+Zeile 200 | zurueck          -> zurück
+Zeile 209 | zurueck          -> zurück
+Zeile 221 | zurueck          -> zurück
+Zeile 234 | Prueft           -> Prüft
+Zeile 246 | zurueck          -> zurück
+Zeile 258 | zurueck          -> zurück
+Zeile 306 | Gesamtlagerkapazitaet -> Gesamtlagerkapazität
+Zeile 327 | benoetigte, fuer, naechstes -> benötigte, für, nächstes
+
+==========================================================
+DATEI: app/models/News.php
+----------------------------------------------------------
+Zeile   5 | Beitraege        -> Beiträge
+Zeile  32 | Ungueltige       -> Ungültige
+Zeile  43 | veroeffentlicht  -> veröffentlicht
+Zeile  52 | veroeffentlicht  -> veröffentlicht
+Zeile  58 | Beitraege, zurueck -> Beiträge, zurück
+Zeile  99 | zurueck          -> zurück
+Zeile 115 | Erhoehe          -> Erhöhe
+Zeile 136 | Pruefe           -> Prüfe
+Zeile 159 | veroeffentlicht  -> veröffentlicht
+Zeile 169 | Pruefe           -> Prüfe
+Zeile 194 | Loescht          -> Löscht
+Zeile 214 | geloescht        -> gelöscht
+Zeile 218 | Loescht          -> Löscht
+Zeile 233 | geloescht        -> gelöscht
+Zeile 237 | Beitraege, zurueck -> Beiträge, zurück
+Zeile 264 | Beitraege, zurueck -> Beiträge, zurück
+Zeile 279 | Beitraege, zurueck -> Beiträge, zurück
+Zeile 294 | Beitraegen       -> Beiträgen
+
+==========================================================
+DATEI: app/models/Field.php
+----------------------------------------------------------
+Zeile  42 | Pruefe           -> Prüfe
+Zeile  53 | Pruefe           -> Prüfe
+Zeile  56 | genuegend        -> genügend
+Zeile 108 | Bodenqualitaet   -> Bodenqualität
+Zeile 113 | Fuege            -> Füge
+Zeile 116 | Bodenqualitaet   -> Bodenqualität
+Zeile 152 | Fuegt            -> Fügt
+Zeile 177 | verfuegbare, zurueck -> verfügbare, zurück
+Zeile 203 | genuegend        -> genügend
+Zeile 207 | naechste         -> nächste
+Zeile 237 | zurueck          -> zurück
+Zeile 251 | fuer             -> für
+Zeile 272 | Bodenqualitaet, Duengung -> Bodenqualität, Düngung
+Zeile 286 | Bodenqualitaet   -> Bodenqualität
+Zeile 295 | Duengung         -> Düngung
+Zeile 296 | genuegend        -> genügend
+Zeile 305 | Bodenqualitaet   -> Bodenqualität
+
+==========================================================
+DATEI: app/models/Market.php
+----------------------------------------------------------
+Zeile  27 | Pruefe           -> Prüfe
+Zeile  34 | genuegend        -> genügend
+Zeile  42 | gueltig          -> gültig
+Zeile  80 | verfuegbar       -> verfügbar
+Zeile  83 | Pruefe, Kaeufer, Verkaeufer -> Prüfe, Käufer, Verkäufer
+Zeile  88 | Pruefe           -> Prüfe
+Zeile  90 | genuegend, verfuegbar -> genügend, verfügbar
+Zeile  96 | Pruefe           -> Prüfe
+Zeile  99 | genuegend        -> genügend
+Zeile 102 | Fuege, Verkaeufer -> Füge, Verkäufer
+Zeile 106 | Fuege, Kaeufer   -> Füge, Käufer
+Zeile 139 | fuer, Verkaeufer -> für, Verkäufer
+Zeile 155 | fuer             -> für
+Zeile 174 | Fuege, zurueck   -> Füge, zurück
+Zeile 193 | zurueck          -> zurück
+Zeile 198 | Fuegt            -> Fügt
+Zeile 223 | zurueck          -> zurück
+Zeile 271 | zurueck          -> zurück
+Zeile 284 | zurueck          -> zurück
+Zeile 301 | zurueck          -> zurück
+Zeile 329 | genuegend        -> genügend
+Zeile 353 | Fuege            -> Füge
+Zeile 372 | fuer             -> für
+Zeile 378 | fuer             -> für
+Zeile 392 | Fuege, zurueck   -> Füge, zurück
+
+==========================================================
+DATEI: app/models/Animal.php
+----------------------------------------------------------
+Zeile  28 | Pruefe           -> Prüfe
+Zeile  39 | Pruefe           -> Prüfe
+Zeile  42 | genuegend        -> genügend
+Zeile  45 | Pruefe           -> Prüfe
+Zeile  52 | Erhoehe          -> Erhöhe
+Zeile  82 | Fuettert         -> Füttert
+Zeile 102 | Pruefe           -> Prüfe
+Zeile 105 | genuegend, fuer  -> genügend, für
+Zeile 108 | Fuetterungszeit, Glueck -> Fütterungszeit, Glück
+Zeile 125 | gefuettert       -> gefüttert
+Zeile 151 | Pruefe           -> Prüfe
+Zeile 162 | naechsten        -> nächsten
+Zeile 167 | Gluecks          -> Glücks
+Zeile 181 | Fuege            -> Füge
+Zeile 184 | Glueck           -> Glück
+Zeile 213 | Fuegt            -> Fügt
+Zeile 238 | verfuegbare, zurueck -> verfügbare, zurück
+Zeile 253 | zurueck          -> zurück
+Zeile 278 | Fuetterungsstatus -> Fütterungsstatus
+Zeile 309 | genuegend        -> genügend
+Zeile 318 | loesche          -> lösche
+Zeile 336 | fuer             -> für
+Zeile 342 | fuer             -> für
+Zeile 348 | Glueck, gefuetterten -> Glück, gefütterten
+
+==========================================================
+DATEI: app/models/Cooperative.php
+----------------------------------------------------------
+Zeile  17 | Gruendet         -> Gründet
+Zeile  21 | Pruefe           -> Prüfe
+Zeile  26 | Pruefe, verfuegbar -> Prüfe, verfügbar
+Zeile  31 | Gruendungskosten -> Gründungskosten
+Zeile  35 | gegruendet       -> gegründet
+Zeile  36 | genuegend, benoetigt -> genügend, benötigt
+Zeile  46 | Fuege, Gruender  -> Füge, Gründer
+Zeile  53 | gegruendet       -> gegründet
+Zeile  63 | gegruendet       -> gegründet
+Zeile  73 | Pruefe           -> Prüfe
+Zeile  85 | Pruefe           -> Prüfe
+Zeile  92 | Fuege            -> Füge
+Zeile 114 | Verlaesst        -> Verlässt
+Zeile 124 | Gruender, aufloesen -> Gründer, auflösen
+Zeile 126 | Gruender, koennen, Loese, uebertrage, Gruenderrolle -> Gründer, können, Löse, übertrage, Gründerrolle
+Zeile 129 | Geraete          -> Geräte
+Zeile 147 | Loest            -> Löst
+Zeile 154 | Gruender, aufloesen -> Gründer, auflösen
+Zeile 159 | gleichmaessig    -> gleichmäßig
+Zeile 171 | aufgeloest       -> aufgelöst
+Zeile 175 | Loesche, loescht, Geraete -> Lösche, löscht, Geräte
+Zeile 185 | aufgeloest       -> aufgelöst
+Zeile 190 | zurueck          -> zurück
+Zeile 204 | zurueck          -> zurück
+Zeile 219 | zurueck          -> zurück
+Zeile 245 | Geraete          -> Geräte
+Zeile 260 | Geraet           -> Gerät
+Zeile 270 | Pruefe           -> Prüfe
+Zeile 283 | Pruefe           -> Prüfe
+Zeile 288 | Fuege, Geraeten  -> Füge, Geräten
+Zeile 309 | Geraet           -> Gerät
+Zeile 319 | Geraet           -> Gerät
+Zeile 323 | Geraet           -> Gerät
+Zeile 330 | Geraet           -> Gerät
+Zeile 335 | Geraet           -> Gerät
+Zeile 355 | Geraet, verfuegbar -> Gerät, verfügbar
+Zeile 359 | Geraet           -> Gerät
+Zeile 383 | Geraet, zurueck  -> Gerät, zurück
+Zeile 400 | Gebuehr          -> Gebühr
+Zeile 405 | Ausleihgebuehr   -> Ausleihgebühr
+Zeile 406 | genuegend, fuer, Ausleihgebuehr -> genügend, für, Ausleihgebühr
+Zeile 409 | Eigentuemer      -> Eigentümer
+Zeile 411 | Ausleihgebuehr   -> Ausleihgebühr
+Zeile 433 | Geraet, zurueckgegeben, Gebuehr -> Gerät, zurückgegeben, Gebühr
+Zeile 451 | genuegend        -> genügend
+Zeile 454 | Erhoehe          -> Erhöhe
+Zeile 460 | Erhoehe          -> Erhöhe
+Zeile 467 | Erhoehe          -> Erhöhe
+Zeile 482 | Befoerdert       -> Befördert
+Zeile 502 | befoerdern       -> befördern
+Zeile 509 | befoerdert       -> befördert
+
+==========================================================
+DATEI: app/controllers/VehicleController.php
+----------------------------------------------------------
+Zeile   5 | Geraete          -> Geräte
+Zeile  10 | Uebersicht       -> Übersicht
+Zeile 179 | verfuegbare, zurueck -> verfügbare, zurück
+
+==========================================================
+DATEI: app/controllers/FarmController.php
+----------------------------------------------------------
+Zeile  36 | Uebersicht       -> Übersicht
+Zeile 113 | zurueck          -> zurück
+Zeile 128 | zurueck          -> zurück
+Zeile 146 | zurueck          -> zurück
+Zeile 161 | zurueck          -> zurück
+Zeile 176 | zurueck          -> zurück
+Zeile 191 | zurueck          -> zurück
+Zeile 210 | zurueck          -> zurück
+
+==========================================================
+DATEI: app/controllers/AnimalController.php
+----------------------------------------------------------
+Zeile   5 | Fuetterung       -> Fütterung
+Zeile  10 | Uebersicht       -> Übersicht
+Zeile  74 | Fuettert         -> Füttert
+Zeile 195 | Fuettert         -> Füttert
+Zeile 260 | verfuegbare, zurueck -> verfügbare, zurück
+
+==========================================================
+DATEI: app/controllers/ResearchController.php
+----------------------------------------------------------
+Zeile  89 | zurueck          -> zurück
+Zeile 136 | zurueck          -> zurück
+Zeile 155 | Schliesst        -> Schließt
+Zeile 163 | Pruefe           -> Prüfe
+
+==========================================================
+DATEI: app/controllers/AuthController.php
+----------------------------------------------------------
+Zeile  85 | Bestaetigung     -> Bestätigung
+Zeile  86 | Passwoerter, ueberein -> Passwörter, überein
+
+==========================================================
+DATEI: app/controllers/AdminController.php
+----------------------------------------------------------
+Zeile   5 | Verwaltungsoberflaeche, fuer -> Verwaltungsoberfläche, für
+Zeile  10 | Prueft           -> Prüft
+Zeile 141 | Ungueltige       -> Ungültige
+Zeile 167 | aendern          -> ändern
+Zeile 180 | loeschen         -> löschen
+Zeile 187 | Ungueltige       -> Ungültige
+Zeile 191 | Selbstloeschung  -> Selbstlöschung
+Zeile 193 | loeschen         -> löschen
+Zeile 197 | Loesche, zugehoerige -> Lösche, zugehörige
+Zeile 213 | geloescht        -> gelöscht
+Zeile 243 | Hoefe            -> Höfe
+Zeile 271 | zusaetzliche     -> zusätzliche
+Zeile 305 | Ungueltige       -> Ungültige
+Zeile 363 | loeschen         -> löschen
+Zeile 388 | Ungueltige       -> Ungültige
+Zeile 416 | Ungueltige       -> Ungültige
+Zeile 426 | geloescht        -> gelöscht
+Zeile 438 | Ungueltige       -> Ungültige
+
+==========================================================
+DATEI: app/controllers/MarketController.php
+----------------------------------------------------------
+Zeile 220 | zurueck          -> zurück
+
+==========================================================
+DATEI: app/controllers/NewsController.php
+----------------------------------------------------------
+Zeile  10 | Uebersicht       -> Übersicht
+Zeile  33 | Ankuendigungen   -> Ankündigungen
+Zeile  68 | fuer             -> für
+Zeile  77 | Ankuendigungen   -> Ankündigungen
+Zeile 134 | Fuegt            -> Fügt
+Zeile 185 | Loescht          -> Löscht
+Zeile 238 | Beitraege, zurueck -> Beiträge, zurück
+
+==========================================================
+DATEI: app/controllers/CooperativeController.php
+----------------------------------------------------------
+Zeile  10 | Uebersicht       -> Übersicht
+Zeile  59 | Gruendet         -> Gründet
+Zeile 138 | Verlaesst        -> Verlässt
+Zeile 188 | Geraet           -> Gerät
+Zeile 218 | Geraet           -> Gerät
+Zeile 247 | Geraet, zurueck  -> Gerät, zurück
+Zeile 277 | zurueck          -> zurück
+Zeile 294 | zurueck          -> zurück
+
+==========================================================
+DATEI: app/controllers/FieldController.php
+----------------------------------------------------------
+Zeile  10 | Uebersicht       -> Übersicht
+Zeile 156 | Mindestgroesse   -> Mindestgröße
+Zeile 157 | Maximalgroesse   -> Maximalgröße
+Zeile 177 | Duengt           -> Düngt
+Zeile 263 | zurueck          -> zurück
+Zeile 282 | Kauft            -> Kauft
+Zeile 294 | Feldgroesse      -> Feldgröße
+
+==========================================================
+DATEI: app/controllers/RankingController.php
+----------------------------------------------------------
+Zeile  56 | woechentliche    -> wöchentliche
+Zeile  65 | fuer             -> für
+Zeile  71 | Woechentliche    -> Wöchentliche
+Zeile  79 | zurueck          -> zurück
+Zeile  95 | zurueck          -> zurück
+Zeile 111 | zurueck          -> zurück
+
+==========================================================
+ZUSAMMENFASSUNG
+==========================================================
+
+Betroffene Dateien: 26
+
+Nach Kategorie:
+- app/core/: 6 Dateien
+- app/models/: 11 Dateien
+- app/controllers/: 9 Dateien
+
+Häufigste Ersetzungen:
+- zurueck -> zurück (ca. 60 Fälle)
+- Prueft/Pruefe -> Prüft/Prüfe (ca. 40 Fälle)
+- genuegend -> genügend (ca. 15 Fälle)
+- fuer -> für (ca. 25 Fälle)
+- Geraet/Geraete -> Gerät/Geräte (ca. 25 Fälle)
+- loescht/Loesche -> löscht/Lösche (ca. 15 Fälle)
+
+==========================================================
+ENDE DES BERICHTS
+==========================================================

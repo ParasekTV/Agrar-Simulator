@@ -2,8 +2,36 @@
 
 ## Status: FERTIG - Alle Kernfunktionen implementiert
 
-**Letztes Update:** 31.01.2026
+**Letztes Update:** 02.02.2026
 **Waehrung:** Agrar Taler (T)
+**Live-URL:** https://agrar.sl-wide.de
+
+---
+
+## AKTUELLER STAND (fuer spaetere Fortsetzung)
+
+### Zuletzt erledigt:
+- [x] Spielname geaendert: Farming Simulator -> Agrar Simulator
+- [x] Waehrung geaendert: EUR -> Agrar Taler (T)
+- [x] Admin-Panel komplett erstellt (Controller + 7 Views)
+- [x] README.md fuer GitHub erstellt
+- [x] Zukunftsplaene dokumentiert
+- [x] Logo auf Login- und Registrierungsseite hinzugefuegt
+- [x] **Phase 1: Erweiterte Feldfruechte** komplett implementiert:
+  - 18 neue Feldfruechte in 5 Kategorien
+  - 8 neue Forschungsknoten
+  - Kalk-System fuer pH-Balance
+  - 4 Duengertypen mit unterschiedlichen Effekten
+  - UI-Update mit pH-Anzeige und Dropdown-Menues
+
+### Noch beim User hochzuladen/auszufuehren:
+1. SQL-Migration ausfuehren: `sql/phase1_crops.sql`
+2. Marken-Logos bereits heruntergeladen in `public/img/brands/`
+
+### Naechste geplante Schritte:
+1. Phase 1 testen (neue Feldfruechte, Duenger, Kalk)
+2. Phase 2: Erweiterte Tierhaltung umsetzen
+3. Phase 3: Echte Traktor-Marken einbauen
 
 ---
 
@@ -15,6 +43,7 @@
   - Foreign Keys und Indizes
   - Initiale Daten (Crops, Animals, Vehicles, Research, Buildings, Challenges)
 - [x] `sql/update_admin.sql` - Migration fuer Admin-Funktionalitaet
+- [x] `sql/phase1_crops.sql` - **NEU:** Phase 1 Migration (18 Fruechte, pH-System, Duenger, Kalk)
 
 ### 2. Konfiguration (100%)
 - [x] `config/config.php` - Hauptkonfiguration
@@ -162,11 +191,16 @@ Das Admin-Panel ermoeglicht vollstaendige Verwaltung:
 
 ## Geplante Erweiterungen (Zukunft)
 
-### Phase 1: Erweiterte Feldfruchte
-- [ ] Viele neue Feldfruchte (Mais, Sonnenblumen, Kartoffeln, Rueben, etc.)
-- [ ] Feldfruchte muessen erst erforscht werden
-- [ ] Verschiedene Anbauzeiten und Ertraege
-- [ ] Kalk und Duenger fuer Ertragssteigerung
+### Phase 1: Erweiterte Feldfruchte ✅ ABGESCHLOSSEN
+- [x] 18 neue Feldfruechte (Hafer, Roggen, Dinkel, Klee, Luzerne, Gras, Hopfen, Tabak, Baumwolle, Hanf, Flachs, Zwiebeln, Karotten, Kohl, Spinat, Sellerie, Erdbeeren)
+- [x] Feldfruechte in 5 Forschungs-Tiers organisiert
+- [x] 8 neue Forschungsknoten (Erweiterte Getreide, Futterpflanzen, Industriepflanzen, Gemuesebau, Obstanbau, Erweiterte Duengung, Praezisionslandwirtschaft, Bodenkunde)
+- [x] Verschiedene Anbauzeiten und Ertraege pro Frucht
+- [x] pH-System: Boden-pH beeinflusst Ertrag (optimal/akzeptabel/schlecht)
+- [x] 4 Duengertypen: Basis, NPK (+15% Ertrag), Bio (kein Qualitaetsverlust), Fluessig (+25% Ertrag)
+- [x] 3 Kalktypen: Kohlensaurer Kalk, Branntkalk, Dolomitkalk
+- [x] UI erweitert: pH-Anzeige, kategorisierte Pflanzen, Duenger/Kalk-Dropdowns
+- [x] Migration: `sql/phase1_crops.sql`
 
 ### Phase 2: Erweiterte Tierhaltung
 - [ ] Viel mehr Tierarten (Gaense, Enten, Ziegen, Pferde, Bienen, etc.)

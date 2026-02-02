@@ -11,8 +11,11 @@
         <div class="card card-highlight">
             <div class="card-header">
                 <h3>Meine Genossenschaft: <?= htmlspecialchars($membership['cooperative_name']) ?></h3>
+                <?php
+                $roleLabels = ['founder' => 'Gründer', 'admin' => 'Admin', 'member' => 'Mitglied'];
+                ?>
                 <span class="badge badge-<?= $membership['role'] === 'founder' ? 'warning' : ($membership['role'] === 'admin' ? 'info' : 'secondary') ?>">
-                    <?= ucfirst($membership['role']) ?>
+                    <?= $roleLabels[$membership['role']] ?? 'Mitglied' ?>
                 </span>
             </div>
             <div class="card-body">
@@ -59,7 +62,7 @@
                         <?php foreach ($coopDetails['members'] ?? [] as $member): ?>
                             <tr>
                                 <td><?= htmlspecialchars($member['farm_name']) ?></td>
-                                <td><span class="badge badge-secondary"><?= ucfirst($member['role']) ?></span></td>
+                                <td><span class="badge badge-secondary"><?= $roleLabels[$member['role']] ?? 'Mitglied' ?></span></td>
                                 <td><?= $member['level'] ?></td>
                                 <td><?= number_format($member['contribution_points']) ?> Punkte</td>
                             </tr>

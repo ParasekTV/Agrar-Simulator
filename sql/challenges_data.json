@@ -1,0 +1,401 @@
+{
+  "generated_at": "2026-02-02T10:07:14.078757",
+  "weekly_challenges": [
+    {
+      "name": "Erntekoenig",
+      "description": "Ernte 1.000 Einheiten beliebiger Feldfruechte",
+      "type": "production",
+      "target": 1000,
+      "reward_points": 150,
+      "reward_money": 500
+    },
+    {
+      "name": "Getreideexperte",
+      "description": "Ernte 500 Einheiten Weizen",
+      "type": "production",
+      "target": 500,
+      "reward_points": 100,
+      "reward_money": 300
+    },
+    {
+      "name": "Maismeister",
+      "description": "Ernte 400 Einheiten Mais",
+      "type": "production",
+      "target": 400,
+      "reward_points": 100,
+      "reward_money": 300
+    },
+    {
+      "name": "Kartoffelbauer",
+      "description": "Ernte 600 Einheiten Kartoffeln",
+      "type": "production",
+      "target": 600,
+      "reward_points": 120,
+      "reward_money": 400
+    },
+    {
+      "name": "Marktmeister",
+      "description": "Verkaufe Waren im Wert von 5.000 Talern",
+      "type": "sales",
+      "target": 5000,
+      "reward_points": 200,
+      "reward_money": 750
+    },
+    {
+      "name": "Handelsprofi",
+      "description": "Verkaufe 20 verschiedene Produkte auf dem Markt",
+      "type": "sales",
+      "target": 20,
+      "reward_points": 180,
+      "reward_money": 600
+    },
+    {
+      "name": "Schnellverkaeufer",
+      "description": "Verkaufe 50 Einheiten innerhalb von 24 Stunden",
+      "type": "sales",
+      "target": 50,
+      "reward_points": 150,
+      "reward_money": 400
+    },
+    {
+      "name": "Forscher",
+      "description": "Schliesse 2 Forschungen ab",
+      "type": "research",
+      "target": 2,
+      "reward_points": 250,
+      "reward_money": 1000
+    },
+    {
+      "name": "Wissensdurst",
+      "description": "Starte 3 neue Forschungsprojekte",
+      "type": "research",
+      "target": 3,
+      "reward_points": 200,
+      "reward_money": 800
+    },
+    {
+      "name": "Milchbauer",
+      "description": "Produziere 200 Liter Milch",
+      "type": "production",
+      "target": 200,
+      "reward_points": 130,
+      "reward_money": 450
+    },
+    {
+      "name": "Eiersammler",
+      "description": "Sammle 100 Eier",
+      "type": "production",
+      "target": 100,
+      "reward_points": 100,
+      "reward_money": 300
+    },
+    {
+      "name": "Wollproduzent",
+      "description": "Produziere 50 Einheiten Wolle",
+      "type": "production",
+      "target": 50,
+      "reward_points": 120,
+      "reward_money": 400
+    },
+    {
+      "name": "Teamplayer",
+      "description": "Hilf 3 Genossenschaftsmitgliedern",
+      "type": "cooperative",
+      "target": 3,
+      "reward_points": 180,
+      "reward_money": 500
+    },
+    {
+      "name": "Gemeinschaftsgeist",
+      "description": "Spende 1.000 Taler an die Genossenschaftskasse",
+      "type": "cooperative",
+      "target": 1000,
+      "reward_points": 200,
+      "reward_money": 0
+    },
+    {
+      "name": "Baecker",
+      "description": "Produziere 30 Einheiten Brot",
+      "type": "production",
+      "target": 30,
+      "reward_points": 140,
+      "reward_money": 500
+    },
+    {
+      "name": "Kaesemeister",
+      "description": "Produziere 20 Einheiten Kaese",
+      "type": "production",
+      "target": 20,
+      "reward_points": 160,
+      "reward_money": 600
+    },
+    {
+      "name": "Fleissiger Bauer",
+      "description": "Logge dich 5 Tage hintereinander ein",
+      "type": "activity",
+      "target": 5,
+      "reward_points": 100,
+      "reward_money": 250
+    },
+    {
+      "name": "Feldarbeiter",
+      "description": "Bearbeite 10 Felder",
+      "type": "activity",
+      "target": 10,
+      "reward_points": 120,
+      "reward_money": 350
+    }
+  ],
+  "monthly_challenges": [
+    {
+      "name": "Erntegigant",
+      "description": "Ernte 10.000 Einheiten beliebiger Feldfruechte",
+      "type": "production",
+      "target": 10000,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Weizenkoenig",
+      "description": "Ernte 5.000 Einheiten Weizen",
+      "type": "production",
+      "target": 5000,
+      "reward_points": 800,
+      "reward_money": 4000
+    },
+    {
+      "name": "Vielfaltbauer",
+      "description": "Ernte mindestens 10 verschiedene Feldfruchtsorten",
+      "type": "production",
+      "target": 10,
+      "reward_points": 600,
+      "reward_money": 3000
+    },
+    {
+      "name": "Zuckermagnat",
+      "description": "Ernte 3.000 Einheiten Zuckerrueben",
+      "type": "production",
+      "target": 3000,
+      "reward_points": 700,
+      "reward_money": 3500
+    },
+    {
+      "name": "Rapsbaron",
+      "description": "Ernte 2.500 Einheiten Raps",
+      "type": "production",
+      "target": 2500,
+      "reward_points": 650,
+      "reward_money": 3200
+    },
+    {
+      "name": "Handelsimperium",
+      "description": "Verkaufe Waren im Wert von 50.000 Talern",
+      "type": "sales",
+      "target": 50000,
+      "reward_points": 1500,
+      "reward_money": 10000
+    },
+    {
+      "name": "Marktdominanz",
+      "description": "Verkaufe 500 Einheiten auf dem Spielermarkt",
+      "type": "sales",
+      "target": 500,
+      "reward_points": 1000,
+      "reward_money": 6000
+    },
+    {
+      "name": "Exportmeister",
+      "description": "Verkaufe an 5 verschiedene Verkaufsstellen",
+      "type": "sales",
+      "target": 5,
+      "reward_points": 500,
+      "reward_money": 2500
+    },
+    {
+      "name": "Gewinnmaximierer",
+      "description": "Erziele einen Gewinn von 25.000 Talern",
+      "type": "sales",
+      "target": 25000,
+      "reward_points": 1200,
+      "reward_money": 7500
+    },
+    {
+      "name": "Wissenschaftler",
+      "description": "Schliesse 8 Forschungen ab",
+      "type": "research",
+      "target": 8,
+      "reward_points": 1500,
+      "reward_money": 8000
+    },
+    {
+      "name": "Technologiepionier",
+      "description": "Erreiche Forschungslevel 10",
+      "type": "research",
+      "target": 10,
+      "reward_points": 2000,
+      "reward_money": 12000
+    },
+    {
+      "name": "Innovator",
+      "description": "Schalte 5 neue Produktionen frei",
+      "type": "research",
+      "target": 5,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Milchimperium",
+      "description": "Produziere 2.000 Liter Milch",
+      "type": "production",
+      "target": 2000,
+      "reward_points": 900,
+      "reward_money": 4500
+    },
+    {
+      "name": "Gefluegelbaron",
+      "description": "Sammle 1.000 Eier",
+      "type": "production",
+      "target": 1000,
+      "reward_points": 700,
+      "reward_money": 3500
+    },
+    {
+      "name": "Viehzuechter",
+      "description": "Besitze insgesamt 50 Tiere",
+      "type": "activity",
+      "target": 50,
+      "reward_points": 800,
+      "reward_money": 4000
+    },
+    {
+      "name": "Honigproduzent",
+      "description": "Produziere 100 Einheiten Honig",
+      "type": "production",
+      "target": 100,
+      "reward_points": 600,
+      "reward_money": 3000
+    },
+    {
+      "name": "Genossenschaftsheld",
+      "description": "Hilf 20 Genossenschaftsmitgliedern",
+      "type": "cooperative",
+      "target": 20,
+      "reward_points": 1200,
+      "reward_money": 6000
+    },
+    {
+      "name": "Grossspender",
+      "description": "Spende 10.000 Taler an die Genossenschaftskasse",
+      "type": "cooperative",
+      "target": 10000,
+      "reward_points": 1500,
+      "reward_money": 0
+    },
+    {
+      "name": "Genossenschaftsgruender",
+      "description": "Werbe 3 neue Mitglieder fuer die Genossenschaft",
+      "type": "cooperative",
+      "target": 3,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Industriebaron",
+      "description": "Betreibe 5 Produktionsstaetten gleichzeitig",
+      "type": "production",
+      "target": 5,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Brauermeister",
+      "description": "Produziere 200 Einheiten Bier",
+      "type": "production",
+      "target": 200,
+      "reward_points": 800,
+      "reward_money": 4000
+    },
+    {
+      "name": "Backwarenkoenig",
+      "description": "Produziere 300 Einheiten Backwaren",
+      "type": "production",
+      "target": 300,
+      "reward_points": 750,
+      "reward_money": 3800
+    },
+    {
+      "name": "Oelmagnat",
+      "description": "Produziere 150 Einheiten Oel (Raps-, Sonnenblumen- oder Olivenoel)",
+      "type": "production",
+      "target": 150,
+      "reward_points": 850,
+      "reward_money": 4200
+    },
+    {
+      "name": "Fleischproduzent",
+      "description": "Produziere 100 Einheiten Fleisch",
+      "type": "production",
+      "target": 100,
+      "reward_points": 900,
+      "reward_money": 4500
+    },
+    {
+      "name": "Dauerbrenner",
+      "description": "Logge dich 25 Tage im Monat ein",
+      "type": "activity",
+      "target": 25,
+      "reward_points": 800,
+      "reward_money": 4000
+    },
+    {
+      "name": "Grossgrundbesitzer",
+      "description": "Besitze 20 Felder",
+      "type": "activity",
+      "target": 20,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Leveljaeger",
+      "description": "Steige 3 Level auf",
+      "type": "activity",
+      "target": 3,
+      "reward_points": 1500,
+      "reward_money": 7500
+    },
+    {
+      "name": "Punktesammler",
+      "description": "Sammle 5.000 Punkte",
+      "type": "activity",
+      "target": 5000,
+      "reward_points": 1000,
+      "reward_money": 5000
+    },
+    {
+      "name": "Vermoegensaufbau",
+      "description": "Erreiche ein Vermoegen von 100.000 Talern",
+      "type": "activity",
+      "target": 100000,
+      "reward_points": 2000,
+      "reward_money": 10000
+    }
+  ],
+  "statistics": {
+    "total_weekly": 18,
+    "total_monthly": 29,
+    "weekly_by_type": {
+      "production": 9,
+      "sales": 3,
+      "research": 2,
+      "cooperative": 2,
+      "activity": 2
+    },
+    "monthly_by_type": {
+      "production": 13,
+      "sales": 4,
+      "research": 3,
+      "activity": 6,
+      "cooperative": 3
+    }
+  }
+}

@@ -177,9 +177,11 @@ class Farm
      */
     public function getVehicles(): array
     {
-        $sql = "SELECT fv.*, v.name, v.type, v.efficiency_bonus, v.fuel_consumption, v.image_url
+        $sql = "SELECT fv.*, v.name, v.vehicle_type, v.power_hp, v.fuel_consumption, v.image_url,
+                       vb.name as brand_name, vb.logo_url as brand_logo
                 FROM farm_vehicles fv
                 JOIN vehicles v ON fv.vehicle_id = v.id
+                JOIN vehicle_brands vb ON v.brand_id = vb.id
                 WHERE fv.farm_id = ?";
         return $this->db->fetchAll($sql, [$this->farmId]);
     }

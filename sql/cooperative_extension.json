@@ -1,0 +1,829 @@
+{
+  "generated_at": "2026-02-02T14:15:26.046562",
+  "roles": [
+    {
+      "key": "founder",
+      "name": "Gründer",
+      "description": "Vollzugriff auf alle Funktionen der Genossenschaft",
+      "permissions": [
+        "all"
+      ],
+      "is_transferable": false,
+      "max_per_coop": 1
+    },
+    {
+      "key": "admin",
+      "name": "Administrator",
+      "description": "Kann Mitglieder verwalten und Bewerbungen bearbeiten",
+      "permissions": [
+        "manage_members",
+        "manage_applications",
+        "view_finances",
+        "manage_challenges"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 3
+    },
+    {
+      "key": "fleet_manager",
+      "name": "Fuhrparkmanager",
+      "description": "Verwaltet alle Fahrzeuge der Genossenschaft",
+      "permissions": [
+        "manage_vehicles",
+        "buy_vehicles",
+        "sell_vehicles",
+        "assign_vehicles"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 2
+    },
+    {
+      "key": "field_manager",
+      "name": "Feldmanager",
+      "description": "Verwaltet alle Felder der Genossenschaft",
+      "permissions": [
+        "manage_fields",
+        "buy_fields",
+        "sell_fields",
+        "plant_fields",
+        "harvest_fields"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 2
+    },
+    {
+      "key": "animal_manager",
+      "name": "Tiermanager",
+      "description": "Verwaltet alle Tiere der Genossenschaft",
+      "permissions": [
+        "manage_animals",
+        "buy_animals",
+        "sell_animals",
+        "feed_animals"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 2
+    },
+    {
+      "key": "production_manager",
+      "name": "Produktionsleiter",
+      "description": "Verwaltet alle Produktionsstätten der Genossenschaft",
+      "permissions": [
+        "manage_productions",
+        "start_production",
+        "collect_products"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 2
+    },
+    {
+      "key": "warehouse_manager",
+      "name": "Lagerverwaltung",
+      "description": "Verwaltet das Silo und Lager der Genossenschaft",
+      "permissions": [
+        "manage_warehouse",
+        "deposit_products",
+        "withdraw_products",
+        "sell_products"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 2
+    },
+    {
+      "key": "treasurer",
+      "name": "Kassenwart",
+      "description": "Verwaltet die Finanzen der Genossenschaft",
+      "permissions": [
+        "view_finances",
+        "payout_members",
+        "view_transactions"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 1
+    },
+    {
+      "key": "researcher",
+      "name": "Forschungsleiter",
+      "description": "Leitet die Forschungsabteilung der Genossenschaft",
+      "permissions": [
+        "manage_research",
+        "start_research",
+        "cancel_research"
+      ],
+      "is_transferable": true,
+      "max_per_coop": 1
+    },
+    {
+      "key": "member",
+      "name": "Mitglied",
+      "description": "Standardmitglied der Genossenschaft",
+      "permissions": [
+        "view_coop",
+        "donate",
+        "deposit_products",
+        "participate_challenges"
+      ],
+      "is_transferable": false,
+      "max_per_coop": 0
+    }
+  ],
+  "research": [
+    {
+      "name": "Gemeinschafts-Mühle",
+      "description": "Schaltet eine Mühle für die Genossenschaft frei",
+      "category": "production",
+      "cost": 50000,
+      "research_time_hours": 24,
+      "unlocks": "production:mehlproduktion",
+      "required_level": 5
+    },
+    {
+      "name": "Gemeinschafts-Molkerei",
+      "description": "Schaltet eine Molkerei für die Genossenschaft frei",
+      "category": "production",
+      "cost": 75000,
+      "research_time_hours": 36,
+      "unlocks": "production:molkerei",
+      "required_level": 8
+    },
+    {
+      "name": "Gemeinschafts-Bäckerei",
+      "description": "Schaltet eine Bäckerei für die Genossenschaft frei",
+      "category": "production",
+      "cost": 100000,
+      "research_time_hours": 48,
+      "unlocks": "production:baeckerei",
+      "required_level": 10
+    },
+    {
+      "name": "Gemeinschafts-Käserei",
+      "description": "Schaltet eine Käserei für die Genossenschaft frei",
+      "category": "production",
+      "cost": 120000,
+      "research_time_hours": 48,
+      "unlocks": "production:kaeserei",
+      "required_level": 12
+    },
+    {
+      "name": "Gemeinschafts-Schlachterei",
+      "description": "Schaltet eine Schlachterei für die Genossenschaft frei",
+      "category": "production",
+      "cost": 150000,
+      "research_time_hours": 72,
+      "unlocks": "production:schlachterei",
+      "required_level": 15
+    },
+    {
+      "name": "Gemeinschafts-Brauerei",
+      "description": "Schaltet eine Brauerei für die Genossenschaft frei",
+      "category": "production",
+      "cost": 200000,
+      "research_time_hours": 96,
+      "unlocks": "production:brauerei",
+      "required_level": 18
+    },
+    {
+      "name": "Gemeinschafts-Raffinerie",
+      "description": "Schaltet eine Ölraffinerie für die Genossenschaft frei",
+      "category": "production",
+      "cost": 250000,
+      "research_time_hours": 120,
+      "unlocks": "production:raffinerie",
+      "required_level": 20
+    },
+    {
+      "name": "Erweitertes Silo",
+      "description": "Erhöht die Lagerkapazität um 50%",
+      "category": "storage",
+      "cost": 30000,
+      "research_time_hours": 12,
+      "unlocks": "storage:upgrade_50",
+      "required_level": 3
+    },
+    {
+      "name": "Großes Silo",
+      "description": "Erhöht die Lagerkapazität um 100%",
+      "category": "storage",
+      "cost": 60000,
+      "research_time_hours": 24,
+      "unlocks": "storage:upgrade_100",
+      "required_level": 7
+    },
+    {
+      "name": "Mega-Silo",
+      "description": "Erhöht die Lagerkapazität um 200%",
+      "category": "storage",
+      "cost": 120000,
+      "research_time_hours": 48,
+      "unlocks": "storage:upgrade_200",
+      "required_level": 12
+    },
+    {
+      "name": "Effiziente Ernte",
+      "description": "Erhöht den Ernteertrag aller Mitglieder um 5%",
+      "category": "efficiency",
+      "cost": 40000,
+      "research_time_hours": 24,
+      "unlocks": "bonus:harvest_5",
+      "required_level": 5
+    },
+    {
+      "name": "Effiziente Tierhaltung",
+      "description": "Erhöht die Tierproduktion aller Mitglieder um 5%",
+      "category": "efficiency",
+      "cost": 45000,
+      "research_time_hours": 24,
+      "unlocks": "bonus:animal_5",
+      "required_level": 6
+    },
+    {
+      "name": "Kostenoptimierung",
+      "description": "Reduziert Wartungskosten um 10%",
+      "category": "efficiency",
+      "cost": 50000,
+      "research_time_hours": 36,
+      "unlocks": "bonus:maintenance_10",
+      "required_level": 8
+    },
+    {
+      "name": "Handelsabkommen",
+      "description": "Erhöht Verkaufspreise um 5%",
+      "category": "efficiency",
+      "cost": 80000,
+      "research_time_hours": 48,
+      "unlocks": "bonus:sell_price_5",
+      "required_level": 10
+    },
+    {
+      "name": "Einkaufsgemeinschaft",
+      "description": "Reduziert Einkaufspreise um 5%",
+      "category": "efficiency",
+      "cost": 80000,
+      "research_time_hours": 48,
+      "unlocks": "bonus:buy_price_5",
+      "required_level": 10
+    }
+  ],
+  "weekly_challenges": [
+    {
+      "name": "Gemeinsame Ernte",
+      "description": "Erntet zusammen 5.000 Einheiten Getreide",
+      "type": "harvest",
+      "target": 5000,
+      "reward_money": 2500,
+      "reward_points": 500
+    },
+    {
+      "name": "Weizen-Offensive",
+      "description": "Erntet zusammen 3.000 Einheiten Weizen",
+      "type": "harvest",
+      "target": 3000,
+      "reward_money": 2000,
+      "reward_points": 400
+    },
+    {
+      "name": "Mais-Marathon",
+      "description": "Erntet zusammen 2.500 Einheiten Mais",
+      "type": "harvest",
+      "target": 2500,
+      "reward_money": 1800,
+      "reward_points": 350
+    },
+    {
+      "name": "Kartoffel-König",
+      "description": "Erntet zusammen 2.000 Einheiten Kartoffeln",
+      "type": "harvest",
+      "target": 2000,
+      "reward_money": 1500,
+      "reward_points": 300
+    },
+    {
+      "name": "Milchlieferung",
+      "description": "Produziert zusammen 1.000 Liter Milch",
+      "type": "animal_product",
+      "target": 1000,
+      "reward_money": 2000,
+      "reward_points": 400
+    },
+    {
+      "name": "Eier-Sammlung",
+      "description": "Sammelt zusammen 500 Eier",
+      "type": "animal_product",
+      "target": 500,
+      "reward_money": 1500,
+      "reward_points": 300
+    },
+    {
+      "name": "Wolle-Woche",
+      "description": "Produziert zusammen 200 Einheiten Wolle",
+      "type": "animal_product",
+      "target": 200,
+      "reward_money": 1800,
+      "reward_points": 350
+    },
+    {
+      "name": "Markt-Meister",
+      "description": "Verkauft zusammen Waren im Wert von 25.000 Talern",
+      "type": "sales",
+      "target": 25000,
+      "reward_money": 3000,
+      "reward_points": 600
+    },
+    {
+      "name": "Handels-Helden",
+      "description": "Führt zusammen 50 Verkäufe durch",
+      "type": "sales_count",
+      "target": 50,
+      "reward_money": 2000,
+      "reward_points": 400
+    },
+    {
+      "name": "Brot-Bäcker",
+      "description": "Produziert zusammen 100 Einheiten Brot",
+      "type": "production",
+      "target": 100,
+      "reward_money": 2500,
+      "reward_points": 500
+    },
+    {
+      "name": "Käse-Könige",
+      "description": "Produziert zusammen 50 Einheiten Käse",
+      "type": "production",
+      "target": 50,
+      "reward_money": 2200,
+      "reward_points": 450
+    },
+    {
+      "name": "Großzügige Gemeinschaft",
+      "description": "Spendet zusammen 10.000 Taler in die Kasse",
+      "type": "donation",
+      "target": 10000,
+      "reward_money": 1500,
+      "reward_points": 300
+    },
+    {
+      "name": "Produkt-Spende",
+      "description": "Lagert zusammen 500 Produkte ins Silo ein",
+      "type": "deposit",
+      "target": 500,
+      "reward_money": 1800,
+      "reward_points": 350
+    },
+    {
+      "name": "Aktive Gemeinschaft",
+      "description": "Alle Mitglieder loggen sich mindestens 3x ein",
+      "type": "activity",
+      "target": 3,
+      "reward_money": 1000,
+      "reward_points": 200
+    },
+    {
+      "name": "Teamarbeit",
+      "description": "Mindestens 5 verschiedene Mitglieder tragen bei",
+      "type": "participation",
+      "target": 5,
+      "reward_money": 1500,
+      "reward_points": 300
+    },
+    {
+      "name": "Forschungsdrang",
+      "description": "Schließt eine Genossenschafts-Forschung ab",
+      "type": "research",
+      "target": 1,
+      "reward_money": 3000,
+      "reward_points": 600
+    },
+    {
+      "name": "Fuhrpark-Ausbau",
+      "description": "Kauft zusammen 3 Fahrzeuge für die Genossenschaft",
+      "type": "vehicle_purchase",
+      "target": 3,
+      "reward_money": 2500,
+      "reward_points": 500
+    },
+    {
+      "name": "Fleißige Fahrer",
+      "description": "Nutzt Genossenschafts-Fahrzeuge für 100 Stunden",
+      "type": "vehicle_usage",
+      "target": 100,
+      "reward_money": 2000,
+      "reward_points": 400
+    },
+    {
+      "name": "Feld-Expansion",
+      "description": "Kauft zusammen 2 neue Felder für die Genossenschaft",
+      "type": "field_purchase",
+      "target": 2,
+      "reward_money": 2000,
+      "reward_points": 400
+    },
+    {
+      "name": "Vielfalt-Anbau",
+      "description": "Baut mindestens 5 verschiedene Früchte an",
+      "type": "crop_variety",
+      "target": 5,
+      "reward_money": 1500,
+      "reward_points": 300
+    }
+  ],
+  "monthly_challenges": [
+    {
+      "name": "Ernte-Giganten",
+      "description": "Erntet zusammen 50.000 Einheiten beliebiger Feldfrüchte",
+      "type": "harvest",
+      "target": 50000,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Weizen-Imperium",
+      "description": "Erntet zusammen 25.000 Einheiten Weizen",
+      "type": "harvest",
+      "target": 25000,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Mais-Mogule",
+      "description": "Erntet zusammen 20.000 Einheiten Mais",
+      "type": "harvest",
+      "target": 20000,
+      "reward_money": 18000,
+      "reward_points": 3600
+    },
+    {
+      "name": "Kartoffel-Könige",
+      "description": "Erntet zusammen 15.000 Einheiten Kartoffeln",
+      "type": "harvest",
+      "target": 15000,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Raps-Rekord",
+      "description": "Erntet zusammen 12.000 Einheiten Raps",
+      "type": "harvest",
+      "target": 12000,
+      "reward_money": 14000,
+      "reward_points": 2800
+    },
+    {
+      "name": "Sonnenblumen-Sommer",
+      "description": "Erntet zusammen 10.000 Einheiten Sonnenblumen",
+      "type": "harvest",
+      "target": 10000,
+      "reward_money": 12000,
+      "reward_points": 2400
+    },
+    {
+      "name": "Zuckerrüben-Ziel",
+      "description": "Erntet zusammen 8.000 Einheiten Zuckerrüben",
+      "type": "harvest",
+      "target": 8000,
+      "reward_money": 10000,
+      "reward_points": 2000
+    },
+    {
+      "name": "Gersten-Großernte",
+      "description": "Erntet zusammen 15.000 Einheiten Gerste",
+      "type": "harvest",
+      "target": 15000,
+      "reward_money": 13000,
+      "reward_points": 2600
+    },
+    {
+      "name": "Hafer-Helden",
+      "description": "Erntet zusammen 10.000 Einheiten Hafer",
+      "type": "harvest",
+      "target": 10000,
+      "reward_money": 11000,
+      "reward_points": 2200
+    },
+    {
+      "name": "Vielfalt-Champion",
+      "description": "Erntet mindestens 10 verschiedene Feldfrüchte",
+      "type": "crop_variety",
+      "target": 10,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Milch-Imperium",
+      "description": "Produziert zusammen 10.000 Liter Milch",
+      "type": "animal_product",
+      "target": 10000,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Eier-Explosion",
+      "description": "Sammelt zusammen 5.000 Eier",
+      "type": "animal_product",
+      "target": 5000,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Wolle-Weltmeister",
+      "description": "Produziert zusammen 2.000 Einheiten Wolle",
+      "type": "animal_product",
+      "target": 2000,
+      "reward_money": 18000,
+      "reward_points": 3600
+    },
+    {
+      "name": "Fleisch-Fabrik",
+      "description": "Produziert zusammen 500 Einheiten Fleisch",
+      "type": "animal_product",
+      "target": 500,
+      "reward_money": 22000,
+      "reward_points": 4400
+    },
+    {
+      "name": "Honig-Helden",
+      "description": "Produziert zusammen 300 Einheiten Honig",
+      "type": "animal_product",
+      "target": 300,
+      "reward_money": 12000,
+      "reward_points": 2400
+    },
+    {
+      "name": "Tier-Vielfalt",
+      "description": "Haltet mindestens 5 verschiedene Tierarten",
+      "type": "animal_variety",
+      "target": 5,
+      "reward_money": 10000,
+      "reward_points": 2000
+    },
+    {
+      "name": "Handels-Imperium",
+      "description": "Verkauft zusammen Waren im Wert von 250.000 Talern",
+      "type": "sales",
+      "target": 250000,
+      "reward_money": 30000,
+      "reward_points": 6000
+    },
+    {
+      "name": "Markt-Dominanz",
+      "description": "Führt zusammen 500 Verkäufe durch",
+      "type": "sales_count",
+      "target": 500,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Export-Experten",
+      "description": "Verkauft an alle 10 Verkaufsstellen",
+      "type": "selling_points",
+      "target": 10,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Gewinn-Giganten",
+      "description": "Erzielt zusammen einen Gewinn von 100.000 Talern",
+      "type": "profit",
+      "target": 100000,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Brot-Barone",
+      "description": "Produziert zusammen 1.000 Einheiten Brot",
+      "type": "production",
+      "target": 1000,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Käse-Könige",
+      "description": "Produziert zusammen 500 Einheiten Käse",
+      "type": "production",
+      "target": 500,
+      "reward_money": 22000,
+      "reward_points": 4400
+    },
+    {
+      "name": "Butter-Berge",
+      "description": "Produziert zusammen 400 Einheiten Butter",
+      "type": "production",
+      "target": 400,
+      "reward_money": 18000,
+      "reward_points": 3600
+    },
+    {
+      "name": "Mehl-Meister",
+      "description": "Produziert zusammen 800 Einheiten Mehl",
+      "type": "production",
+      "target": 800,
+      "reward_money": 16000,
+      "reward_points": 3200
+    },
+    {
+      "name": "Öl-Offensive",
+      "description": "Produziert zusammen 300 Einheiten Öl",
+      "type": "production",
+      "target": 300,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Bier-Brauer",
+      "description": "Produziert zusammen 200 Einheiten Bier",
+      "type": "production",
+      "target": 200,
+      "reward_money": 24000,
+      "reward_points": 4800
+    },
+    {
+      "name": "Saft-Spezialisten",
+      "description": "Produziert zusammen 500 Einheiten Saft",
+      "type": "production",
+      "target": 500,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Wurst-Wunder",
+      "description": "Produziert zusammen 300 Einheiten Wurst",
+      "type": "production",
+      "target": 300,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Zucker-Ziel",
+      "description": "Produziert zusammen 600 Einheiten Zucker",
+      "type": "production",
+      "target": 600,
+      "reward_money": 18000,
+      "reward_points": 3600
+    },
+    {
+      "name": "Produktions-Vielfalt",
+      "description": "Produziert mindestens 10 verschiedene Produkte",
+      "type": "product_variety",
+      "target": 10,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Millionen-Kasse",
+      "description": "Spendet zusammen 100.000 Taler in die Kasse",
+      "type": "donation",
+      "target": 100000,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Lager-Legende",
+      "description": "Lagert zusammen 5.000 Produkte ins Silo ein",
+      "type": "deposit",
+      "target": 5000,
+      "reward_money": 18000,
+      "reward_points": 3600
+    },
+    {
+      "name": "Gemeinschafts-Geist",
+      "description": "Jedes Mitglied spendet mindestens einmal",
+      "type": "donation_participation",
+      "target": 100,
+      "reward_money": 10000,
+      "reward_points": 2000
+    },
+    {
+      "name": "Dauerbrenner",
+      "description": "Alle Mitglieder loggen sich mindestens 20x ein",
+      "type": "activity",
+      "target": 20,
+      "reward_money": 10000,
+      "reward_points": 2000
+    },
+    {
+      "name": "Volle Beteiligung",
+      "description": "Alle Mitglieder tragen zu mindestens einer Herausforderung bei",
+      "type": "challenge_participation",
+      "target": 100,
+      "reward_money": 12000,
+      "reward_points": 2400
+    },
+    {
+      "name": "Forschungs-Führer",
+      "description": "Schließt 5 Genossenschafts-Forschungen ab",
+      "type": "research",
+      "target": 5,
+      "reward_money": 30000,
+      "reward_points": 6000
+    },
+    {
+      "name": "Technologie-Titan",
+      "description": "Schaltet 3 neue Produktionsstätten frei",
+      "type": "production_unlock",
+      "target": 3,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Fuhrpark-Imperium",
+      "description": "Besitzt zusammen 20 Genossenschafts-Fahrzeuge",
+      "type": "vehicle_count",
+      "target": 20,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Fleißige Flotte",
+      "description": "Nutzt Genossenschafts-Fahrzeuge für 1.000 Stunden",
+      "type": "vehicle_usage",
+      "target": 1000,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Premium-Fuhrpark",
+      "description": "Kauft 5 Fahrzeuge über 100.000 Taler",
+      "type": "premium_vehicle",
+      "target": 5,
+      "reward_money": 30000,
+      "reward_points": 6000
+    },
+    {
+      "name": "Land-Barone",
+      "description": "Besitzt zusammen 50 Hektar Felder",
+      "type": "field_size",
+      "target": 50,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Feld-Führer",
+      "description": "Besitzt zusammen 30 Felder",
+      "type": "field_count",
+      "target": 30,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Anbau-Meister",
+      "description": "Baut alle verfügbaren Feldfrüchte mindestens einmal an",
+      "type": "all_crops",
+      "target": 1,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Wachsende Gemeinschaft",
+      "description": "Rekrutiert 5 neue Mitglieder",
+      "type": "recruitment",
+      "target": 5,
+      "reward_money": 15000,
+      "reward_points": 3000
+    },
+    {
+      "name": "Level-Boost",
+      "description": "Alle Mitglieder steigen mindestens 1 Level auf",
+      "type": "member_levelup",
+      "target": 1,
+      "reward_money": 20000,
+      "reward_points": 4000
+    },
+    {
+      "name": "Punkte-Power",
+      "description": "Sammelt zusammen 50.000 Punkte",
+      "type": "points",
+      "target": 50000,
+      "reward_money": 25000,
+      "reward_points": 5000
+    },
+    {
+      "name": "Allrounder",
+      "description": "Schließt mindestens 10 wöchentliche Herausforderungen ab",
+      "type": "weekly_complete",
+      "target": 10,
+      "reward_money": 30000,
+      "reward_points": 6000
+    },
+    {
+      "name": "Perfekter Monat",
+      "description": "Schließt alle wöchentlichen Herausforderungen des Monats ab",
+      "type": "perfect_month",
+      "target": 1,
+      "reward_money": 50000,
+      "reward_points": 10000
+    },
+    {
+      "name": "Top-Genossenschaft",
+      "description": "Erreicht Platz 1-10 in der Rangliste",
+      "type": "ranking",
+      "target": 10,
+      "reward_money": 40000,
+      "reward_points": 8000
+    }
+  ],
+  "statistics": {
+    "total_roles": 10,
+    "total_research": 15,
+    "weekly_challenges": 20,
+    "monthly_challenges": 49
+  }
+}

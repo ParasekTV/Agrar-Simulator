@@ -1,0 +1,1746 @@
+{
+  "generated_at": "2026-02-02T13:54:09.772694",
+  "brands": [
+    {
+      "key": "abi",
+      "name": "ABI",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agco",
+      "name": "AGCO",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agi",
+      "name": "AGI",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agibatco",
+      "name": "AGI Batco",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agisentinel",
+      "name": "AGI Sentinel",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agistorm",
+      "name": "AGI Storm",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agiwesteel",
+      "name": "AGI Westeel",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agiwestfield",
+      "name": "AGI Westfield",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agrifac",
+      "name": "Agrifac",
+      "categories": [
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agrio",
+      "name": "Agrio",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agrisem",
+      "name": "Agrisem",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "agromasz",
+      "name": "Agromasz",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "albutt",
+      "name": "Albutt",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "alpego",
+      "name": "Alpego",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "amazone",
+      "name": "Amazone",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "amitytech",
+      "name": "Amity Technology",
+      "categories": [
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "andersongroup",
+      "name": "Anderson Group",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "annaburger",
+      "name": "Annaburger",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "antoniocarraro",
+      "name": "Antonio Carraro",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "ape",
+      "name": "Piaggio Ape",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "aprilia",
+      "name": "Aprilia",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "arcusin",
+      "name": "Arcusin",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "bednar",
+      "name": "Bednar",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "bergmann",
+      "name": "Bergmann",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "berthoud",
+      "name": "Berthoud",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "bkt",
+      "name": "BKT",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "bomech",
+      "name": "Bomech",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "brandt",
+      "name": "Brandt",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "brantner",
+      "name": "Brantner",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "bredal",
+      "name": "Bredal",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "brielmaier",
+      "name": "Brielmaier",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "capello",
+      "name": "Capello",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "caseih",
+      "name": "Case IH",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.2
+    },
+    {
+      "key": "challenger",
+      "name": "Challenger",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "claas",
+      "name": "CLAAS",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.25
+    },
+    {
+      "key": "continental",
+      "name": "Continental",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "conveyall",
+      "name": "Conveyall",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "corteva",
+      "name": "Corteva",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "dalbo",
+      "name": "Dal-Bo",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "damcon",
+      "name": "Damcon",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "demco",
+      "name": "Demco",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "deutzfahr",
+      "name": "Deutz-Fahr",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "dewulf",
+      "name": "Dewulf",
+      "categories": [
+        "erntemaschinen",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "easysheds",
+      "name": "Easy Sheds",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "einboeck",
+      "name": "Einboeck",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "elho",
+      "name": "Elho",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "elmersmfg",
+      "name": "Elmers Manufacturing",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "elten",
+      "name": "Elten",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "engelbertstrauss",
+      "name": "Engelbert Strauss",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "ero",
+      "name": "ERO",
+      "categories": [
+        "erntemaschinen",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "faresin",
+      "name": "Faresin",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "farmax",
+      "name": "Farmax",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "farmet",
+      "name": "Farmet",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "farmtech",
+      "name": "Farmtech",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "fendt",
+      "name": "Fendt",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.35
+    },
+    {
+      "key": "fiat",
+      "name": "Fiat",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "fliegl",
+      "name": "Fliegl",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "fuhrmann",
+      "name": "Fuhrmann",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "geringhoff",
+      "name": "Geringhoff",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "gessner",
+      "name": "Gessner",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "goeweil",
+      "name": "Goeweil",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "gorenc",
+      "name": "Gorenc",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "greatplains",
+      "name": "Great Plains",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "gregoire",
+      "name": "Gregoire",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "grimme",
+      "name": "Grimme",
+      "categories": [
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.25
+    },
+    {
+      "key": "groha",
+      "name": "Groha",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "hardi",
+      "name": "Hardi",
+      "categories": [
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "hauer",
+      "name": "Hauer",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "hawe",
+      "name": "Hawe",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "heizomat",
+      "name": "Heizomat",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "hella",
+      "name": "Hella",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "helm",
+      "name": "Helm",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "holaras",
+      "name": "Holaras",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "holmer",
+      "name": "Holmer",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "horsch",
+      "name": "Horsch",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.2
+    },
+    {
+      "key": "husqvarna",
+      "name": "Husqvarna",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "idagro",
+      "name": "Idagro",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "impex",
+      "name": "Impex",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "international",
+      "name": "International",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "iseki",
+      "name": "Iseki",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "jcb",
+      "name": "JCB",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "jenz",
+      "name": "Jenz",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "jmmanufacturing",
+      "name": "JM Manufacturing",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "johndeere",
+      "name": "John Deere",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.3
+    },
+    {
+      "key": "jonsered",
+      "name": "Jonsered",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "jungheinrich",
+      "name": "Jungheinrich",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kaercher",
+      "name": "Kaercher",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kaweco",
+      "name": "Kaweco",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kemper",
+      "name": "Kemper",
+      "categories": [
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kesla",
+      "name": "Kesla",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kingston",
+      "name": "Kingston",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kinze",
+      "name": "Kinze",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "knoche",
+      "name": "Knoche",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kockerling",
+      "name": "Koeckerling",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "koller",
+      "name": "Koller",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "komatsu",
+      "name": "Komatsu",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kotte",
+      "name": "Kotte",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "krampe",
+      "name": "Krampe",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kroeger",
+      "name": "Kroeger",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "krone",
+      "name": "Krone",
+      "categories": [
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.2
+    },
+    {
+      "key": "kronetrailer",
+      "name": "Krone Trailer",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "kubota",
+      "name": "Kubota",
+      "categories": [
+        "fahrzeuge",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.15
+    },
+    {
+      "key": "kuhn",
+      "name": "Kuhn",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "kverneland",
+      "name": "Kverneland",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "lacotec",
+      "name": "Lacotec",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "landini",
+      "name": "Landini",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "lely",
+      "name": "Lely",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "lemken",
+      "name": "Lemken",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.15
+    },
+    {
+      "key": "lincoln",
+      "name": "Lincoln",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "lindner",
+      "name": "Lindner",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "lizard",
+      "name": "Lizard",
+      "categories": [
+        "fahrzeuge",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 0.7
+    },
+    {
+      "key": "lodeking",
+      "name": "Lode King",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "macdon",
+      "name": "MacDon",
+      "categories": [
+        "erntemaschinen"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "mack",
+      "name": "Mack",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "magsi",
+      "name": "Magsi",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "manitou",
+      "name": "Manitou",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "masseyferguson",
+      "name": "Massey Ferguson",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "mccormack",
+      "name": "McCormack",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "mccormick",
+      "name": "McCormick",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "mcculloch",
+      "name": "McCulloch",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "meridian",
+      "name": "Meridian",
+      "categories": [
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "merlo",
+      "name": "Merlo",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "michelin",
+      "name": "Michelin",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "mitas",
+      "name": "Mitas",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "moescha",
+      "name": "Moescha",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "mzuri",
+      "name": "Mzuri",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "nardi",
+      "name": "Nardi",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "neuero",
+      "name": "Neuero",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "newholland",
+      "name": "New Holland",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.15
+    },
+    {
+      "key": "nokiantyres",
+      "name": "Nokian Tyres",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "novag",
+      "name": "Novag",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "oxbo",
+      "name": "Oxbo",
+      "categories": [
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "paladin",
+      "name": "Paladin",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "pesslinstruments",
+      "name": "Pessl Instruments",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "pfanzelt",
+      "name": "Pfanzelt",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "pioneer",
+      "name": "Pioneer",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "pittstrailers",
+      "name": "Pitts Trailers",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "planet",
+      "name": "Planet",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "poettinger",
+      "name": "Poettinger",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.15
+    },
+    {
+      "key": "ponsse",
+      "name": "Ponsse",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "prinoth",
+      "name": "Prinoth",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "provitis",
+      "name": "Provitis",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "quicke",
+      "name": "Quicke",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "raniplast",
+      "name": "Raniplast",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "reiter",
+      "name": "Reiter",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "riedler",
+      "name": "Riedler",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "rigitrac",
+      "name": "Rigitrac",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "risutec",
+      "name": "Risutec",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "ropa",
+      "name": "ROPA",
+      "categories": [
+        "fahrzeuge",
+        "erntemaschinen",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "rottne",
+      "name": "Rottne",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "rudolfhoermann",
+      "name": "Rudolf Hoermann",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "rudolph",
+      "name": "Rudolph",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "salek",
+      "name": "Salek",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "samasz",
+      "name": "SaMASZ",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "same",
+      "name": "SAME",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "samsonagro",
+      "name": "Samson Agro",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "schaeffer",
+      "name": "Schaeffer",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "schuitemaker",
+      "name": "Schuitemaker",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "schwarzmueller",
+      "name": "Schwarzmueller",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "sennebogen",
+      "name": "Sennebogen",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "siloking",
+      "name": "Siloking",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "sip",
+      "name": "SIP",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "skoda",
+      "name": "Skoda",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "stema",
+      "name": "Stema",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "steyr",
+      "name": "Steyr",
+      "categories": [
+        "fahrzeuge",
+        "geraete"
+      ],
+      "price_modifier": 1.05
+    },
+    {
+      "key": "stihl",
+      "name": "Stihl",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "streumaster",
+      "name": "Streumaster",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "summersmfg",
+      "name": "Summers Manufacturing",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "tajfun",
+      "name": "Tajfun",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "tenwinkel",
+      "name": "Tenwinkel",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "thundercreek",
+      "name": "Thunder Creek",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "tmccancela",
+      "name": "TMC Cancela",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "treffler",
+      "name": "Treffler",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "trelleborg",
+      "name": "Trelleborg",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "tt",
+      "name": "TT",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "unia",
+      "name": "Unia",
+      "categories": [
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "vaederstad",
+      "name": "Vaederstad",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "valtra",
+      "name": "Valtra",
+      "categories": [
+        "fahrzeuge",
+        "diverses"
+      ],
+      "price_modifier": 1.1
+    },
+    {
+      "key": "vermeer",
+      "name": "Vermeer",
+      "categories": [
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "volvo",
+      "name": "Volvo",
+      "categories": [
+        "fahrzeuge",
+        "geraete",
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "vredestein",
+      "name": "Vredestein",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "walkabout",
+      "name": "Walkabout",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "walterscheid",
+      "name": "Walterscheid",
+      "categories": [
+        "diverses"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "westtech",
+      "name": "Westtech",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "wifo",
+      "name": "Wifo",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "wilson",
+      "name": "Wilson",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "zetor",
+      "name": "Zetor",
+      "categories": [
+        "fahrzeuge"
+      ],
+      "price_modifier": 1.0
+    },
+    {
+      "key": "zunhammer",
+      "name": "Zunhammer",
+      "categories": [
+        "geraete"
+      ],
+      "price_modifier": 1.0
+    }
+  ],
+  "vehicle_types": {
+    "fahrzeuge": [
+      {
+        "type": "traktor_klein",
+        "name": "Traktor (Klein)",
+        "base_price": 35000,
+        "power": 80,
+        "speed": 40
+      },
+      {
+        "type": "traktor_mittel",
+        "name": "Traktor (Mittel)",
+        "base_price": 85000,
+        "power": 150,
+        "speed": 50
+      },
+      {
+        "type": "traktor_gross",
+        "name": "Traktor (Gross)",
+        "base_price": 180000,
+        "power": 300,
+        "speed": 50
+      },
+      {
+        "type": "traktor_schwer",
+        "name": "Traktor (Schwer)",
+        "base_price": 350000,
+        "power": 500,
+        "speed": 45
+      },
+      {
+        "type": "radlader",
+        "name": "Radlader",
+        "base_price": 120000,
+        "power": 200,
+        "speed": 35
+      },
+      {
+        "type": "teleskoplader",
+        "name": "Teleskoplader",
+        "base_price": 95000,
+        "power": 150,
+        "speed": 40
+      }
+    ],
+    "erntemaschinen": [
+      {
+        "type": "maehdrescher_klein",
+        "name": "Maehdrescher (Klein)",
+        "base_price": 250000,
+        "power": 300,
+        "speed": 25
+      },
+      {
+        "type": "maehdrescher_gross",
+        "name": "Maehdrescher (Gross)",
+        "base_price": 450000,
+        "power": 500,
+        "speed": 30
+      },
+      {
+        "type": "feldhacker",
+        "name": "Feldhacksler",
+        "base_price": 380000,
+        "power": 600,
+        "speed": 40
+      },
+      {
+        "type": "kartoffelroder",
+        "name": "Kartoffelroder",
+        "base_price": 280000,
+        "power": 400,
+        "speed": 20
+      },
+      {
+        "type": "rubenroder",
+        "name": "Ruebenroder",
+        "base_price": 520000,
+        "power": 700,
+        "speed": 20
+      },
+      {
+        "type": "traubenvollernter",
+        "name": "Traubenvollernter",
+        "base_price": 320000,
+        "power": 250,
+        "speed": 25
+      }
+    ],
+    "geraete": [
+      {
+        "type": "pflug",
+        "name": "Pflug",
+        "base_price": 25000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "grubber",
+        "name": "Grubber",
+        "base_price": 18000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "saemaschine",
+        "name": "Saemaschine",
+        "base_price": 45000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "duengerstreuer",
+        "name": "Duengerstreuer",
+        "base_price": 35000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "feldspritze",
+        "name": "Feldspritze",
+        "base_price": 55000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "anhaenger",
+        "name": "Anhaenger",
+        "base_price": 28000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "maeher",
+        "name": "Maeher",
+        "base_price": 22000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "schwader",
+        "name": "Schwader",
+        "base_price": 32000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "ballenpresse",
+        "name": "Ballenpresse",
+        "base_price": 85000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "ladewagen",
+        "name": "Ladewagen",
+        "base_price": 65000,
+        "power": 0,
+        "speed": 0
+      }
+    ],
+    "diverses": [
+      {
+        "type": "zubehoer",
+        "name": "Zubehoer",
+        "base_price": 5000,
+        "power": 0,
+        "speed": 0
+      },
+      {
+        "type": "werkzeug",
+        "name": "Werkzeug",
+        "base_price": 2500,
+        "power": 0,
+        "speed": 0
+      }
+    ]
+  },
+  "statistics": {
+    "total_brands": 188,
+    "brands_per_category": {
+      "fahrzeuge": 42,
+      "erntemaschinen": 22,
+      "geraete": 123,
+      "diverses": 51
+    }
+  }
+}

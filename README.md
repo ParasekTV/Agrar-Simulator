@@ -32,10 +32,23 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 - **Ranglisten** - Globale Spieler- und Genossenschafts-Rankings
 - **Woechentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
 
+### Produktionssystem
+- **71 Produktionsstaetten** - Von Bohrinsel bis Zuckerfabrik
+- **333 Produkte** - Rohstoffe, Zwischenprodukte und Endprodukte
+- **Produktionsketten** - Komplexe Abhaengigkeiten zwischen Produktionen
+- **10 Verkaufsstellen** - Spezialisierte Abnehmer fuer verschiedene Produktkategorien
+- **8 Tierhaltungs-Gebaeude** - Huehnerstall, Kuhstall, Schweinestall, etc.
+
 ### Administration
 - **Admin-Panel** - Vollstaendige Verwaltung von Benutzern, Hoefen und Genossenschaften
 - **Benutzer bearbeiten** - Name, E-Mail, Passwort, Geld, Punkte, Level
 - **Genossenschaften verwalten** - Mitglieder entfernen, Kasse anpassen, Limits setzen
+- **News & Changelog** - Admin-Beitraege mit Discord-Integration
+
+### Discord Integration
+- **Webhook-Benachrichtigungen** - Automatische Posts bei News und Changelog-Eintraegen
+- **Embed-Nachrichten** - Formatierte Darstellung mit Farben und Kategorien
+- **Konfigurierbar** - Ein-/Ausschaltbar in der config.php
 
 ## Waehrung
 
@@ -82,13 +95,18 @@ FLUSH PRIVILEGES;
 mysql -u agrar_user -p agrar_simulator < sql/install.sql
 ```
 
-4. **Admin-Benutzer erstellen:**
+4. **Produktionssystem importieren (optional):**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/productions_migration.sql
+```
+
+5. **Admin-Benutzer erstellen:**
 Nach der Registrierung im Spiel:
 ```sql
 UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
 ```
 
-5. **Konfiguration anpassen:**
+6. **Konfiguration anpassen:**
 
 Bearbeite `config/database.php`:
 ```php
@@ -105,9 +123,13 @@ Bearbeite `config/config.php`:
 ```php
 define('BASE_URL', '');  // Leer lassen wenn im Root
 define('DEBUG_MODE', false);  // In Produktion auf false
+
+// Discord Webhook (optional)
+define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/DEINE_ID/DEIN_TOKEN');
+define('DISCORD_WEBHOOK_ENABLED', true);
 ```
 
-5. **Webserver konfigurieren:**
+7. **Webserver konfigurieren:**
 
 **Apache:** Setze das Document Root auf den `public/` Ordner.
 
@@ -129,7 +151,7 @@ server {
 }
 ```
 
-6. **Cron Jobs einrichten:**
+8. **Cron Jobs einrichten:**
 ```cron
 */5 * * * * php /var/www/agrar-simulator/cron/harvest_check.php
 */5 * * * * php /var/www/agrar-simulator/cron/research_check.php
@@ -143,21 +165,26 @@ server {
 agrar-simulator/
 ├── app/
 │   ├── controllers/     # Controller-Klassen
-│   ├── core/           # Kernklassen (Database, Router, Session)
-│   ├── models/         # Model-Klassen
-│   └── views/          # PHP-Templates
+│   ├── core/            # Kernklassen (Database, Router, Session, DiscordWebhook)
+│   ├── models/          # Model-Klassen
+│   └── views/           # PHP-Templates
 ├── config/
-│   ├── config.php      # Hauptkonfiguration
-│   └── database.php    # Datenbankverbindung
-├── cron/               # Cron-Job-Skripte
-├── logs/               # Log-Dateien
-├── public/             # Document Root
-│   ├── css/           # Stylesheets
-│   ├── js/            # JavaScript
-│   ├── images/        # Bilder
-│   └── index.php      # Entry Point
+│   ├── config.php       # Hauptkonfiguration (inkl. Discord Webhook)
+│   └── database.php     # Datenbankverbindung
+├── cron/                # Cron-Job-Skripte
+├── logs/                # Log-Dateien
+├── public/              # Document Root
+│   ├── css/             # Stylesheets
+│   ├── js/              # JavaScript
+│   ├── images/          # Bilder
+│   └── index.php        # Entry Point
+├── scripts/             # Hilfsskripte
+│   ├── parse_productions.py   # Produktionsdaten-Parser
+│   └── fix_umlauts.py         # Umlaut-Korrektur fuer SQL
 └── sql/
-    └── install.sql    # Datenbank-Schema
+    ├── install.sql              # Basis-Datenbank-Schema
+    ├── productions_migration.sql # Produktionssystem-Migration
+    └── productions_data.json     # Produktionsdaten als JSON
 ```
 
 ## API-Endpunkte

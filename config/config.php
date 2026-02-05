@@ -59,7 +59,7 @@ define('CSRF_TOKEN_LIFETIME', 3600);
 date_default_timezone_set('Europe/Berlin');
 
 // Discord Webhook
-define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/1467796540679782485/QWckUsK0QvXKam7CVhT6pR2bRVSuP5nStYNyYj72Odx7PUTVF2jy7YJcDn9bDk4jdaNE'); // Webhook-URL hier eintragen
+define('DISCORD_WEBHOOK_URL', ''); // Webhook-URL hier eintragen
 define('DISCORD_WEBHOOK_ENABLED', true);
 
 // Autoloader

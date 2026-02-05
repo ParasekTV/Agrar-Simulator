@@ -244,10 +244,12 @@ class Market
         $whereClause = implode(' AND ', $conditions);
         $offset = ($page - 1) * $perPage;
 
-        // Hole Angebote
-        $sql = "SELECT ml.*, f.farm_name as seller_name
+        // Hole Angebote (mit Produkt-Icon falls vorhanden)
+        $sql = "SELECT ml.*, f.farm_name as seller_name,
+                       p.icon as product_icon
                 FROM market_listings ml
                 JOIN farms f ON ml.seller_farm_id = f.id
+                LEFT JOIN products p ON ml.item_name = p.name_de
                 WHERE {$whereClause}
                 ORDER BY ml.created_at DESC
                 LIMIT {$perPage} OFFSET {$offset}";

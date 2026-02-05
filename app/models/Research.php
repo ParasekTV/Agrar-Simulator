@@ -180,7 +180,7 @@ class Research
     public function getActive(int $farmId): ?array
     {
         return $this->db->fetchOne(
-            "SELECT fr.*, rt.name, rt.description, rt.category, rt.research_time_hours, rt.points_reward
+            "SELECT fr.*, rt.name, rt.description, rt.category, rt.research_time_hours, rt.points_reward, rt.icon
              FROM farm_research fr
              JOIN research_tree rt ON fr.research_id = rt.id
              WHERE fr.farm_id = ? AND fr.status = ?",
@@ -267,7 +267,7 @@ class Research
     public function getCompleted(int $farmId): array
     {
         return $this->db->fetchAll(
-            "SELECT fr.*, rt.name, rt.description, rt.category
+            "SELECT fr.*, rt.name, rt.description, rt.category, rt.icon
              FROM farm_research fr
              JOIN research_tree rt ON fr.research_id = rt.id
              WHERE fr.farm_id = ? AND fr.status = ?

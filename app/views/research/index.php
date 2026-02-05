@@ -12,7 +12,13 @@
             <div class="card-body">
                 <div class="active-research">
                     <div class="research-info">
-                        <h4><?= htmlspecialchars($activeResearch['name']) ?></h4>
+                        <h4>
+                            <?php if (!empty($activeResearch['icon'])): ?>
+                                <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($activeResearch['icon']) ?>"
+                                     class="research-icon" alt="" onerror="this.style.display='none'">
+                            <?php endif; ?>
+                            <?= htmlspecialchars($activeResearch['name']) ?>
+                        </h4>
                         <p><?= htmlspecialchars($activeResearch['description']) ?></p>
                         <span class="research-category category-<?= $activeResearch['category'] ?>">
                             <?= ucfirst($activeResearch['category']) ?>
@@ -63,7 +69,13 @@
                     <?php foreach ($researches as $research): ?>
                         <div class="research-item research-<?= $research['status'] ?>">
                             <div class="research-header">
-                                <h4><?= htmlspecialchars($research['name']) ?></h4>
+                                <h4>
+                                    <?php if (!empty($research['icon'])): ?>
+                                        <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($research['icon']) ?>"
+                                             class="research-icon" alt="" onerror="this.style.display='none'">
+                                    <?php endif; ?>
+                                    <?= htmlspecialchars($research['name']) ?>
+                                </h4>
                                 <?php if ($research['status'] === 'completed'): ?>
                                     <span class="badge badge-success">Erforscht</span>
                                 <?php elseif ($research['status'] === 'in_progress'): ?>
@@ -114,7 +126,13 @@
                 <div class="completed-research-list">
                     <?php foreach ($completedResearch as $research): ?>
                         <div class="completed-research-item">
-                            <span class="research-name"><?= htmlspecialchars($research['name']) ?></span>
+                            <span class="research-name">
+                                <?php if (!empty($research['icon'])): ?>
+                                    <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($research['icon']) ?>"
+                                         class="research-icon" alt="" onerror="this.style.display='none'">
+                                <?php endif; ?>
+                                <?= htmlspecialchars($research['name']) ?>
+                            </span>
                             <span class="research-date"><?= date('d.m.Y', strtotime($research['completed_at'])) ?></span>
                         </div>
                     <?php endforeach; ?>
@@ -123,3 +141,15 @@
         </div>
     <?php endif; ?>
 </div>
+
+<style>
+.research-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 0.4rem;
+}
+.research-header h4 { display: flex; align-items: center; }
+.completed-research-item .research-name { display: flex; align-items: center; }
+</style>

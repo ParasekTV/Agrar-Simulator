@@ -47,9 +47,17 @@
                             <?php foreach ($listings as $listing): ?>
                                 <tr>
                                     <td>
-                                        <strong><?= htmlspecialchars($listing['item_name']) ?></strong>
-                                        <br>
-                                        <small class="text-muted"><?= ucfirst(str_replace('_', ' ', $listing['item_type'])) ?></small>
+                                        <div class="market-item-cell">
+                                            <?php if (!empty($listing['product_icon'])): ?>
+                                                <img src="<?= BASE_URL ?>/img/products/<?= htmlspecialchars($listing['product_icon']) ?>"
+                                                     class="product-icon" alt="" onerror="this.style.display='none'">
+                                            <?php endif; ?>
+                                            <div>
+                                                <strong><?= htmlspecialchars($listing['item_name']) ?></strong>
+                                                <br>
+                                                <small class="text-muted"><?= ucfirst(str_replace('_', ' ', $listing['item_type'])) ?></small>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td><?= htmlspecialchars($listing['seller_name']) ?></td>
                                     <td><?= number_format($listing['quantity']) ?></td>
@@ -234,3 +242,8 @@ function updateTotal() {
     document.getElementById('buy-total').textContent = Math.round(total);
 }
 </script>
+
+<style>
+.market-item-cell { display: flex; align-items: center; gap: 0.5rem; }
+.product-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+</style>

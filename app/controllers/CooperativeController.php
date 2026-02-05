@@ -535,8 +535,7 @@ class CooperativeController extends Controller
         $coopModel = new Cooperative();
         $result = $coopModel->depositToWarehouse(
             $this->getFarmId(),
-            $data['item_type'],
-            $data['item_name'],
+            (int) $data['product_id'],
             (int) $data['quantity']
         );
 
@@ -566,8 +565,7 @@ class CooperativeController extends Controller
         $coopModel = new Cooperative();
         $result = $coopModel->withdrawFromWarehouse(
             $this->getFarmId(),
-            $data['item_type'],
-            $data['item_name'],
+            (int) $data['product_id'],
             (int) $data['quantity']
         );
 

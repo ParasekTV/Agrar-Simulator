@@ -71,7 +71,6 @@ $router->get('/market/history', 'Market', 'history');
 
 // Genossenschaften
 $router->get('/cooperative', 'Cooperative', 'index');
-$router->get('/cooperative/{id}', 'Cooperative', 'show');
 $router->post('/cooperative/create', 'Cooperative', 'create');
 $router->post('/cooperative/join', 'Cooperative', 'join');
 $router->post('/cooperative/leave', 'Cooperative', 'leave');
@@ -79,6 +78,21 @@ $router->post('/cooperative/donate', 'Cooperative', 'donate');
 $router->post('/cooperative/share-equipment', 'Cooperative', 'shareEquipment');
 $router->post('/cooperative/borrow-equipment', 'Cooperative', 'borrowEquipment');
 $router->post('/cooperative/return-equipment', 'Cooperative', 'returnEquipment');
+$router->post('/cooperative/apply', 'Cooperative', 'apply');
+$router->get('/cooperative/applications', 'Cooperative', 'applications');
+$router->post('/cooperative/process-application', 'Cooperative', 'processApplication');
+$router->get('/cooperative/members', 'Cooperative', 'members');
+$router->post('/cooperative/assign-role', 'Cooperative', 'assignRole');
+$router->post('/cooperative/kick', 'Cooperative', 'kick');
+$router->get('/cooperative/warehouse', 'Cooperative', 'warehouse');
+$router->post('/cooperative/deposit', 'Cooperative', 'deposit');
+$router->post('/cooperative/withdraw', 'Cooperative', 'withdraw');
+$router->get('/cooperative/finances', 'Cooperative', 'finances');
+$router->post('/cooperative/withdraw-money', 'Cooperative', 'withdrawMoney');
+$router->get('/cooperative/research', 'Cooperative', 'research');
+$router->post('/cooperative/start-research', 'Cooperative', 'startResearch');
+$router->get('/cooperative/challenges', 'Cooperative', 'challenges');
+$router->get('/cooperative/{id}', 'Cooperative', 'show');
 
 // News/Forum
 $router->get('/news', 'News', 'index');

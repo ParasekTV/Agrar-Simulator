@@ -169,7 +169,7 @@ function formatTime(milliseconds) {
 
 function updateFarmStats() {
     API.get('/farm/stats').then(function(data) {
-        if (data) {
+        if (data && data.money !== undefined && data.money !== null) {
             const moneyEl = document.getElementById('farm-money');
             const pointsEl = document.getElementById('farm-points');
             const levelEl = document.getElementById('farm-level');
@@ -178,5 +178,5 @@ function updateFarmStats() {
             if (pointsEl) pointsEl.textContent = formatNumber(data.points) + ' Punkte';
             if (levelEl) levelEl.textContent = 'Level ' + data.level;
         }
-    });
+    }).catch(function() {});
 }

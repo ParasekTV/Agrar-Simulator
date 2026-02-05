@@ -521,7 +521,7 @@ class Cooperative
      */
     public function getRoles(): array
     {
-        return $this->db->fetchAll('SELECT * FROM cooperative_roles ORDER BY hierarchy_level DESC');
+        return $this->db->fetchAll('SELECT * FROM cooperative_roles ORDER BY id ASC');
     }
 
     /**
@@ -541,7 +541,7 @@ class Cooperative
             return ['success' => false, 'message' => 'Rolle nicht gefunden'];
         }
 
-        if ($role['hierarchy_level'] >= 90 && $membership['role'] !== 'founder') {
+        if (in_array($roleKey, ['founder', 'admin']) && $membership['role'] !== 'founder') {
             return ['success' => false, 'message' => 'Nur der Gründer kann diese Rolle vergeben'];
         }
 
@@ -559,7 +559,7 @@ class Cooperative
             'coop_id' => $membership['cooperative_id']
         ]);
 
-        $this->logTransaction($membership['cooperative_id'], 'role_change', 0, "Rolle geändert zu: {$role['name']}", $assignerFarmId);
+        $this->logTransaction($membership['cooperative_id'], 'fee', 0, "Rolle geändert zu: {$role['name']}", $assignerFarmId);
 
         return ['success' => true, 'message' => "Rolle '{$role['name']}' zugewiesen"];
     }
@@ -629,7 +629,7 @@ class Cooperative
              FROM cooperative_applications ca
              JOIN farms f ON ca.farm_id = f.id
              WHERE ca.cooperative_id = ? AND ca.status = 'pending'
-             ORDER BY ca.created_at DESC",
+             ORDER BY ca.applied_at DESC",
             [$cooperativeId]
         );
     }
@@ -675,7 +675,7 @@ class Cooperative
                 'reviewed_at' => date('Y-m-d H:i:s')
             ], 'id = :id', ['id' => $applicationId]);
 
-            $this->logTransaction($membership['cooperative_id'], 'member_joined', 0, 'Neues Mitglied durch Bewerbung', $application['farm_id']);
+            $this->logTransaction($membership['cooperative_id'], 'fee', 0, 'Neues Mitglied durch Bewerbung', $application['farm_id']);
 
             return ['success' => true, 'message' => 'Bewerbung angenommen'];
         } else {
@@ -720,7 +720,7 @@ class Cooperative
         $kickerRole = $this->db->fetchOne('SELECT * FROM cooperative_roles WHERE role_key = ?', [$membership['role']]);
         $targetRole = $this->db->fetchOne('SELECT * FROM cooperative_roles WHERE role_key = ?', [$targetMembership['role']]);
 
-        if ($targetRole && $kickerRole && $targetRole['hierarchy_level'] >= $kickerRole['hierarchy_level']) {
+        if ($targetRole && $kickerRole && $targetRole['id'] <= $kickerRole['id']) {
             return ['success' => false, 'message' => 'Du kannst keine gleichrangigen oder höheren Mitglieder entfernen'];
         }
 
@@ -730,7 +730,7 @@ class Cooperative
         // Entferne Mitgliedschaft
         $this->db->delete('cooperative_members', 'farm_id = ? AND cooperative_id = ?', [$targetFarmId, $membership['cooperative_id']]);
 
-        $this->logTransaction($membership['cooperative_id'], 'member_kicked', 0, "Mitglied entfernt: {$targetMembership['farm_name']}", $kickerFarmId);
+        $this->logTransaction($membership['cooperative_id'], 'fee', 0, "Mitglied entfernt: {$targetMembership['farm_name']}", $kickerFarmId);
 
         return ['success' => true, 'message' => "{$targetMembership['farm_name']} wurde entfernt"];
     }
@@ -745,7 +745,11 @@ class Cooperative
     public function getWarehouse(int $cooperativeId): array
     {
         return $this->db->fetchAll(
-            'SELECT * FROM cooperative_warehouse WHERE cooperative_id = ? ORDER BY item_type, item_name',
+            'SELECT cw.*, p.name as product_name, p.category as product_category
+             FROM cooperative_warehouse cw
+             LEFT JOIN products p ON cw.product_id = p.id
+             WHERE cw.cooperative_id = ?
+             ORDER BY p.category, p.name',
             [$cooperativeId]
         );
     }
@@ -753,26 +757,24 @@ class Cooperative
     /**
      * Lagert Items im Genossenschaftslager ein
      */
-    public function depositToWarehouse(int $farmId, string $itemType, string $itemName, int $quantity): array
+    public function depositToWarehouse(int $farmId, int $productId, int $quantity): array
     {
         $membership = $this->getMembership($farmId);
         if (!$membership) {
             return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
         }
 
-        if (!$this->hasPermission($farmId, 'manage_warehouse') && !$this->hasPermission($farmId, 'all')) {
-            // Alle Mitglieder dürfen einlagern
-        }
-
         // Prüfe ob Farm das Item hat
         $farmItem = $this->db->fetchOne(
-            'SELECT * FROM inventory WHERE farm_id = ? AND item_type = ? AND item_name = ? AND quantity >= ?',
-            [$farmId, $itemType, $itemName, $quantity]
+            'SELECT * FROM inventory WHERE farm_id = ? AND product_id = ? AND quantity >= ?',
+            [$farmId, $productId, $quantity]
         );
 
         if (!$farmItem) {
             return ['success' => false, 'message' => 'Nicht genügend Items im Inventar'];
         }
+
+        $product = $this->db->fetchOne('SELECT * FROM products WHERE id = ?', [$productId]);
 
         // Reduziere Farm-Inventar
         $newQty = $farmItem['quantity'] - $quantity;
@@ -784,8 +786,8 @@ class Cooperative
 
         // Erhöhe Genossenschaftslager
         $existing = $this->db->fetchOne(
-            'SELECT * FROM cooperative_warehouse WHERE cooperative_id = ? AND item_type = ? AND item_name = ?',
-            [$membership['cooperative_id'], $itemType, $itemName]
+            'SELECT * FROM cooperative_warehouse WHERE cooperative_id = ? AND product_id = ?',
+            [$membership['cooperative_id'], $productId]
         );
 
         if ($existing) {
@@ -796,8 +798,7 @@ class Cooperative
         } else {
             $this->db->insert('cooperative_warehouse', [
                 'cooperative_id' => $membership['cooperative_id'],
-                'item_type' => $itemType,
-                'item_name' => $itemName,
+                'product_id' => $productId,
                 'quantity' => $quantity
             ]);
         }
@@ -806,19 +807,19 @@ class Cooperative
         $this->db->insert('cooperative_warehouse_log', [
             'cooperative_id' => $membership['cooperative_id'],
             'farm_id' => $farmId,
-            'action' => 'deposit',
-            'item_type' => $itemType,
-            'item_name' => $itemName,
-            'quantity' => $quantity
+            'product_id' => $productId,
+            'quantity' => $quantity,
+            'transaction_type' => 'deposit'
         ]);
 
-        return ['success' => true, 'message' => "{$quantity}x {$itemName} eingelagert"];
+        $productName = $product['name'] ?? 'Produkt';
+        return ['success' => true, 'message' => "{$quantity}x {$productName} eingelagert"];
     }
 
     /**
      * Entnimmt Items aus dem Genossenschaftslager
      */
-    public function withdrawFromWarehouse(int $farmId, string $itemType, string $itemName, int $quantity): array
+    public function withdrawFromWarehouse(int $farmId, int $productId, int $quantity): array
     {
         $membership = $this->getMembership($farmId);
         if (!$membership) {
@@ -830,13 +831,15 @@ class Cooperative
         }
 
         $warehouseItem = $this->db->fetchOne(
-            'SELECT * FROM cooperative_warehouse WHERE cooperative_id = ? AND item_type = ? AND item_name = ? AND quantity >= ?',
-            [$membership['cooperative_id'], $itemType, $itemName, $quantity]
+            'SELECT * FROM cooperative_warehouse WHERE cooperative_id = ? AND product_id = ? AND quantity >= ?',
+            [$membership['cooperative_id'], $productId, $quantity]
         );
 
         if (!$warehouseItem) {
             return ['success' => false, 'message' => 'Nicht genügend Items im Lager'];
         }
+
+        $product = $this->db->fetchOne('SELECT * FROM products WHERE id = ?', [$productId]);
 
         // Reduziere Lager
         $newQty = $warehouseItem['quantity'] - $quantity;
@@ -848,8 +851,8 @@ class Cooperative
 
         // Erhöhe Farm-Inventar
         $farmItem = $this->db->fetchOne(
-            'SELECT * FROM inventory WHERE farm_id = ? AND item_type = ? AND item_name = ?',
-            [$farmId, $itemType, $itemName]
+            'SELECT * FROM inventory WHERE farm_id = ? AND product_id = ?',
+            [$farmId, $productId]
         );
 
         if ($farmItem) {
@@ -860,8 +863,7 @@ class Cooperative
         } else {
             $this->db->insert('inventory', [
                 'farm_id' => $farmId,
-                'item_type' => $itemType,
-                'item_name' => $itemName,
+                'product_id' => $productId,
                 'quantity' => $quantity
             ]);
         }
@@ -870,13 +872,13 @@ class Cooperative
         $this->db->insert('cooperative_warehouse_log', [
             'cooperative_id' => $membership['cooperative_id'],
             'farm_id' => $farmId,
-            'action' => 'withdraw',
-            'item_type' => $itemType,
-            'item_name' => $itemName,
-            'quantity' => $quantity
+            'product_id' => $productId,
+            'quantity' => $quantity,
+            'transaction_type' => 'withdraw'
         ]);
 
-        return ['success' => true, 'message' => "{$quantity}x {$itemName} entnommen"];
+        $productName = $product['name'] ?? 'Produkt';
+        return ['success' => true, 'message' => "{$quantity}x {$productName} entnommen"];
     }
 
     // ============================================
@@ -909,7 +911,7 @@ class Cooperative
         $farm = new Farm($farmId);
         $farm->addMoney($amount, "Entnahme aus Genossenschaftskasse: {$reason}");
 
-        $this->logTransaction($membership['cooperative_id'], 'withdrawal', -$amount, $reason ?: 'Entnahme', $farmId);
+        $this->logTransaction($membership['cooperative_id'], 'payout', -$amount, $reason ?: 'Entnahme', $farmId);
 
         return ['success' => true, 'message' => number_format($amount, 0, ',', '.') . ' T entnommen'];
     }
@@ -938,7 +940,7 @@ class Cooperative
         $this->db->insert('cooperative_transactions', [
             'cooperative_id' => $cooperativeId,
             'farm_id' => $farmId,
-            'type' => $type,
+            'transaction_type' => $type,
             'amount' => $amount,
             'description' => $description
         ]);
@@ -957,7 +959,7 @@ class Cooperative
             "SELECT crt.*, cr.status, cr.started_at, cr.completed_at
              FROM cooperative_research_tree crt
              LEFT JOIN cooperative_research cr ON crt.id = cr.research_id AND cr.cooperative_id = ?
-             ORDER BY crt.required_level, crt.cost",
+             ORDER BY crt.required_coop_level, crt.cost",
             [$cooperativeId]
         );
 
@@ -993,10 +995,10 @@ class Cooperative
         }
 
         // Prüfe Voraussetzungen
-        if ($research['required_research_id']) {
+        if ($research['prerequisite_id']) {
             $prereq = $this->db->fetchOne(
                 "SELECT * FROM cooperative_research WHERE cooperative_id = ? AND research_id = ? AND status = 'completed'",
-                [$membership['cooperative_id'], $research['required_research_id']]
+                [$membership['cooperative_id'], $research['prerequisite_id']]
             );
             if (!$prereq) {
                 return ['success' => false, 'message' => 'Voraussetzung nicht erfüllt'];
@@ -1020,7 +1022,7 @@ class Cooperative
             'started_at' => date('Y-m-d H:i:s')
         ]);
 
-        $this->logTransaction($membership['cooperative_id'], 'research', -$research['cost'], "Forschung gestartet: {$research['name']}", $farmId);
+        $this->logTransaction($membership['cooperative_id'], 'purchase', -$research['cost'], "Forschung gestartet: {$research['name']}", $farmId);
 
         return ['success' => true, 'message' => "Forschung '{$research['name']}' gestartet"];
     }
@@ -1048,7 +1050,7 @@ class Cooperative
                     'completed_at' => date('Y-m-d H:i:s')
                 ], 'id = :id', ['id' => $activeResearch['id']]);
 
-                $this->logTransaction($cooperativeId, 'research_complete', 0, "Forschung abgeschlossen: {$activeResearch['name']}");
+                $this->logTransaction($cooperativeId, 'reward', 0, "Forschung abgeschlossen: {$activeResearch['name']}");
             }
         }
     }
@@ -1063,12 +1065,12 @@ class Cooperative
     public function getActiveChallenges(int $cooperativeId): array
     {
         return $this->db->fetchAll(
-            "SELECT cc.*, cct.name, cct.description, cct.type, cct.target_type,
-                    cct.target_amount, cct.reward_money, cct.reward_points
+            "SELECT cc.*, cct.name, cct.description, cct.challenge_period, cct.challenge_type,
+                    cct.target_value, cct.reward_money, cct.reward_points
              FROM cooperative_challenges cc
              JOIN cooperative_challenge_templates cct ON cc.template_id = cct.id
-             WHERE cc.cooperative_id = ? AND cc.status = 'active'
-             ORDER BY cc.ends_at",
+             WHERE cc.cooperative_id = ? AND cc.is_completed = 0
+             ORDER BY cc.end_date",
             [$cooperativeId]
         );
     }
@@ -1083,7 +1085,7 @@ class Cooperative
              FROM cooperative_challenge_contributions ccc
              JOIN farms f ON ccc.farm_id = f.id
              WHERE ccc.challenge_id = ?
-             ORDER BY ccc.contribution DESC",
+             ORDER BY ccc.contribution_value DESC",
             [$challengeId]
         );
     }
@@ -1091,45 +1093,34 @@ class Cooperative
     /**
      * Aktualisiert Herausforderungsfortschritt
      */
-    public function updateChallengeProgress(int $cooperativeId, string $targetType, int $amount, ?int $farmId = null): void
+    public function updateChallengeProgress(int $cooperativeId, string $challengeType, int $amount, ?int $farmId = null): void
     {
         $challenges = $this->db->fetchAll(
-            "SELECT cc.*, cct.target_type, cct.target_amount
+            "SELECT cc.*, cct.challenge_type, cct.target_value
              FROM cooperative_challenges cc
              JOIN cooperative_challenge_templates cct ON cc.template_id = cct.id
-             WHERE cc.cooperative_id = ? AND cc.status = 'active' AND cct.target_type = ?",
-            [$cooperativeId, $targetType]
+             WHERE cc.cooperative_id = ? AND cc.is_completed = 0 AND cct.challenge_type = ?",
+            [$cooperativeId, $challengeType]
         );
 
         foreach ($challenges as $challenge) {
-            $newProgress = min($challenge['current_progress'] + $amount, $challenge['target_amount']);
+            $newProgress = min($challenge['current_value'] + $amount, $challenge['target_value']);
 
             $this->db->update('cooperative_challenges', [
-                'current_progress' => $newProgress
+                'current_value' => $newProgress
             ], 'id = :id', ['id' => $challenge['id']]);
 
             // Logge Beitrag
             if ($farmId) {
-                $existing = $this->db->fetchOne(
-                    'SELECT * FROM cooperative_challenge_contributions WHERE challenge_id = ? AND farm_id = ?',
-                    [$challenge['id'], $farmId]
-                );
-
-                if ($existing) {
-                    $this->db->update('cooperative_challenge_contributions', [
-                        'contribution' => $existing['contribution'] + $amount
-                    ], 'id = :id', ['id' => $existing['id']]);
-                } else {
-                    $this->db->insert('cooperative_challenge_contributions', [
-                        'challenge_id' => $challenge['id'],
-                        'farm_id' => $farmId,
-                        'contribution' => $amount
-                    ]);
-                }
+                $this->db->insert('cooperative_challenge_contributions', [
+                    'challenge_id' => $challenge['id'],
+                    'farm_id' => $farmId,
+                    'contribution_value' => $amount
+                ]);
             }
 
             // Prüfe ob abgeschlossen
-            if ($newProgress >= $challenge['target_amount']) {
+            if ($newProgress >= $challenge['target_value']) {
                 $this->completeChallenge($challenge['id']);
             }
         }
@@ -1148,12 +1139,12 @@ class Cooperative
             [$challengeId]
         );
 
-        if (!$challenge || $challenge['status'] !== 'active') {
+        if (!$challenge || $challenge['is_completed']) {
             return;
         }
 
         $this->db->update('cooperative_challenges', [
-            'status' => 'completed',
+            'is_completed' => 1,
             'completed_at' => date('Y-m-d H:i:s')
         ], 'id = :id', ['id' => $challengeId]);
 
@@ -1174,7 +1165,7 @@ class Cooperative
 
         $this->logTransaction(
             $challenge['cooperative_id'],
-            'challenge_complete',
+            'reward',
             $challenge['reward_money'],
             "Herausforderung abgeschlossen: {$challenge['name']}"
         );
@@ -1188,14 +1179,14 @@ class Cooperative
         // Wöchentliche Herausforderungen
         $weeklyActive = $this->db->count(
             'cooperative_challenges cc JOIN cooperative_challenge_templates cct ON cc.template_id = cct.id',
-            "cc.cooperative_id = ? AND cc.status = 'active' AND cct.type = 'weekly'",
+            "cc.cooperative_id = ? AND cc.is_completed = 0 AND cct.challenge_period = 'weekly'",
             [$cooperativeId]
         );
 
         if ($weeklyActive < 3) {
             $templates = $this->db->fetchAll(
                 "SELECT * FROM cooperative_challenge_templates
-                 WHERE type = 'weekly' AND is_active = 1
+                 WHERE challenge_period = 'weekly' AND is_active = 1
                  ORDER BY RAND() LIMIT ?",
                 [3 - $weeklyActive]
             );
@@ -1204,9 +1195,8 @@ class Cooperative
                 $this->db->insert('cooperative_challenges', [
                     'cooperative_id' => $cooperativeId,
                     'template_id' => $template['id'],
-                    'target_amount' => $template['target_amount'],
-                    'starts_at' => date('Y-m-d H:i:s'),
-                    'ends_at' => date('Y-m-d H:i:s', strtotime('+7 days'))
+                    'start_date' => date('Y-m-d'),
+                    'end_date' => date('Y-m-d', strtotime('+7 days'))
                 ]);
             }
         }
@@ -1214,14 +1204,14 @@ class Cooperative
         // Monatliche Herausforderungen
         $monthlyActive = $this->db->count(
             'cooperative_challenges cc JOIN cooperative_challenge_templates cct ON cc.template_id = cct.id',
-            "cc.cooperative_id = ? AND cc.status = 'active' AND cct.type = 'monthly'",
+            "cc.cooperative_id = ? AND cc.is_completed = 0 AND cct.challenge_period = 'monthly'",
             [$cooperativeId]
         );
 
         if ($monthlyActive < 2) {
             $templates = $this->db->fetchAll(
                 "SELECT * FROM cooperative_challenge_templates
-                 WHERE type = 'monthly' AND is_active = 1
+                 WHERE challenge_period = 'monthly' AND is_active = 1
                  ORDER BY RAND() LIMIT ?",
                 [2 - $monthlyActive]
             );
@@ -1230,9 +1220,8 @@ class Cooperative
                 $this->db->insert('cooperative_challenges', [
                     'cooperative_id' => $cooperativeId,
                     'template_id' => $template['id'],
-                    'target_amount' => $template['target_amount'],
-                    'starts_at' => date('Y-m-d H:i:s'),
-                    'ends_at' => date('Y-m-d H:i:s', strtotime('+30 days'))
+                    'start_date' => date('Y-m-d'),
+                    'end_date' => date('Y-m-d', strtotime('+30 days'))
                 ]);
             }
         }

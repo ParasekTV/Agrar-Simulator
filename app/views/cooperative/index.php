@@ -7,14 +7,41 @@
     </div>
 
     <?php if ($membership): ?>
+        <!-- Navigation Tabs -->
+        <div class="coop-nav">
+            <a href="<?= BASE_URL ?>/cooperative" class="coop-nav-item active">Übersicht</a>
+            <a href="<?= BASE_URL ?>/cooperative/members" class="coop-nav-item">Mitglieder</a>
+            <a href="<?= BASE_URL ?>/cooperative/warehouse" class="coop-nav-item">Lager</a>
+            <a href="<?= BASE_URL ?>/cooperative/finances" class="coop-nav-item">Finanzen</a>
+            <a href="<?= BASE_URL ?>/cooperative/research" class="coop-nav-item">Forschung</a>
+            <a href="<?= BASE_URL ?>/cooperative/challenges" class="coop-nav-item">Herausforderungen</a>
+            <a href="<?= BASE_URL ?>/cooperative/applications" class="coop-nav-item">Bewerbungen</a>
+        </div>
+
         <!-- Eigene Genossenschaft -->
         <div class="card card-highlight">
             <div class="card-header">
                 <h3>Meine Genossenschaft: <?= htmlspecialchars($membership['cooperative_name']) ?></h3>
                 <?php
-                $roleLabels = ['founder' => 'Gründer', 'admin' => 'Admin', 'member' => 'Mitglied'];
+                $roleLabels = [
+                    'founder' => 'Gründer',
+                    'admin' => 'Administrator',
+                    'fleet_manager' => 'Fuhrparkmanager',
+                    'field_manager' => 'Feldmanager',
+                    'animal_manager' => 'Tiermanager',
+                    'production_manager' => 'Produktionsleiter',
+                    'warehouse_manager' => 'Lagerverwaltung',
+                    'treasurer' => 'Kassenwart',
+                    'researcher' => 'Forschungsleiter',
+                    'member' => 'Mitglied'
+                ];
+                $roleBadge = match($membership['role']) {
+                    'founder' => 'warning',
+                    'admin' => 'info',
+                    default => 'secondary'
+                };
                 ?>
-                <span class="badge badge-<?= $membership['role'] === 'founder' ? 'warning' : ($membership['role'] === 'admin' ? 'info' : 'secondary') ?>">
+                <span class="badge badge-<?= $roleBadge ?>">
                     <?= $roleLabels[$membership['role']] ?? 'Mitglied' ?>
                 </span>
             </div>
@@ -116,11 +143,7 @@
                         <div class="coop-card-footer">
                             <span class="coop-points"><?= number_format($coop['total_points']) ?> Punkte</span>
                             <?php if ($coop['member_count'] < $coop['member_limit']): ?>
-                                <form action="<?= BASE_URL ?>/cooperative/join" method="POST" class="inline-form">
-                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                    <input type="hidden" name="cooperative_id" value="<?= $coop['id'] ?>">
-                                    <button type="submit" class="btn btn-primary btn-sm">Beitreten</button>
-                                </form>
+                                <button class="btn btn-primary btn-sm" onclick="showApplyModal(<?= $coop['id'] ?>, '<?= htmlspecialchars($coop['name'], ENT_QUOTES) ?>')">Bewerben</button>
                             <?php else: ?>
                                 <span class="badge badge-secondary">Voll</span>
                             <?php endif; ?>
@@ -186,14 +209,50 @@
     </div>
 </div>
 
+<!-- Modal: Bewerben -->
+<div class="modal" id="apply-modal">
+    <div class="modal-backdrop" onclick="closeApplyModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Bewerbung senden</h3>
+            <button class="modal-close" onclick="closeApplyModal()">&times;</button>
+        </div>
+        <form action="<?= BASE_URL ?>/cooperative/apply" method="POST">
+            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+            <input type="hidden" name="cooperative_id" id="apply-coop-id">
+            <div class="modal-body">
+                <p>Bewerbung an: <strong id="apply-coop-name"></strong></p>
+                <div class="form-group">
+                    <label for="apply-message">Nachricht (optional)</label>
+                    <textarea name="message" id="apply-message" class="form-input" rows="3" placeholder="Warum möchtest du beitreten?"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeApplyModal()">Abbrechen</button>
+                <button type="submit" class="btn btn-primary">Bewerben</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 function showCreateCoopModal() { document.getElementById('create-coop-modal').classList.add('active'); }
 function closeCreateCoopModal() { document.getElementById('create-coop-modal').classList.remove('active'); }
 function showDonateModal() { document.getElementById('donate-modal').classList.add('active'); }
 function closeDonateModal() { document.getElementById('donate-modal').classList.remove('active'); }
+function showApplyModal(id, name) {
+    document.getElementById('apply-coop-id').value = id;
+    document.getElementById('apply-coop-name').textContent = name;
+    document.getElementById('apply-modal').classList.add('active');
+}
+function closeApplyModal() { document.getElementById('apply-modal').classList.remove('active'); }
 </script>
 
 <style>
+.coop-nav { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; background: var(--color-gray-100); padding: 0.25rem; border-radius: var(--radius-lg); }
+.coop-nav-item { padding: 0.5rem 1rem; border-radius: var(--radius); text-decoration: none; color: var(--color-gray-600); font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+.coop-nav-item:hover { background: white; color: var(--color-gray-900); }
+.coop-nav-item.active { background: var(--color-primary); color: white; }
 .coop-stats { display: flex; gap: 2rem; margin-bottom: 1rem; }
 .coop-stat { text-align: center; }
 .coop-stat .stat-value { font-size: 1.5rem; font-weight: 700; display: block; color: var(--color-primary); }

@@ -19,21 +19,43 @@
             <?php foreach ($farmVehicles as $vehicle): ?>
                 <div class="vehicle-card">
                     <div class="vehicle-header">
-                        <span class="vehicle-icon">
-                            <?php
-                            $icons = [
-                                'tractor' => '&#128666;',
-                                'harvester' => '&#127806;',
-                                'seeder' => '&#127793;',
-                                'plow' => '&#129683;',
-                                'trailer' => '&#128666;'
-                            ];
-                            echo $icons[$vehicle['type']] ?? '&#128666;';
-                            ?>
-                        </span>
+                        <?php if (!empty($vehicle['brand_logo'])): ?>
+                            <img src="<?= BASE_URL ?><?= htmlspecialchars($vehicle['brand_logo']) ?>"
+                                 class="brand-logo" alt="<?= htmlspecialchars($vehicle['brand_name'] ?? '') ?>"
+                                 onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                            <span class="vehicle-icon" style="display:none">
+                                <?php
+                                $icons = [
+                                    'tractor' => '&#128666;',
+                                    'harvester' => '&#127806;',
+                                    'seeder' => '&#127793;',
+                                    'plow' => '&#129683;',
+                                    'trailer' => '&#128666;'
+                                ];
+                                echo $icons[$vehicle['vehicle_type'] ?? ''] ?? '&#128666;';
+                                ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="vehicle-icon">
+                                <?php
+                                $icons = [
+                                    'tractor' => '&#128666;',
+                                    'harvester' => '&#127806;',
+                                    'seeder' => '&#127793;',
+                                    'plow' => '&#129683;',
+                                    'trailer' => '&#128666;'
+                                ];
+                                echo $icons[$vehicle['vehicle_type'] ?? ''] ?? '&#128666;';
+                                ?>
+                            </span>
+                        <?php endif; ?>
                         <div class="vehicle-info">
                             <h4><?= htmlspecialchars($vehicle['name']) ?></h4>
-                            <span class="vehicle-type"><?= ucfirst($vehicle['type']) ?></span>
+                            <span class="vehicle-type">
+                                <?= htmlspecialchars($vehicle['brand_name'] ?? '') ?>
+                                &middot;
+                                <?= ucfirst($vehicle['vehicle_type'] ?? 'Fahrzeug') ?>
+                            </span>
                         </div>
                     </div>
 
@@ -47,12 +69,12 @@
                             <span class="stat-value"><?= $vehicle['condition_percent'] ?>%</span>
                         </div>
                         <div class="vehicle-stat">
-                            <span class="stat-label">Effizienz</span>
-                            <span class="stat-value">+<?= $vehicle['efficiency_bonus'] ?>%</span>
+                            <span class="stat-label">Leistung</span>
+                            <span class="stat-value"><?= $vehicle['power_hp'] ?? 0 ?> PS</span>
                         </div>
                         <div class="vehicle-stat">
                             <span class="stat-label">Betriebsstunden</span>
-                            <span class="stat-value"><?= $vehicle['hours_used'] ?>h</span>
+                            <span class="stat-value"><?= $vehicle['operating_hours'] ?? 0 ?>h</span>
                         </div>
                     </div>
 
@@ -94,9 +116,10 @@
                         <option value="">Wähle ein Fahrzeug...</option>
                         <?php foreach ($availableVehicles as $vehicle): ?>
                             <option value="<?= $vehicle['id'] ?>">
+                                <?= htmlspecialchars($vehicle['brand_name'] ?? '') ?> -
                                 <?= htmlspecialchars($vehicle['name']) ?> -
-                                <?= number_format($vehicle['cost'], 0, ',', '.') ?> T
-                                (+<?= $vehicle['efficiency_bonus'] ?>% Effizienz)
+                                <?= number_format($vehicle['price'] ?? 0, 0, ',', '.') ?> T
+                                (<?= $vehicle['power_hp'] ?? 0 ?> PS)
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -139,6 +162,7 @@ function closeBuyVehicleModal() {
     margin-bottom: 1rem;
 }
 .vehicle-icon { font-size: 2.5rem; }
+.brand-logo { width: 48px; height: 48px; object-fit: contain; border-radius: var(--radius); }
 .vehicle-info h4 { margin: 0; }
 .vehicle-type { font-size: 0.9rem; color: var(--color-gray-600); }
 .vehicle-stats { margin-bottom: 1rem; }

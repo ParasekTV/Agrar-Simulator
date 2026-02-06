@@ -1,4 +1,4 @@
-# LSBG Agrar Simulator
+# Agrar Simulator
 
 Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt mit PHP 8 und MySQL.
 

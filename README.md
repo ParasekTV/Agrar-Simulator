@@ -1,85 +1,124 @@
-# Agrar Simulator
+# LSBG Agrar Simulator
 
 Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt mit PHP 8 und MySQL.
 
 ![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?style=flat-square&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+[![Discord](https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/invite/S53gZ6Rg9C)
+
+## Screenshots
+
+### Dashboard
+![Dashboard](public/img/screenshots/Dashboard.PNG)
+
+### Felder bewirtschaften
+![Felder](public/img/screenshots/Felder.PNG)
+
+### Tierhaltung
+![Tiere](public/img/screenshots/Tiere.PNG)
+
+### Fahrzeugpark
+![Fahrzeuge](public/img/screenshots/Fahrzeuge.PNG)
+
+### Forschung & Technologie
+![Forschung](public/img/screenshots/Forschung.PNG)
+
+### Marktplatz
+![Marktplatz](public/img/screenshots/Marktplatz.PNG)
+
+### Genossenschaften
+![Genossenschaften](public/img/screenshots/Genossenschaften.PNG)
+
+### Zeitung & News
+![Zeitung](public/img/screenshots/Zeitung.PNG)
+
+### Rangliste
+![Rangliste](public/img/screenshots/Rangliste.PNG)
+
+### Admin-Bereich
+![Admin-Bereich](public/img/screenshots/AdminBereich.PNG)
+
+---
 
 ## Features
 
 ### Farming & Produktion
-- **Felder bewirtschaften** - Kaufe Felder, pflanze verschiedene Feldfruchte und ernte sie
-- **Tiere halten** - Kuehe, Schweine, Huehner und Schafe mit Produkten wie Milch, Eier und Wolle
-- **Fahrzeuge nutzen** - Traktoren, Maehdrescher und Transportfahrzeuge
+- **Felder bewirtschaften** - Kaufe Felder, pflanze verschiedene Feldfrüchte und ernte sie
+- **Bodenqualität** - Düngen und Kalken verbessert die Erträge
+- **Tiere halten** - Kühe, Schweine, Hühner, Schafe, Büffel und mehr
+- **Tierprodukte** - Milch, Eier, Wolle, Fleisch und verarbeitete Produkte
+- **Fahrzeuge nutzen** - Traktoren, Mähdrescher und Transportfahrzeuge
+
+### Produktionssystem
+- **71 Produktionsstätten** - Von Bäckerei bis Zuckerfabrik
+- **333 Produkte** - Rohstoffe, Zwischenprodukte und Endprodukte
+- **Produktionsketten** - Komplexe Abhängigkeiten zwischen Produktionen
+- **10 Verkaufsstellen** - Spezialisierte Abnehmer für verschiedene Produktkategorien
+- **8 Tierhaltungs-Gebäude** - Hühnerstall, Kuhstall, Schweinestall, Büffelstall, etc.
 
 ### Wirtschaft & Handel
 - **Marktplatz** - Handel mit anderen Spielern in Echtzeit
 - **Dynamische Preise** - Angebot und Nachfrage beeinflussen die Preise
-- **NPC-Verkauf** - Verkaufe direkt an das System zu festen Preisen
+- **Preisvergleich** - Finde den besten Preis für deine Produkte
+- **Lager-System** - Verwalte deine Ernte- und Produktionsprodukte
 
 ### Forschung & Fortschritt
 - **Forschungsbaum** - Schalte neue Technologien und Boni frei
 - **Level-System** - Sammle Punkte und steige im Level auf
-- **Taeglicher Login-Bonus** - Belohnungen fuer regelmaessiges Spielen
+- **Täglicher Login-Bonus** - Belohnungen für regelmäßiges Spielen
+- **Erfahrungspunkte** - Verdiene XP durch alle Aktivitäten
 
 ### Community
-- **Genossenschaften** - Gruende oder tritt einer Genossenschaft bei
-- **Ausruestung teilen** - Verleihe Fahrzeuge an Genossenschaftsmitglieder
-- **Forum** - Diskutiere mit anderen Spielern
+- **Genossenschaften** - Gründe oder tritt einer Genossenschaft bei
+- **Ausrüstung teilen** - Verleihe Fahrzeuge an Genossenschaftsmitglieder
+- **Zeitung & Forum** - Diskutiere mit anderen Spielern
+- **Discord-Integration** - Community-Server für direkten Austausch
 
 ### Wettbewerb
 - **Ranglisten** - Globale Spieler- und Genossenschafts-Rankings
-- **Woechentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
-
-### Produktionssystem
-- **71 Produktionsstaetten** - Von Bohrinsel bis Zuckerfabrik
-- **333 Produkte** - Rohstoffe, Zwischenprodukte und Endprodukte
-- **Produktionsketten** - Komplexe Abhaengigkeiten zwischen Produktionen
-- **10 Verkaufsstellen** - Spezialisierte Abnehmer fuer verschiedene Produktkategorien
-- **8 Tierhaltungs-Gebaeude** - Huehnerstall, Kuhstall, Schweinestall, etc.
+- **Top-Listen** - Nach Punkten, Level, Geld und mehr
+- **Wöchentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
 
 ### Administration
-- **Admin-Panel** - Vollstaendige Verwaltung von Benutzern, Hoefen und Genossenschaften
+- **Admin-Panel** - Vollständige Verwaltung von Benutzern, Höfen und Genossenschaften
 - **Benutzer bearbeiten** - Name, E-Mail, Passwort, Geld, Punkte, Level
-- **Genossenschaften verwalten** - Mitglieder entfernen, Kasse anpassen, Limits setzen
-- **News & Changelog** - Admin-Beitraege mit Discord-Integration
+- **Bug-Report-System** - Spieler können Bugs melden, Admins verwalten mit Discord-Integration
+- **News & Changelog** - Admin-Beiträge mit automatischer Discord-Benachrichtigung
 
 ### Discord Integration
-- **Webhook-Benachrichtigungen** - Automatische Posts bei News und Changelog-Eintraegen
-- **Embed-Nachrichten** - Formatierte Darstellung mit Farben und Kategorien
+- **Webhook-Benachrichtigungen** - Automatische Posts bei News und Changelog-Einträgen
+- **Bug-Reports** - Automatische Forum-Threads für gemeldete Bugs
+- **Status-Updates** - Admin-Begründungen werden an Discord gesendet
 - **Konfigurierbar** - Ein-/Ausschaltbar in der config.php
 
-## Waehrung
+## Währung
 
-Das Spiel verwendet eine eigene Waehrung: **Agrar Taler (T)**
-
-## Screenshots
-
-*Screenshots folgen*
+Das Spiel verwendet eine eigene Währung: **Agrar Taler (T)**
 
 ## Technologie-Stack
 
 - **Backend:** PHP 8.x mit MVC-Architektur
-- **Datenbank:** MySQL/MariaDB
+- **Datenbank:** MySQL/MariaDB mit UTF-8 Unterstützung
 - **Frontend:** HTML5, CSS3, Vanilla JavaScript
 - **Sicherheit:** CSRF-Schutz, bcrypt Passwort-Hashing, Prepared Statements
+- **Dark Mode:** Vollständig unterstützt
 
 ## Installation
 
 ### Voraussetzungen
 
-- PHP 8.0 oder hoeher
-- MySQL 5.7 / MariaDB 10.3 oder hoeher
+- PHP 8.0 oder höher
+- MySQL 5.7 / MariaDB 10.3 oder höher
 - Apache mit mod_rewrite oder Nginx
-- Composer (optional)
+- cURL Extension für PHP (für Discord-Integration)
 
 ### Schnellstart
 
 1. **Repository klonen:**
 ```bash
-git clone https://github.com/dein-username/agrar-simulator.git
-cd agrar-simulator
+git clone https://github.com/dein-username/lsbg-agrar-simulator.git
+cd lsbg-agrar-simulator
 ```
 
 2. **Datenbank erstellen:**
@@ -95,18 +134,24 @@ FLUSH PRIVILEGES;
 mysql -u agrar_user -p agrar_simulator < sql/install.sql
 ```
 
-4. **Produktionssystem importieren (optional):**
+4. **Produktionssystem importieren:**
 ```bash
 mysql -u agrar_user -p agrar_simulator < sql/productions_migration.sql
 ```
 
-5. **Admin-Benutzer erstellen:**
+5. **Bug-Report-System einrichten:**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/bug_reports_migration.sql
+mysql -u agrar_user -p agrar_simulator < sql/bug_reports_discord_update.sql
+```
+
+6. **Admin-Benutzer erstellen:**
 Nach der Registrierung im Spiel:
 ```sql
 UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
 ```
 
-6. **Konfiguration anpassen:**
+7. **Konfiguration anpassen:**
 
 Bearbeite `config/database.php`:
 ```php
@@ -129,7 +174,7 @@ define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/DEINE_ID/DEIN_TO
 define('DISCORD_WEBHOOK_ENABLED', true);
 ```
 
-7. **Webserver konfigurieren:**
+8. **Webserver konfigurieren:**
 
 **Apache:** Setze das Document Root auf den `public/` Ordner.
 
@@ -151,7 +196,7 @@ server {
 }
 ```
 
-8. **Cron Jobs einrichten:**
+9. **Cron Jobs einrichten:**
 ```cron
 */5 * * * * php /var/www/agrar-simulator/cron/harvest_check.php
 */5 * * * * php /var/www/agrar-simulator/cron/research_check.php
@@ -162,7 +207,7 @@ server {
 ## Projektstruktur
 
 ```
-agrar-simulator/
+lsbg-agrar-simulator/
 ├── app/
 │   ├── controllers/     # Controller-Klassen
 │   ├── core/            # Kernklassen (Database, Router, Session, DiscordWebhook)
@@ -176,20 +221,22 @@ agrar-simulator/
 ├── public/              # Document Root
 │   ├── css/             # Stylesheets
 │   ├── js/              # JavaScript
-│   ├── images/          # Bilder
+│   ├── img/             # Bilder & Screenshots
 │   └── index.php        # Entry Point
 ├── scripts/             # Hilfsskripte
 │   ├── parse_productions.py   # Produktionsdaten-Parser
-│   └── fix_umlauts.py         # Umlaut-Korrektur fuer SQL
+│   └── fix_umlauts.py         # Umlaut-Korrektur für SQL
 └── sql/
-    ├── install.sql              # Basis-Datenbank-Schema
-    ├── productions_migration.sql # Produktionssystem-Migration
-    └── productions_data.json     # Produktionsdaten als JSON
+    ├── install.sql                    # Basis-Datenbank-Schema
+    ├── productions_migration.sql      # Produktionssystem-Migration
+    ├── bug_reports_migration.sql      # Bug-Report-System
+    ├── bug_reports_discord_update.sql # Discord-Integration für Bug-Reports
+    └── fix_products_encoding_v2.sql   # Umlaut-Korrektur für Produkte
 ```
 
 ## API-Endpunkte
 
-Das Spiel bietet eine REST-API fuer AJAX-Interaktionen:
+Das Spiel bietet eine REST-API für AJAX-Interaktionen:
 
 | Endpunkt | Methode | Beschreibung |
 |----------|---------|--------------|
@@ -202,30 +249,40 @@ Das Spiel bietet eine REST-API fuer AJAX-Interaktionen:
 
 ## Sicherheit
 
-- **CSRF-Token:** Alle Formulare sind mit CSRF-Tokens geschuetzt
+- **CSRF-Token:** Alle Formulare sind mit CSRF-Tokens geschützt
 - **Prepared Statements:** Schutz vor SQL-Injection
 - **Password Hashing:** bcrypt mit Kostenfaktor 12
 - **Input Validation:** Serverseitige Validierung aller Eingaben
 - **XSS-Schutz:** HTML-Escaping aller Ausgaben
 
+## Community
+
+[![Discord](https://img.shields.io/badge/Discord_beitreten-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/S53gZ6Rg9C)
+
+Tritt unserer Discord-Community bei für:
+- Direkten Support
+- Feature-Vorschläge
+- Bug-Reports und Feedback
+- Austausch mit anderen Spielern
+
 ## Mitwirken
 
-Beitraege sind willkommen! Bitte erstelle einen Fork und reiche einen Pull Request ein.
+Beiträge sind willkommen! Bitte erstelle einen Fork und reiche einen Pull Request ein.
 
 1. Fork das Repository
 2. Erstelle einen Feature-Branch (`git checkout -b feature/NeuesFeature`)
-3. Committe deine Aenderungen (`git commit -m 'Neues Feature hinzugefuegt'`)
+3. Committe deine Änderungen (`git commit -m 'Neues Feature hinzugefügt'`)
 4. Push zum Branch (`git push origin feature/NeuesFeature`)
 5. Erstelle einen Pull Request
 
 ## Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) fuer Details.
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) für Details.
 
 ## Autor
 
-Entwickelt mit Claude Code
+Entwickelt mit [Claude Code](https://claude.ai/code)
 
 ---
 
-**Live Demo:** [agrar.sl-wide.de](https://agrar.sl-wide.de)
+**Live Demo:** [agrar.lsbg.eu](https://agrar.lsbg.eu)

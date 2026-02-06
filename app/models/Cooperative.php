@@ -764,9 +764,9 @@ class Cooperative
             return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
         }
 
-        // Prüfe ob Farm das Item hat
+        // Prüfe ob Farm das Item hat (item_id in inventory-Tabelle)
         $farmItem = $this->db->fetchOne(
-            'SELECT * FROM inventory WHERE farm_id = ? AND product_id = ? AND quantity >= ?',
+            'SELECT * FROM inventory WHERE farm_id = ? AND item_id = ? AND quantity >= ?',
             [$farmId, $productId, $quantity]
         );
 
@@ -851,7 +851,7 @@ class Cooperative
 
         // Erhöhe Farm-Inventar
         $farmItem = $this->db->fetchOne(
-            'SELECT * FROM inventory WHERE farm_id = ? AND product_id = ?',
+            'SELECT * FROM inventory WHERE farm_id = ? AND item_id = ?',
             [$farmId, $productId]
         );
 
@@ -861,9 +861,23 @@ class Cooperative
                 'id = :id', ['id' => $farmItem['id']]
             );
         } else {
+            // Bestimme item_type aus Produkt-Kategorie
+            $itemType = 'material';
+            if ($product) {
+                $cat = $product['category'] ?? '';
+                if (in_array($cat, ['getreide', 'gemuese', 'obst', 'oelsaaten'])) {
+                    $itemType = 'crop';
+                } elseif (in_array($cat, ['fleisch', 'milchprodukte', 'eier'])) {
+                    $itemType = 'animal_product';
+                } elseif ($cat === 'kraftstoff') {
+                    $itemType = 'fuel';
+                }
+            }
             $this->db->insert('inventory', [
                 'farm_id' => $farmId,
-                'product_id' => $productId,
+                'item_id' => $productId,
+                'item_type' => $itemType,
+                'item_name' => $product['name'] ?? 'Unbekannt',
                 'quantity' => $quantity
             ]);
         }

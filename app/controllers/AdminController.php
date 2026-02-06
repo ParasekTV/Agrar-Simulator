@@ -453,6 +453,66 @@ class AdminController extends Controller
     }
 
     // ==========================================
+    // BUG-REPORTS VERWALTUNG
+    // ==========================================
+
+    /**
+     * Bug-Reports Liste
+     */
+    public function bugs(): void
+    {
+        $this->requireAdmin();
+
+        $page = (int)($this->getQueryParam('page', 1));
+
+        $bugReport = new BugReport();
+        $result = $bugReport->getAll($page);
+
+        $this->renderWithLayout('admin/bugs', [
+            'title' => 'Bug-Meldungen',
+            'reports' => $result['reports'],
+            'page' => $result['page'],
+            'totalPages' => $result['total_pages'],
+            'total' => $result['total']
+        ]);
+    }
+
+    /**
+     * Bug-Report Status aktualisieren
+     */
+    public function updateBugStatus(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect('/admin/bugs');
+        }
+
+        $data = $this->getPostData();
+        $status = $data['status'] ?? 'open';
+        $reason = $data['reason'] ?? '';
+
+        // Hole Admin-Name
+        $admin = $this->db->fetchOne(
+            'SELECT username FROM users WHERE id = ?',
+            [Session::getUserId()]
+        );
+        $adminName = $admin['username'] ?? 'Admin';
+
+        $bugReport = new BugReport();
+        $result = $bugReport->updateStatus($id, $status, $reason, $adminName);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/admin/bugs');
+    }
+
+    // ==========================================
     // NEWS/CHANGELOG-VERWALTUNG
     // ==========================================
 

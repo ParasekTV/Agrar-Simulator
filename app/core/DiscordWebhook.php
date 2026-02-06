@@ -14,7 +14,7 @@ class DiscordWebhook
     }
 
     /**
-     * Prueft ob der Webhook aktiviert und konfiguriert ist
+     * Prüft ob der Webhook aktiviert und konfiguriert ist
      */
     public function isEnabled(): bool
     {
@@ -114,7 +114,7 @@ class DiscordWebhook
             return false;
         }
 
-        // Discord gibt 204 No Content bei Erfolg zurueck
+        // Discord gibt 204 No Content bei Erfolg zurück
         if ($httpCode >= 200 && $httpCode < 300) {
             Logger::info('Discord Webhook sent successfully');
             return true;

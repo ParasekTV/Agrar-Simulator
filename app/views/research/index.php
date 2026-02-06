@@ -14,7 +14,7 @@
                     <div class="research-info">
                         <h4>
                             <?php if (!empty($activeResearch['icon'])): ?>
-                                <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($activeResearch['icon']) ?>"
+                                <img src="<?= BASE_URL ?>/img/<?= htmlspecialchars($activeResearch['icon']) ?>"
                                      class="research-icon" alt="" onerror="this.style.display='none'">
                             <?php endif; ?>
                             <?= htmlspecialchars($activeResearch['name']) ?>
@@ -60,7 +60,9 @@
                         'animals' => 'Viehzucht',
                         'vehicles' => 'Fahrzeuge',
                         'buildings' => 'Gebäude',
-                        'efficiency' => 'Effizienz'
+                        'efficiency' => 'Effizienz',
+                        'production' => 'Produktionen',
+                        'brands' => 'Marken'
                     ];
                     echo $categoryNames[$category] ?? ucfirst($category);
                     ?>
@@ -71,7 +73,7 @@
                             <div class="research-header">
                                 <h4>
                                     <?php if (!empty($research['icon'])): ?>
-                                        <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($research['icon']) ?>"
+                                        <img src="<?= BASE_URL ?>/img/<?= htmlspecialchars($research['icon']) ?>"
                                              class="research-icon" alt="" onerror="this.style.display='none'">
                                     <?php endif; ?>
                                     <?= htmlspecialchars($research['name']) ?>
@@ -128,7 +130,7 @@
                         <div class="completed-research-item">
                             <span class="research-name">
                                 <?php if (!empty($research['icon'])): ?>
-                                    <img src="<?= BASE_URL ?>/img/productions/<?= htmlspecialchars($research['icon']) ?>"
+                                    <img src="<?= BASE_URL ?>/img/<?= htmlspecialchars($research['icon']) ?>"
                                          class="research-icon" alt="" onerror="this.style.display='none'">
                                 <?php endif; ?>
                                 <?= htmlspecialchars($research['name']) ?>

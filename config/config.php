@@ -45,6 +45,8 @@ define('POINTS_SALE_PER_100', 1);
 define('POINTS_BUILDING', 20);
 define('POINTS_DAILY_LOGIN', 5);
 define('POINTS_LEVEL_UP_BONUS', 50);
+define('POINTS_TRADE', 5);
+define('POINTS_PRODUCTION', 10);
 
 // Rate-Limiting
 define('RATE_LIMIT_LOGIN_ATTEMPTS', 5);

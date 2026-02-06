@@ -143,7 +143,7 @@
                             <?php if (!empty($availableFertilizers)): ?>
                                 <div class="dropdown">
                                     <button class="btn btn-outline btn-sm dropdown-toggle" type="button"
-                                            onclick="toggleDropdown('fert-<?= $field['id'] ?>')">
+                                            onclick="toggleDropdown('fert-<?= $field['id'] ?>', event)">
                                         Düngen
                                     </button>
                                     <div class="dropdown-menu" id="fert-<?= $field['id'] ?>">
@@ -172,7 +172,7 @@
                             <?php if (!empty($availableLimeTypes) && $soilPh < 7.5): ?>
                                 <div class="dropdown">
                                     <button class="btn btn-outline btn-sm dropdown-toggle" type="button"
-                                            onclick="toggleDropdown('lime-<?= $field['id'] ?>')">
+                                            onclick="toggleDropdown('lime-<?= $field['id'] ?>', event)">
                                         Kalken
                                     </button>
                                     <div class="dropdown-menu" id="lime-<?= $field['id'] ?>">
@@ -240,15 +240,21 @@ function closeBuyFieldModal() {
     document.getElementById('buy-field-modal').classList.remove('active');
 }
 
-function toggleDropdown(id) {
-    // Alle anderen Dropdowns schließen
-    document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
-        if (menu.id !== id) {
-            menu.classList.remove('show');
-        }
+function toggleDropdown(id, event) {
+    event.stopPropagation();
+
+    var menu = document.getElementById(id);
+    var isCurrentlyShown = menu.classList.contains('show');
+
+    // Alle Dropdowns schließen
+    document.querySelectorAll('.dropdown-menu.show').forEach(function(m) {
+        m.classList.remove('show');
     });
-    // Dieses Dropdown togglen
-    document.getElementById(id).classList.toggle('show');
+
+    // Wenn es geschlossen war, jetzt öffnen
+    if (!isCurrentlyShown) {
+        menu.classList.add('show');
+    }
 }
 
 // Dropdowns schließen bei Klick außerhalb
@@ -262,6 +268,11 @@ document.addEventListener('click', function(e) {
 </script>
 
 <style>
+/* Field Card overflow fix für Dropdowns */
+.fields-page .field-card {
+    overflow: visible !important;
+}
+
 /* Dropdown Styles für Feld-Behandlung */
 .field-treatments {
     display: flex;
@@ -271,25 +282,46 @@ document.addEventListener('click', function(e) {
 
 .dropdown {
     position: relative;
-    display: inline-block;
 }
 
 .dropdown-menu {
     display: none;
     position: absolute;
-    bottom: 100%;
     left: 0;
-    min-width: 220px;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+    bottom: 100%;
+    margin-bottom: 8px;
+    min-width: 250px;
+    background: #1a1a2e;
+    border: 1px solid #2d2d44;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 100;
-    margin-bottom: 4px;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.4);
+    z-index: 1000;
 }
 
 .dropdown-menu.show {
     display: block;
+}
+
+/* Pfeil unten am Dropdown */
+.dropdown-menu::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 15px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #2d2d44;
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 15px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #1a1a2e;
+    z-index: 1;
 }
 
 .dropdown-item {
@@ -298,31 +330,41 @@ document.addEventListener('click', function(e) {
     width: 100%;
     padding: 0.75rem 1rem;
     border: none;
-    background: none;
+    background: #1a1a2e;
     text-align: left;
     cursor: pointer;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid #2d2d44;
+    color: #ffffff;
+}
+
+.dropdown-item:first-child {
+    border-radius: 8px 8px 0 0;
 }
 
 .dropdown-item:last-child {
     border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.dropdown-item:only-child {
+    border-radius: 8px;
 }
 
 .dropdown-item:hover {
-    background: var(--color-bg-secondary);
+    background: #252542;
 }
 
 .dropdown-item strong {
-    color: var(--color-text);
+    color: #ffffff;
 }
 
 .dropdown-item small {
-    color: var(--color-text-secondary);
+    color: #a0a0b0;
     font-size: 0.8rem;
 }
 
 .dropdown-item .price {
-    color: var(--color-primary);
+    color: #4ade80;
     font-weight: 600;
     margin-top: 0.25rem;
 }

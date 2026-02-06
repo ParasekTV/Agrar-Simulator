@@ -56,6 +56,28 @@ $router->post('/vehicles/buy', 'Vehicle', 'buy');
 $router->post('/vehicles/sell', 'Vehicle', 'sell');
 $router->post('/vehicles/repair', 'Vehicle', 'repair');
 
+// Produktionen
+$router->get('/productions', 'Production', 'index');
+$router->get('/productions/shop', 'Production', 'shop');
+$router->get('/productions/{id}', 'Production', 'show');
+$router->post('/productions/buy', 'Production', 'buy');
+$router->post('/productions/toggle', 'Production', 'toggle');
+$router->post('/productions/start', 'Production', 'start');
+$router->post('/productions/collect', 'Production', 'collect');
+
+// Lager
+$router->get('/storage', 'Storage', 'index');
+$router->get('/storage/product/{id}', 'Storage', 'product');
+$router->get('/storage/search', 'Storage', 'search');
+$router->post('/storage/transfer', 'Storage', 'transfer');
+
+// Verkaufsstellen
+$router->get('/salespoints', 'SalesPoint', 'index');
+$router->get('/salespoints/history', 'SalesPoint', 'history');
+$router->get('/salespoints/compare/{id}', 'SalesPoint', 'compare');
+$router->get('/salespoints/{id}', 'SalesPoint', 'show');
+$router->post('/salespoints/sell', 'SalesPoint', 'sell');
+
 // Forschung
 $router->get('/research', 'Research', 'index');
 $router->post('/research/start', 'Research', 'start');
@@ -104,6 +126,10 @@ $router->post('/news/comment', 'News', 'comment');
 $router->post('/news/like', 'News', 'like');
 $router->post('/news/delete', 'News', 'delete');
 
+// Bug Reports
+$router->get('/bugreport', 'BugReport', 'index');
+$router->post('/bugreport/submit', 'BugReport', 'submit');
+
 // Ranglisten
 $router->get('/rankings', 'Ranking', 'index');
 $router->get('/rankings/cooperatives', 'Ranking', 'cooperatives');
@@ -123,6 +149,10 @@ $router->get('/admin/cooperatives/{id}', 'Admin', 'editCooperative');
 $router->post('/admin/cooperatives/{id}/update', 'Admin', 'updateCooperative');
 $router->post('/admin/cooperatives/{id}/delete', 'Admin', 'deleteCooperative');
 $router->post('/admin/cooperatives/remove-member', 'Admin', 'removeMember');
+
+// Admin Bug Reports
+$router->get('/admin/bugs', 'Admin', 'bugs');
+$router->post('/admin/bugs/{id}/status', 'Admin', 'updateBugStatus');
 
 // Admin News/Changelog
 $router->get('/admin/news', 'Admin', 'news');
@@ -171,6 +201,25 @@ $router->api('GET', '/research/tree', 'Research', 'treeApi');
 $router->api('POST', '/research/start', 'Research', 'startApi');
 $router->api('GET', '/research/progress', 'Research', 'progressApi');
 $router->api('POST', '/research/complete', 'Research', 'completeApi');
+
+// Production API
+$router->api('GET', '/production/list', 'Production', 'listApi');
+$router->api('GET', '/production/{id}', 'Production', 'getApi');
+$router->api('POST', '/production/start', 'Production', 'startApi');
+$router->api('POST', '/production/collect', 'Production', 'collectApi');
+$router->api('POST', '/production/toggle', 'Production', 'toggleApi');
+
+// Storage API
+$router->api('GET', '/storage/list', 'Storage', 'listApi');
+$router->api('GET', '/storage/search', 'Storage', 'searchApi');
+$router->api('GET', '/storage/quantity/{id}', 'Storage', 'quantityApi');
+
+// SalesPoint API
+$router->api('GET', '/salespoint/list', 'SalesPoint', 'listApi');
+$router->api('GET', '/salespoint/{id}/prices', 'SalesPoint', 'pricesApi');
+$router->api('POST', '/salespoint/sell', 'SalesPoint', 'sellApi');
+$router->api('GET', '/salespoint/best-prices/{id}', 'SalesPoint', 'bestPricesApi');
+$router->api('GET', '/salespoint/history', 'SalesPoint', 'historyApi');
 
 // Market API
 $router->api('GET', '/market/listings', 'Market', 'listingsApi');

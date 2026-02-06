@@ -12,7 +12,17 @@ class AuthController extends Controller
     public function loginForm(): void
     {
         $this->requireGuest();
-        $this->renderWithLayout('auth/login', ['title' => 'Anmelden']);
+
+        // Hole öffentliche News und Changelog für Gäste
+        $newsModel = new News();
+        $newsData = $newsModel->getPublicPosts(5);
+        $changelogData = $newsModel->getPublicChangelog(5);
+
+        $this->renderWithLayout('auth/login', [
+            'title' => 'Anmelden',
+            'news' => $newsData,
+            'changelog' => $changelogData
+        ]);
     }
 
     /**

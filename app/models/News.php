@@ -464,4 +464,36 @@ class News
             Logger::error('Discord Webhook failed', ['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Gibt öffentliche News für Gäste zurück (Admin-Posts)
+     */
+    public function getPublicPosts(int $limit = 5): array
+    {
+        return $this->db->fetchAll(
+            "SELECT np.*, u.username as admin_name
+             FROM news_posts np
+             LEFT JOIN users u ON np.admin_user_id = u.id
+             WHERE np.is_admin_post = 1 AND np.category = 'admin_news'
+             ORDER BY np.is_pinned DESC, np.created_at DESC
+             LIMIT ?",
+            [$limit]
+        );
+    }
+
+    /**
+     * Gibt öffentliches Changelog für Gäste zurück
+     */
+    public function getPublicChangelog(int $limit = 5): array
+    {
+        return $this->db->fetchAll(
+            "SELECT np.*, u.username as admin_name
+             FROM news_posts np
+             LEFT JOIN users u ON np.admin_user_id = u.id
+             WHERE np.is_admin_post = 1 AND np.category = 'changelog'
+             ORDER BY np.created_at DESC
+             LIMIT ?",
+            [$limit]
+        );
+    }
 }

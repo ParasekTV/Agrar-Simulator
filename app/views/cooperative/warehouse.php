@@ -85,7 +85,7 @@
                                     <td>
                                         <form action="<?= BASE_URL ?>/cooperative/deposit" method="POST" class="inline-form">
                                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                            <input type="hidden" name="product_id" value="<?= $item['product_id'] ?? $item['id'] ?>">
+                                            <input type="hidden" name="product_id" value="<?= $item['item_id'] ?? $item['product_id'] ?? $item['id'] ?>">
                                             <div class="input-group-sm">
                                                 <input type="number" name="quantity" min="1" max="<?= $item['quantity'] ?>" value="1" class="form-input form-input-sm">
                                                 <button type="submit" class="btn btn-sm btn-primary">Einlagern</button>

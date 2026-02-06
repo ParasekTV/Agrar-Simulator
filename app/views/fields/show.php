@@ -168,10 +168,10 @@
 .stat-row:last-child {
     border-bottom: none;
 }
-.stat-label {
+.field-detail-page .stat-label {
     color: var(--color-gray-600);
 }
-.stat-value {
+.field-detail-page .stat-value {
     font-weight: 500;
 }
 .stat-bar {

@@ -21,6 +21,10 @@
                     <span class="stat-icon">&#127942;</span>
                     <span class="stat-value" id="farm-level">Level <?= $currentFarm['level'] ?></span>
                 </div>
+                <a href="<?= BASE_URL ?>/bugreport" class="stat-item stat-link" title="Bug melden">
+                    <span class="stat-icon">&#128027;</span>
+                    <span class="stat-value">Bug</span>
+                </a>
             </div>
 
             <button class="navbar-toggle" id="navbar-toggle">
@@ -34,6 +38,9 @@
                 <li><a href="<?= BASE_URL ?>/fields" class="nav-link">Felder</a></li>
                 <li><a href="<?= BASE_URL ?>/animals" class="nav-link">Tiere</a></li>
                 <li><a href="<?= BASE_URL ?>/vehicles" class="nav-link">Fahrzeuge</a></li>
+                <li><a href="<?= BASE_URL ?>/productions" class="nav-link">Produktionen</a></li>
+                <li><a href="<?= BASE_URL ?>/storage" class="nav-link">Lager</a></li>
+                <li><a href="<?= BASE_URL ?>/salespoints" class="nav-link">Verkauf</a></li>
                 <li><a href="<?= BASE_URL ?>/research" class="nav-link">Forschung</a></li>
                 <li><a href="<?= BASE_URL ?>/market" class="nav-link">Marktplatz</a></li>
                 <li><a href="<?= BASE_URL ?>/cooperative" class="nav-link">Genossenschaft</a></li>

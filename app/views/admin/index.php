@@ -65,6 +65,9 @@
             <a href="<?= BASE_URL ?>/admin/news" class="btn btn-primary btn-lg">
                 &#128240; News & Changelog
             </a>
+            <a href="<?= BASE_URL ?>/admin/bugs" class="btn btn-warning btn-lg">
+                &#128027; Bug-Meldungen
+            </a>
         </div>
     </div>
 

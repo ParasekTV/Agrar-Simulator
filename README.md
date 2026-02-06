@@ -285,4 +285,4 @@ Entwickelt mit [Claude Code](https://claude.ai/code)
 
 ---
 
-**Live Demo:** [agrar.lsbg.eu](https://agrar.lsbg.eu)
+**Live Demo:** [agrar.sl-wide.de](https://agrar.sl-wide.de)

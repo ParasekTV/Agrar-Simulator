@@ -18,12 +18,30 @@ $router = new Router(BASE_URL);
 // Home / Landing
 $router->get('/', 'Auth', 'loginForm');
 
+// Statische Seiten (öffentlich)
+$router->get('/impressum', 'Page', 'impressum');
+$router->get('/datenschutz', 'Page', 'datenschutz');
+$router->get('/spielregeln', 'Page', 'spielregeln');
+
 // Authentifizierung
 $router->get('/login', 'Auth', 'loginForm');
 $router->post('/login', 'Auth', 'login');
 $router->get('/register', 'Auth', 'registerForm');
 $router->post('/register', 'Auth', 'register');
 $router->get('/logout', 'Auth', 'logout');
+
+// E-Mail-Verifizierung
+$router->get('/auth/verify/pending', 'Auth', 'verifyPending');
+$router->get('/auth/verify/resend', 'Auth', 'resendVerificationForm');
+$router->post('/auth/verify/resend', 'Auth', 'resendVerification');
+$router->get('/auth/verify/{token}', 'Auth', 'verify');
+
+// Discord OAuth
+$router->get('/auth/discord', 'Auth', 'discordAuth');
+$router->get('/auth/discord/callback', 'Auth', 'discordCallback');
+$router->get('/auth/discord/complete', 'Auth', 'discordComplete');
+$router->post('/auth/discord/register', 'Auth', 'discordRegister');
+$router->post('/auth/discord/unlink', 'Auth', 'unlinkDiscord');
 
 // Dashboard
 $router->get('/dashboard', 'Farm', 'dashboard');
@@ -77,6 +95,13 @@ $router->get('/salespoints/history', 'SalesPoint', 'history');
 $router->get('/salespoints/compare/{id}', 'SalesPoint', 'compare');
 $router->get('/salespoints/{id}', 'SalesPoint', 'show');
 $router->post('/salespoints/sell', 'SalesPoint', 'sell');
+
+// Shop/Einkauf
+$router->get('/shop', 'Shop', 'index');
+$router->get('/shop/history', 'Shop', 'history');
+$router->get('/shop/compare/{id}', 'Shop', 'compare');
+$router->get('/shop/{id}', 'Shop', 'show');
+$router->post('/shop/buy', 'Shop', 'buy');
 
 // Forschung
 $router->get('/research', 'Research', 'index');
@@ -141,6 +166,7 @@ $router->get('/admin/users', 'Admin', 'users');
 $router->get('/admin/users/{id}', 'Admin', 'editUser');
 $router->post('/admin/users/{id}/update', 'Admin', 'updateUser');
 $router->post('/admin/users/{id}/delete', 'Admin', 'deleteUser');
+$router->post('/admin/users/{id}/verify', 'Admin', 'verifyUser');
 $router->get('/admin/farms', 'Admin', 'farms');
 $router->get('/admin/farms/{id}', 'Admin', 'editFarm');
 $router->post('/admin/farms/{id}/update', 'Admin', 'updateFarm');
@@ -220,6 +246,13 @@ $router->api('GET', '/salespoint/{id}/prices', 'SalesPoint', 'pricesApi');
 $router->api('POST', '/salespoint/sell', 'SalesPoint', 'sellApi');
 $router->api('GET', '/salespoint/best-prices/{id}', 'SalesPoint', 'bestPricesApi');
 $router->api('GET', '/salespoint/history', 'SalesPoint', 'historyApi');
+
+// Shop API
+$router->api('GET', '/shop/list', 'Shop', 'listApi');
+$router->api('GET', '/shop/{id}/prices', 'Shop', 'pricesApi');
+$router->api('POST', '/shop/buy', 'Shop', 'buyApi');
+$router->api('GET', '/shop/best-prices/{id}', 'Shop', 'bestPricesApi');
+$router->api('GET', '/shop/history', 'Shop', 'historyApi');
 
 // Market API
 $router->api('GET', '/market/listings', 'Market', 'listingsApi');

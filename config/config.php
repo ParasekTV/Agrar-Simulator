@@ -60,9 +60,40 @@ define('CSRF_TOKEN_LIFETIME', 3600);
 // Zeitzone
 date_default_timezone_set('Europe/Berlin');
 
-// Discord Webhook
-define('DISCORD_WEBHOOK_URL', ''); // Webhook-URL hier eintragen
+// Discord Webhook (für News/Changelog)
+define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/1467796540679782485/QWckUsK0QvXKam7CVhT6pR2bRVSuP5nStYNyYj72Odx7PUTVF2jy7YJcDn9bDk4jdaNE');
 define('DISCORD_WEBHOOK_ENABLED', true);
+
+// ============================================
+// reCAPTCHA v3 Konfiguration
+// ============================================
+define('RECAPTCHA_ENABLED', true); // Auf true setzen und Keys eintragen
+define('RECAPTCHA_SITE_KEY', '6LfQmWIsAAAAAFQ8p28FS-rboKZD3Hp1fbLnKVbf'); // Von Google reCAPTCHA Admin
+define('RECAPTCHA_SECRET_KEY', '6LfQmWIsAAAAAFS1O-st1BuEbjqD_LdyNia0ZGPw'); // Von Google reCAPTCHA Admin
+define('RECAPTCHA_MIN_SCORE', 0.5); // 0.0 = Bot, 1.0 = Mensch
+
+// ============================================
+// E-Mail Verifizierung
+// ============================================
+define('EMAIL_VERIFICATION_ENABLED', true); // Auf true setzen wenn SMTP konfiguriert
+define('EMAIL_TOKEN_EXPIRY_HOURS', 24);
+
+// SMTP-Einstellungen
+define('SMTP_HOST', 'smtp.sl-wide.de'); // z.B. smtp.example.com
+define('SMTP_PORT', 587);
+define('SMTP_USERNAME', 'noreply@sl-wide.de');
+define('SMTP_PASSWORD', '@nR874tm4');
+define('SMTP_FROM_EMAIL', 'noreply@sl-wide.de');
+define('SMTP_FROM_NAME', 'Agrar Simulator');
+define('SMTP_ENCRYPTION', 'tls'); // tls oder ssl
+
+// ============================================
+// Discord OAuth2 Konfiguration
+// ============================================
+define('DISCORD_OAUTH_ENABLED', true); // Auf true setzen und Keys eintragen
+define('DISCORD_CLIENT_ID', '1469295259023442012'); // Von Discord Developer Portal
+define('DISCORD_CLIENT_SECRET', '4b95PQrpif2-A660ZDp95mloOEk_iuGF'); // Von Discord Developer Portal
+define('DISCORD_REDIRECT_URI', SITE_URL . '/auth/discord/callback');
 
 // Autoloader
 spl_autoload_register(function ($class) {

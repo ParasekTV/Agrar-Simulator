@@ -37,6 +37,7 @@
                         <th>Geld</th>
                         <th>Punkte</th>
                         <th>Status</th>
+                        <th>Verifiziert</th>
                         <th>Aktionen</th>
                     </tr>
                 </thead>
@@ -60,6 +61,13 @@
                                     <span class="status-badge status-active">Aktiv</span>
                                 <?php else: ?>
                                     <span class="status-badge status-inactive">Inaktiv</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($user['is_verified'] ?? false): ?>
+                                    <span class="status-badge status-verified">Ja</span>
+                                <?php else: ?>
+                                    <span class="status-badge status-unverified">Nein</span>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -126,5 +134,13 @@
 .status-inactive {
     background: var(--color-gray-400);
     color: white;
+}
+.status-verified {
+    background: var(--color-success);
+    color: white;
+}
+.status-unverified {
+    background: var(--color-warning);
+    color: #856404;
 }
 </style>

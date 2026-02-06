@@ -9,7 +9,7 @@ return [
     'host'     => 'localhost',
     'database' => 'farming_simulator',
     'username' => 'farm_user',
-    'password' => '',
+    'password' => 'PGdNwpnn%x6mb92_',
     'charset'  => 'utf8mb4',
     'options'  => [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

@@ -1,35 +1,59 @@
 # Agrar Simulator Browsergame - Entwicklungsfortschritt
 
-## Status: FERTIG - Alle Kernfunktionen implementiert
+## Status: AKTIV - Kontinuierliche Erweiterung
 
-**Letztes Update:** 02.02.2026
+**Letztes Update:** 06.02.2026
 **Waehrung:** Agrar Taler (T)
-**Live-URL:** https://agrar.sl-wide.de
+**Live-URL:** https://agrar.lsbg.eu
 
 ---
 
 ## AKTUELLER STAND (fuer spaetere Fortsetzung)
 
-### Zuletzt erledigt:
-- [x] Spielname geaendert: Farming Simulator -> Agrar Simulator
-- [x] Waehrung geaendert: EUR -> Agrar Taler (T)
-- [x] Admin-Panel komplett erstellt (Controller + 7 Views)
-- [x] README.md fuer GitHub erstellt
-- [x] Zukunftsplaene dokumentiert
-- [x] Logo auf Login- und Registrierungsseite hinzugefuegt
-- [x] **Phase 1: Erweiterte Feldfruechte** komplett implementiert:
-  - 18 neue Feldfruechte in 5 Kategorien
-  - 8 neue Forschungsknoten
-  - Kalk-System fuer pH-Balance
-  - 4 Duengertypen mit unterschiedlichen Effekten
-  - UI-Update mit pH-Anzeige und Dropdown-Menues
+### Zuletzt erledigt (06.02.2026):
+- [x] **Shop/Einkauf-System** komplett implementiert:
+  - 5 Haendler: Landhandel, Bauernmarkt, Technik-Partner, Grosshandel, Bio-Laden
+  - Tagesbasierte Preise mit Seed-Algorithmus
+  - Preistrend-Anzeige (steigend/fallend/stabil)
+  - Preisvergleich ueber alle Haendler
+  - Einkaufshistorie
+  - Model, Controller, 4 Views, API-Endpunkte
+- [x] **Wasser- und Strom-Produktionen**:
+  - Wasserwerk (150.000 T, 10x Wasser, Level 3)
+  - Kraftwerk (250.000 T, 10x Strom, Level 5)
+  - Brunnen (50.000 T, 4x Wasser, Level 1)
+  - Solaranlage (100.000 T, 5x Strom, Level 2)
+  - Windkraftanlage (180.000 T, 8x Strom, Level 4)
+  - Zugehoerige Forschungen im Forschungsbaum
+- [x] **Spielregeln-Seite** erstellt:
+  - Respektvoller Umgang, Hassrede-Verbot
+  - Keine Politik/Religion in Spielinhalten
+  - Faires Spielen, Ein-Account-Regel
+  - Konsequenzen bei Verstoessen
+- [x] **Admin manuelle Benutzer-Verifizierung**:
+  - Button in Benutzer-Bearbeitung
+  - Direktes Verifizieren ohne E-Mail
+- [x] **Umlaut-Fixes**:
+  - Doppelt-kodierte UTF-8 Zeichen in allen Tabellen behoben
+  - ASCII-Ersatzzeichen in Challenges durch echte Umlaute ersetzt
+- [x] **Bugfix: Registrierung** - Falscher Spaltenname (cost statt price) korrigiert
 
 ### Noch beim User hochzuladen/auszufuehren:
-1. SQL-Migration ausfuehren: `sql/phase1_crops.sql`
-2. Marken-Logos bereits heruntergeladen in `public/img/brands/`
+1. `app/models/User.php` - Registrierungs-Bugfix
+2. `app/models/Shop.php` - Neues Model
+3. `app/controllers/ShopController.php` - Neuer Controller
+4. `app/controllers/AdminController.php` - Verifizierungs-Fix
+5. `app/views/shop/*` - 4 neue Views
+6. `app/views/pages/spielregeln.php` - Neue Seite
+7. SQL-Migrationen:
+   - `sql/shop_migration.sql`
+   - `sql/water_electricity_migration.sql`
+   - `sql/energy_water_expansion.sql`
+   - `sql/fix_all_umlauts.sql`
+   - `sql/fix_challenge_umlauts.sql`
 
 ### Naechste geplante Schritte:
-1. Phase 1 testen (neue Feldfruechte, Duenger, Kalk)
+1. Testen aller neuen Features
 2. Phase 2: Erweiterte Tierhaltung umsetzen
 3. Phase 3: Echte Traktor-Marken einbauen
 
@@ -43,7 +67,12 @@
   - Foreign Keys und Indizes
   - Initiale Daten (Crops, Animals, Vehicles, Research, Buildings, Challenges)
 - [x] `sql/update_admin.sql` - Migration fuer Admin-Funktionalitaet
-- [x] `sql/phase1_crops.sql` - **NEU:** Phase 1 Migration (18 Fruechte, pH-System, Duenger, Kalk)
+- [x] `sql/phase1_crops.sql` - Phase 1 Migration (18 Fruechte, pH-System, Duenger, Kalk)
+- [x] `sql/shop_migration.sql` - **NEU:** Shop/Einkauf-System (Haendler, Produkte, Historie)
+- [x] `sql/water_electricity_migration.sql` - **NEU:** Wasserwerk & Kraftwerk
+- [x] `sql/energy_water_expansion.sql` - **NEU:** Brunnen, Solaranlage, Windkraftanlage
+- [x] `sql/fix_all_umlauts.sql` - **NEU:** Umlaut-Korrektur fuer alle Tabellen
+- [x] `sql/fix_challenge_umlauts.sql` - **NEU:** Umlaut-Korrektur fuer Challenges
 
 ### 2. Konfiguration (100%)
 - [x] `config/config.php` - Hauptkonfiguration
@@ -65,6 +94,8 @@
 - [x] `app/models/Vehicle.php` - Fahrzeuge
 - [x] `app/models/Research.php` - Forschungsbaum
 - [x] `app/models/Market.php` - Marktplatz
+- [x] `app/models/SalesPoint.php` - Verkaufsstellen
+- [x] `app/models/Shop.php` - **NEU:** Einkauf/Haendler
 - [x] `app/models/Cooperative.php` - Genossenschaften
 - [x] `app/models/News.php` - Forum/Zeitung
 - [x] `app/models/Ranking.php` - Ranglisten
@@ -77,10 +108,13 @@
 - [x] `app/controllers/VehicleController.php`
 - [x] `app/controllers/ResearchController.php`
 - [x] `app/controllers/MarketController.php`
+- [x] `app/controllers/SalesPointController.php` - Verkaufsstellen
+- [x] `app/controllers/ShopController.php` - **NEU:** Einkauf/Haendler
 - [x] `app/controllers/CooperativeController.php`
 - [x] `app/controllers/NewsController.php`
 - [x] `app/controllers/RankingController.php`
-- [x] `app/controllers/AdminController.php` - **NEU: Admin-Panel**
+- [x] `app/controllers/PageController.php` - **NEU:** Statische Seiten (Spielregeln, etc.)
+- [x] `app/controllers/AdminController.php` - Admin-Panel (mit manueller Verifizierung)
 
 ### 6. Views (100%)
 
@@ -133,7 +167,24 @@
 - [x] `app/views/rankings/cooperatives.php` - Genossenschafts-Rangliste
 - [x] `app/views/rankings/challenges.php` - Woechentliche Herausforderungen
 
-**Admin-Panel:** (NEU)
+**Verkauf:**
+- [x] `app/views/salespoints/index.php` - Verkaufsstellen-Uebersicht
+- [x] `app/views/salespoints/show.php` - Verkaufsstelle Details
+- [x] `app/views/salespoints/history.php` - Verkaufshistorie
+- [x] `app/views/salespoints/compare.php` - Preisvergleich
+
+**Einkauf/Shop:** (NEU)
+- [x] `app/views/shop/index.php` - Haendler-Uebersicht
+- [x] `app/views/shop/show.php` - Haendler Details
+- [x] `app/views/shop/history.php` - Einkaufshistorie
+- [x] `app/views/shop/compare.php` - Preisvergleich
+
+**Statische Seiten:** (NEU)
+- [x] `app/views/pages/spielregeln.php` - Spielregeln
+- [x] `app/views/pages/impressum.php` - Impressum
+- [x] `app/views/pages/datenschutz.php` - Datenschutz
+
+**Admin-Panel:**
 - [x] `app/views/admin/index.php` - Admin Dashboard
 - [x] `app/views/admin/users.php` - Benutzer-Liste
 - [x] `app/views/admin/user_edit.php` - Benutzer bearbeiten
@@ -171,6 +222,7 @@ Das Admin-Panel ermoeglicht vollstaendige Verwaltung:
 - Alle Benutzer anzeigen mit Suche
 - Benutzername, E-Mail, Passwort aendern
 - Aktiv/Inaktiv Status setzen
+- **Manuelle Verifizierung** - Benutzer ohne E-Mail-Bestaetigung freischalten
 - Admin-Rechte vergeben/entziehen
 - Farm-Daten bearbeiten (Geld, Punkte, Level)
 - Benutzer loeschen
@@ -226,20 +278,26 @@ Das Admin-Panel ermoeglicht vollstaendige Verwaltung:
 - [ ] Lagerhallen fuer Inventar-Erweiterung
 - [ ] Wohnhaus-Upgrades
 
-### Phase 5: Produktionen
-- [ ] Baeckerei (Mehl -> Brot, Broetchen)
-- [ ] Metzgerei (Fleisch -> Wurst, Schinken)
-- [ ] Saegewerk (Holz -> Bretter, Moebel)
-- [ ] Brauerei (Gerste, Hopfen -> Bier)
-- [ ] Winzerei mit Weinberg (Trauben -> Wein)
-- [ ] Molkerei (Milch -> Kaese, Butter, Joghurt)
-- [ ] Oelmuehle (Sonnenblumen, Raps -> Oel)
+### Phase 5: Produktionen ✅ TEILWEISE ABGESCHLOSSEN
+- [x] 71+ Produktionsstaetten bereits implementiert
+- [x] Wasserversorgung: Brunnen, Wasserwerk
+- [x] Stromproduktion: Solaranlage, Windkraftanlage, Kraftwerk
+- [x] Baeckerei, Molkerei, Oelmuehle, Brauerei etc. bereits vorhanden
 
-### Phase 6: Erweiterte Wirtschaft
-- [ ] Variable Verkaufsstellen (Grosshandel, Bauernmarkt, Export)
-- [ ] Saisonale Preisschwankungen
+### Phase 6: Erweiterte Wirtschaft ✅ TEILWEISE ABGESCHLOSSEN
+- [x] 10 Verkaufsstellen mit unterschiedlichen Preisen
+- [x] 5 Haendler/Einkaufsstellen (Landhandel, Bauernmarkt, Technik-Partner, Grosshandel, Bio-Laden)
+- [x] Tagesbasierte Preisschwankungen bei Kauf und Verkauf
+- [x] Preistrend-Anzeige (steigend/fallend/stabil)
+- [x] Preisvergleich ueber alle Haendler/Verkaufsstellen
 - [ ] Vertraege mit Abnehmern
 - [ ] Lieferauftraege
+
+### Phase 7: Infrastruktur & Ressourcen ✅ ABGESCHLOSSEN
+- [x] Wasserproduktion: Brunnen (Level 1), Wasserwerk (Level 3)
+- [x] Stromproduktion: Solaranlage (Level 2), Windkraftanlage (Level 4), Kraftwerk (Level 5)
+- [x] Forschungsbaum fuer Infrastruktur-Gebaeude
+- [x] Produkte: Wasser und Strom fuer Produktionen
 
 ---
 
@@ -293,4 +351,19 @@ UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
 
 ---
 
-**Das Spiel ist vollstaendig implementiert und bereit zum Testen!**
+**Das Spiel ist vollstaendig implementiert und wird kontinuierlich erweitert!**
+
+---
+
+## Changelog
+
+### Version 1.1.0 (06.02.2026)
+- Shop/Einkauf-System mit 5 Haendlern
+- Wasser- und Stromproduktion (Brunnen, Solar, Wind, Wasserwerk, Kraftwerk)
+- Spielregeln-Seite
+- Admin manuelle Benutzer-Verifizierung
+- Umlaut-Fixes fuer alle Tabellen
+- Bugfix: Registrierung funktioniert wieder
+
+### Version 1.0.0 (02.02.2026)
+- Initiales Release mit allen Kernfunktionen

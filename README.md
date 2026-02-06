@@ -51,15 +51,23 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 - **Fahrzeuge nutzen** - Traktoren, Mähdrescher und Transportfahrzeuge
 
 ### Produktionssystem
-- **71 Produktionsstätten** - Von Bäckerei bis Zuckerfabrik
+- **71+ Produktionsstätten** - Von Bäckerei bis Zuckerfabrik
 - **333 Produkte** - Rohstoffe, Zwischenprodukte und Endprodukte
 - **Produktionsketten** - Komplexe Abhängigkeiten zwischen Produktionen
 - **10 Verkaufsstellen** - Spezialisierte Abnehmer für verschiedene Produktkategorien
+- **5 Händler** - Landhandel, Bauernmarkt, Technik-Partner, Großhandel, Bio-Laden
 - **8 Tierhaltungs-Gebäude** - Hühnerstall, Kuhstall, Schweinestall, Büffelstall, etc.
+
+### Infrastruktur & Ressourcen
+- **Wasserversorgung** - Brunnen (klein) und Wasserwerk (groß)
+- **Stromproduktion** - Solaranlage, Windkraftanlage und Kraftwerk
+- **Ressourcen-Management** - Wasser und Strom für Produktionen benötigt
 
 ### Wirtschaft & Handel
 - **Marktplatz** - Handel mit anderen Spielern in Echtzeit
-- **Dynamische Preise** - Angebot und Nachfrage beeinflussen die Preise
+- **Verkaufsstellen** - 10 spezialisierte Abnehmer mit täglichen Preisen
+- **Einkauf/Shop** - 5 Händler mit unterschiedlichen Produktsortimenten
+- **Dynamische Preise** - Tagesbasierte Preisschwankungen bei Kauf und Verkauf
 - **Preisvergleich** - Finde den besten Preis für deine Produkte
 - **Lager-System** - Verwalte deine Ernte- und Produktionsprodukte
 
@@ -83,8 +91,10 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 ### Administration
 - **Admin-Panel** - Vollständige Verwaltung von Benutzern, Höfen und Genossenschaften
 - **Benutzer bearbeiten** - Name, E-Mail, Passwort, Geld, Punkte, Level
+- **Manuelle Verifizierung** - Admins können Benutzer direkt verifizieren
 - **Bug-Report-System** - Spieler können Bugs melden, Admins verwalten mit Discord-Integration
 - **News & Changelog** - Admin-Beiträge mit automatischer Discord-Benachrichtigung
+- **Spielregeln** - Verhaltensregeln und Community-Richtlinien
 
 ### Discord Integration
 - **Webhook-Benachrichtigungen** - Automatische Posts bei News und Changelog-Einträgen
@@ -143,6 +153,17 @@ mysql -u agrar_user -p agrar_simulator < sql/productions_migration.sql
 ```bash
 mysql -u agrar_user -p agrar_simulator < sql/bug_reports_migration.sql
 mysql -u agrar_user -p agrar_simulator < sql/bug_reports_discord_update.sql
+```
+
+6. **Shop/Einkauf-System einrichten:**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/shop_migration.sql
+```
+
+7. **Wasser- und Stromproduktion einrichten:**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/water_electricity_migration.sql
+mysql -u agrar_user -p agrar_simulator < sql/energy_water_expansion.sql
 ```
 
 6. **Admin-Benutzer erstellen:**
@@ -231,7 +252,11 @@ lsbg-agrar-simulator/
     ├── productions_migration.sql      # Produktionssystem-Migration
     ├── bug_reports_migration.sql      # Bug-Report-System
     ├── bug_reports_discord_update.sql # Discord-Integration für Bug-Reports
-    └── fix_products_encoding_v2.sql   # Umlaut-Korrektur für Produkte
+    ├── shop_migration.sql             # Shop/Einkauf-System
+    ├── water_electricity_migration.sql # Wasserwerk & Kraftwerk
+    ├── energy_water_expansion.sql     # Brunnen, Solar, Wind
+    ├── fix_all_umlauts.sql            # Umlaut-Korrektur für alle Tabellen
+    └── fix_challenge_umlauts.sql      # Umlaut-Korrektur für Challenges
 ```
 
 ## API-Endpunkte

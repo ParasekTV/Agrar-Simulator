@@ -107,7 +107,33 @@
                             <?= $user['last_login'] ? date('d.m.Y H:i', strtotime($user['last_login'])) : 'Nie' ?>
                         </span>
                     </div>
+                    <div class="info-item">
+                        <span class="info-label">Verifiziert:</span>
+                        <span class="info-value">
+                            <?php if ($user['is_verified']): ?>
+                                <span class="status-badge status-verified">Ja</span>
+                            <?php else: ?>
+                                <span class="status-badge status-unverified">Nein</span>
+                            <?php endif; ?>
+                        </span>
+                    </div>
                 </div>
+
+                <?php if (!$user['is_verified']): ?>
+                    <hr>
+
+                    <div class="verification-zone">
+                        <h4>E-Mail-Verifizierung</h4>
+                        <p class="verification-hint">Der Benutzer hat seine E-Mail-Adresse noch nicht bestätigt.</p>
+                        <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/verify" method="POST"
+                              onsubmit="return confirm('Benutzer manuell verifizieren?')">
+                            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Manuell verifizieren
+                            </button>
+                        </form>
+                    </div>
+                <?php endif; ?>
 
                 <hr>
 
@@ -184,5 +210,35 @@ hr {
 .danger-zone h4 {
     color: var(--color-danger);
     margin-bottom: 1rem;
+}
+.verification-zone {
+    background: #d4edda;
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.verification-zone h4 {
+    color: var(--color-success);
+    margin-bottom: 0.5rem;
+}
+.verification-hint {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+.status-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.status-verified {
+    background: var(--color-success);
+    color: white;
+}
+.status-unverified {
+    background: var(--color-warning);
+    color: #856404;
 }
 </style>

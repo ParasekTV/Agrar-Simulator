@@ -41,6 +41,7 @@
                 <li><a href="<?= BASE_URL ?>/productions" class="nav-link">Produktionen</a></li>
                 <li><a href="<?= BASE_URL ?>/storage" class="nav-link">Lager</a></li>
                 <li><a href="<?= BASE_URL ?>/salespoints" class="nav-link">Verkauf</a></li>
+                <li><a href="<?= BASE_URL ?>/shop" class="nav-link">Einkauf</a></li>
                 <li><a href="<?= BASE_URL ?>/research" class="nav-link">Forschung</a></li>
                 <li><a href="<?= BASE_URL ?>/market" class="nav-link">Marktplatz</a></li>
                 <li><a href="<?= BASE_URL ?>/cooperative" class="nav-link">Genossenschaft</a></li>

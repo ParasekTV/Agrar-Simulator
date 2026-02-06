@@ -214,6 +214,44 @@ class AdminController extends Controller
         $this->redirect('/admin/users');
     }
 
+    /**
+     * Benutzer manuell verifizieren
+     */
+    public function verifyUser(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        // Prüfe ob Benutzer existiert
+        $user = $this->db->fetchOne('SELECT id, is_verified FROM users WHERE id = ?', [$id]);
+
+        if (!$user) {
+            Session::setFlash('error', 'Benutzer nicht gefunden', 'danger');
+            $this->redirect('/admin/users');
+        }
+
+        if ($user['is_verified']) {
+            Session::setFlash('info', 'Benutzer ist bereits verifiziert', 'info');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        // Verifiziere Benutzer
+        $this->db->update('users', [
+            'is_verified' => 1,
+            'verification_token' => null,
+            'token_expires_at' => null
+        ], 'id = :id', ['id' => $id]);
+
+        Logger::info('Admin manually verified user', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
+
+        Session::setFlash('success', 'Benutzer wurde erfolgreich verifiziert', 'success');
+        $this->redirect("/admin/users/{$id}");
+    }
+
     // ==========================================
     // FARM-VERWALTUNG
     // ==========================================

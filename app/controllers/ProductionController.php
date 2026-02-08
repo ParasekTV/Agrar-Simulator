@@ -221,6 +221,94 @@ class ProductionController extends Controller
     }
 
     /**
+     * Startet kontinuierliche Produktion (POST)
+     */
+    public function startContinuous(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/productions');
+        }
+
+        $data = $this->getPostData();
+
+        $validator = new Validator($data);
+        $validator->required('farm_production_id')->numeric('farm_production_id');
+
+        if (!$validator->isValid()) {
+            Session::setFlash('error', $validator->getFirstError(), 'danger');
+            $this->redirect('/productions');
+        }
+
+        $productionModel = new Production();
+        $result = $productionModel->startContinuousProduction((int) $data['farm_production_id'], $this->getFarmId());
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $redirectTo = isset($data['redirect']) ? $data['redirect'] : '/productions';
+        $this->redirect($redirectTo);
+    }
+
+    /**
+     * Stoppt kontinuierliche Produktion (POST)
+     */
+    public function stopContinuous(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/productions');
+        }
+
+        $data = $this->getPostData();
+
+        $validator = new Validator($data);
+        $validator->required('farm_production_id')->numeric('farm_production_id');
+
+        if (!$validator->isValid()) {
+            Session::setFlash('error', $validator->getFirstError(), 'danger');
+            $this->redirect('/productions');
+        }
+
+        $productionModel = new Production();
+        $result = $productionModel->stopContinuousProduction((int) $data['farm_production_id'], $this->getFarmId());
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $redirectTo = isset($data['redirect']) ? $data['redirect'] : '/productions';
+        $this->redirect($redirectTo);
+    }
+
+    /**
+     * Zeigt Produktions-Logs
+     */
+    public function logs(): void
+    {
+        $this->requireAuth();
+
+        $farmId = $this->getFarmId();
+        $productionModel = new Production();
+
+        $data = [
+            'title' => 'Produktions-Historie',
+            'logs' => $productionModel->getProductionLogs($farmId, 100)
+        ];
+
+        $this->renderWithLayout('productions/logs', $data);
+    }
+
+    /**
      * API: Gibt Produktionen zurück
      */
     public function listApi(): array
@@ -321,5 +409,69 @@ class ProductionController extends Controller
         return $result['success']
             ? $this->jsonSuccess($result['message'], ['is_active' => $result['is_active'] ?? false])
             : $this->jsonError($result['message']);
+    }
+
+    /**
+     * API: Startet kontinuierliche Produktion
+     */
+    public function startContinuousApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $data = $this->getJsonData();
+
+        if (empty($data['farmProductionId'])) {
+            return $this->jsonError('farmProductionId erforderlich');
+        }
+
+        $productionModel = new Production();
+        $result = $productionModel->startContinuousProduction((int) $data['farmProductionId'], $this->getFarmId());
+
+        return $result['success']
+            ? $this->jsonSuccess($result['message'], ['efficiency' => $result['efficiency'] ?? 100])
+            : $this->jsonError($result['message']);
+    }
+
+    /**
+     * API: Stoppt kontinuierliche Produktion
+     */
+    public function stopContinuousApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $data = $this->getJsonData();
+
+        if (empty($data['farmProductionId'])) {
+            return $this->jsonError('farmProductionId erforderlich');
+        }
+
+        $productionModel = new Production();
+        $result = $productionModel->stopContinuousProduction((int) $data['farmProductionId'], $this->getFarmId());
+
+        return $result['success']
+            ? $this->jsonSuccess($result['message'], ['cycles_completed' => $result['cycles_completed'] ?? 0])
+            : $this->jsonError($result['message']);
+    }
+
+    /**
+     * API: Gibt Produktions-Logs zurück
+     */
+    public function logsApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $limit = (int) ($_GET['limit'] ?? 50);
+        $limit = min(100, max(1, $limit));
+
+        $productionModel = new Production();
+        $logs = $productionModel->getProductionLogs($this->getFarmId(), $limit);
+
+        return $this->json(['logs' => $logs]);
     }
 }

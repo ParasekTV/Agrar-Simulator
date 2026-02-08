@@ -16,13 +16,15 @@ class VehicleController extends Controller
         $farmId = $this->getFarmId();
         $farm = new Farm($farmId);
         $vehicleModel = new Vehicle();
+        $coopModel = new Cooperative();
 
         $data = [
             'title' => 'Fahrzeuge',
             'farmVehicles' => $vehicleModel->getFarmVehicles($farmId),
             'availableVehicles' => $vehicleModel->getAvailableVehicles($farmId),
             'efficiencyBonus' => $vehicleModel->getTotalEfficiencyBonus($farmId),
-            'farm' => $farm->getData()
+            'farm' => $farm->getData(),
+            'membership' => $coopModel->getMembership($farmId)
         ];
 
         $this->renderWithLayout('vehicles/index', $data);

@@ -23,7 +23,7 @@
                 </div>
                 <a href="<?= BASE_URL ?>/bugreport" class="stat-item stat-link" title="Bug melden">
                     <span class="stat-icon">&#128027;</span>
-                    <span class="stat-value">Bug</span>
+                    <span class="stat-value">Bug-Melden</span>
                 </a>
             </div>
 

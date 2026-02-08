@@ -210,4 +210,29 @@ class Session
     {
         return self::get('farm_id');
     }
+
+    /**
+     * Aktualisiert die letzte Aktivität des eingeloggten Benutzers
+     * Wird nur alle 5 Minuten aktualisiert um DB-Last zu reduzieren
+     */
+    public static function updateActivity(): void
+    {
+        $userId = self::getUserId();
+        if ($userId === null) {
+            return;
+        }
+
+        $lastUpdate = self::get('last_activity_update', 0);
+        $now = time();
+
+        // Nur alle 5 Minuten aktualisieren
+        if ($now - $lastUpdate < 300) {
+            return;
+        }
+
+        self::set('last_activity_update', $now);
+
+        // Aktualisiere in der Datenbank
+        Ranking::updateUserActivity($userId);
+    }
 }

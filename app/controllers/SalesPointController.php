@@ -24,10 +24,31 @@ class SalesPointController extends Controller
             'priceOverview' => $salesModel->getDailyPriceOverview(),
             'sellableProducts' => $salesModel->getAllSellableProducts($farmId),
             'storageStats' => $storageModel->getStorageStats($farmId),
-            'farm' => $farm->getData()
+            'farm' => $farm->getData(),
+            'priceChangeTime' => SalesPoint::getTimeUntilPriceChange()
         ];
 
         $this->renderWithLayout('salespoints/index', $data);
+    }
+
+    /**
+     * Sucht nach Produkten
+     */
+    public function search(): void
+    {
+        $this->requireAuth();
+
+        $query = trim($this->getQueryParam('q', ''));
+        $salesModel = new SalesPoint();
+
+        $data = [
+            'title' => 'Produktsuche',
+            'query' => $query,
+            'results' => !empty($query) ? $salesModel->searchProduct($query) : [],
+            'priceChangeTime' => SalesPoint::getTimeUntilPriceChange()
+        ];
+
+        $this->renderWithLayout('salespoints/search', $data);
     }
 
     /**
@@ -256,5 +277,38 @@ class SalesPointController extends Controller
         $history = $salesModel->getSalesHistory($this->getFarmId(), $limit);
 
         return $this->json(['history' => $history]);
+    }
+
+    /**
+     * API: Sucht nach Produkten
+     */
+    public function searchApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $query = trim($_GET['q'] ?? '');
+
+        if (empty($query)) {
+            return $this->jsonError('Suchbegriff erforderlich');
+        }
+
+        $salesModel = new SalesPoint();
+        $results = $salesModel->searchProduct($query);
+
+        return $this->json([
+            'query' => $query,
+            'results' => $results,
+            'priceChangeTime' => SalesPoint::getTimeUntilPriceChange()
+        ]);
+    }
+
+    /**
+     * API: Gibt Zeit bis zur Preisaktualisierung zurück
+     */
+    public function priceChangeTimeApi(): array
+    {
+        return $this->json(SalesPoint::getTimeUntilPriceChange());
     }
 }

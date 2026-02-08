@@ -10,7 +10,93 @@
 
 ## AKTUELLER STAND (fuer spaetere Fortsetzung)
 
-### Zuletzt erledigt (06.02.2026):
+### Zuletzt erledigt (08.02.2026):
+- [x] **Fahrzeuge an Genossenschaft verleihen** (v1.2 Feature - Phase E):
+  - Fahrzeuge fuer X Stunden an Genossenschaft verleihen
+  - Stundengebuehr optional
+  - Andere Mitglieder koennen verliehene Fahrzeuge ausleihen
+  - Automatische Gebuehrenabrechnung bei Rueckgabe
+  - `sql/v1.2_coop_vehicles.sql` Migration
+
+- [x] **Genossenschafts-Produktionen** (v1.2 Feature - Phase E):
+  - Genossenschaft kann Produktionen kaufen
+  - Nutzt Genossenschaftskasse fuer Kauf
+  - Produktionen starten/stoppen
+  - Produktions-Logs
+  - `sql/v1.2_coop_productions.sql` Migration
+
+- [x] **Marktplatz Push-Funktion** (v1.2 Feature - Phase D):
+  - 3 Push-Optionen: Standard (24h/500T), Premium (48h/1200T), Super (72h/2500T)
+  - Gepushte Angebote erscheinen ganz oben
+  - Push-Historie
+  - `sql/v1.2_market_push.sql` Migration
+
+- [x] **Genossenschafts-Pinnwand** (v1.2 Feature - Phase D):
+  - Internes Forum nur fuer Genossenschaftsmitglieder
+  - Beitraege erstellen, lesen, loeschen
+  - Kommentare hinzufuegen und loeschen
+  - Like-System fuer Beitraege
+  - Ankuendigungen und angepinnte Beitraege (nur Leader)
+  - Ungelesene Beitraege zaehlen
+  - `sql/v1.2_coop_board.sql` Migration
+  - Neues Model: `CooperativePost.php`
+  - Neue Views: `cooperative/board.php`, `cooperative/post.php`
+
+- [x] **Individuelle Tier-Forschung** (v1.2 Feature - Phase C):
+  - 8 neue Forschungen: Ziegenhaltung, Entenhaltung, Gaensehaltung, Pferdezucht, Imkerei, Bueffelzucht, Kaninchenzucht, Putenhaltung
+  - 8 neue Tierarten: Ziege, Ente, Gans, Pferd, Bienenvolk, Wasserbueffel, Kaninchen, Truthahn
+  - 8 neue Staelle/Produktionen fuer neue Tierarten
+  - Forschungsbaum mit Abhaengigkeiten (z.B. Gaense benoetigt Enten)
+  - `sql/v1.2_research_animals.sql` Migration
+
+- [x] **Individuelle Feldfrucht-Forschung** (v1.2 Feature - Phase C):
+  - 6 neue Forschungen: Rapsanbau, Sojabohnenanbau, Weinbau, Obstplantagen, Gewaechshaus-Kulturen, Kraeuteranbau
+  - 11 neue Feldfruechte: Raps, Sojabohnen, Weintrauben, Aepfel, Birnen, Tomaten, Paprika, Gurken, Basilikum, Thymian, Rosmarin
+  - Neue Produktionen: Weinkellerei, Saftpresse, Gewaechshaus, Kraeutergarten
+  - `sql/v1.2_research_crops.sql` Migration
+
+- [x] **Tierkapazitaet durch Staelle** (v1.2 Feature):
+  - Tierhaltungs-Produktionen definieren Tierkapazitaet
+  - Ohne Stall: 0 Tiere dieser Art moeglich
+  - Kapazitaetsuebersicht auf Tiere-Seite
+  - Kaufen-Modal mit Kapazitaetspruefung
+  - `sql/v1.2_animal_capacity.sql` Migration
+  - Animal Model: getAnimalCapacity(), getCapacityOverview(), getAvailableAnimalsWithCapacity()
+
+- [x] **Rankings Online-Status & Erweiterte Stats** (v1.2 Feature):
+  - Online-Status-Anzeige (gruen=online, gelb=24h, orange=7d, grau=offline)
+  - Erweiterte Statistiken in Rangliste (Tiere, Fahrzeuge, Felder, Produktionen)
+  - `last_activity` Tracking in users-Tabelle
+  - Session-basiertes Activity-Tracking (alle 5 Min)
+  - CSS-Animationen fuer Online-Status
+  - `sql/v1.2_rankings_extended.sql` Migration
+
+- [x] **Salespoints Countdown + Suche** (v1.2 Feature):
+  - Countdown bis Mitternacht wenn neue Preise gelten
+  - Produktsuche: "Wer kauft X?" mit Preisvergleich
+  - Alle Verkaufsstellen sortiert nach bestem Preis
+  - Neue View: `salespoints/search.php`
+  - API-Endpunkte: `/salespoint/search`, `/salespoint/price-change-time`
+
+- [x] **Shop Countdown + Suche** (v1.2 Feature):
+  - Countdown bis Mitternacht wenn neue Preise gelten
+  - Produktsuche: "Wer verkauft X?" mit Preisvergleich
+  - Alle Haendler sortiert nach guenstigstem Preis
+  - Neue View: `shop/search.php`
+  - API-Endpunkte: `/shop/search`, `/shop/price-change-time`
+
+- [x] **Kontinuierliche Produktion** (v1.2 Feature):
+  - Produktionen laufen dauerhaft bis manuell gestoppt
+  - Automatischer Stopp wenn Rohstoffe aufgebraucht
+  - Effizienz-System: 0-100% basierend auf verfuegbaren Inputs
+  - Produktions-Historie mit detaillierten Logs
+  - Cron-Job `cron/production_cycle.php` (alle 5 Min)
+  - Neue DB-Felder: is_running, started_at, cycles_completed, current_efficiency
+  - `sql/v1.2_continuous_production.sql` Migration
+  - Neue Views: `productions/logs.php`, aktualisierte `productions/index.php`
+  - API-Endpunkte: `/production/start-continuous`, `/production/stop-continuous`, `/production/logs`
+
+### Vorher erledigt (06.02.2026):
 - [x] **Shop/Einkauf-System** komplett implementiert:
   - 5 Haendler: Landhandel, Bauernmarkt, Technik-Partner, Grosshandel, Bio-Laden
   - Tagesbasierte Preise mit Seed-Algorithmus
@@ -293,6 +379,31 @@ Das Admin-Panel ermoeglicht vollstaendige Verwaltung:
 - [ ] Vertraege mit Abnehmern
 - [ ] Lieferauftraege
 
+### v1.2 Feature-Paket (IN ARBEIT)
+Siehe `docs/feature_plan_v1.2.md` fuer detaillierten Plan.
+
+**Phase A: Grundlegende Verbesserungen** - ABGESCHLOSSEN
+- [x] Salespoints Countdown + Suche
+- [x] Shop Countdown + Suche
+- [x] Rankings Online-Status + erweiterte Stats
+
+**Phase B: Produktionssystem** - ABGESCHLOSSEN
+- [x] Kontinuierliche Produktion (laeuft bis gestoppt/Rohstoffe leer)
+- [x] Effizienz-System fuer partielle Inputs
+- [x] Tierkapazitaet durch Staelle
+
+**Phase C: Forschung** - ABGESCHLOSSEN
+- [x] Tiere einzeln erforschbar (8 neue Tierforschungen)
+- [x] Feldfruechte einzeln erforschbar (6 neue Pflanzenforschungen)
+
+**Phase D: Marktplatz & Community** - ABGESCHLOSSEN
+- [x] Marktplatz Push-Funktion (Angebot hervorheben)
+- [x] Genossenschaft Pinnwand (internes Forum)
+
+**Phase E: Genossenschaft Erweitert** - ABGESCHLOSSEN
+- [x] Fahrzeuge an Genossenschaft ausleihen
+- [x] Genossenschafts-Produktionen (nutzt Coop-Lager)
+
 ### Phase 7: Infrastruktur & Ressourcen ✅ ABGESCHLOSSEN
 - [x] Wasserproduktion: Brunnen (Level 1), Wasserwerk (Level 3)
 - [x] Stromproduktion: Solaranlage (Level 2), Windkraftanlage (Level 4), Kraftwerk (Level 5)
@@ -356,6 +467,24 @@ UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
 ---
 
 ## Changelog
+
+### Version 1.2.0 (08.02.2026) - FERTIGGESTELLT
+- Rankings: Online-Status-Anzeige (gruen/gelb/orange/grau)
+- Rankings: Erweiterte Statistiken (Tiere, Fahrzeuge, Felder, Produktionen)
+- Activity-Tracking fuer Online-Status
+- Salespoints: Countdown bis Preisaenderung + Produktsuche
+- Shop: Countdown bis Preisaenderung + Produktsuche
+- Produktionen: Kontinuierlicher Modus mit Effizienz-System
+- Produktionen: Automatisches Stoppen bei Rohstoffmangel
+- Produktionen: Produktions-Historie mit detaillierten Logs
+- Tierkapazitaet durch Staelle (ohne Stall keine Tiere)
+- 8 neue Tierarten mit individueller Forschung (Ziege, Ente, Gans, Pferd, Bienen, Bueffel, Kaninchen, Pute)
+- 11 neue Feldfruechte mit individueller Forschung (Raps, Soja, Weintrauben, Aepfel, Birnen, Tomaten, Paprika, Gurken, Kraeuter)
+- Marktplatz Push-Funktion (Angebote hervorheben fuer 24-72h)
+- Genossenschafts-Pinnwand (internes Forum mit Kommentaren und Likes)
+- Fahrzeuge an Genossenschaft verleihen
+- Genossenschafts-Produktionen
+- v1.2 Feature-Paket VOLLSTAENDIG abgeschlossen (Phase A-E)
 
 ### Version 1.1.0 (06.02.2026)
 - Shop/Einkauf-System mit 5 Haendlern

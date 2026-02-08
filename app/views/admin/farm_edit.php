@@ -137,7 +137,7 @@
                                 <td><?= $animal['id'] ?></td>
                                 <td><?= htmlspecialchars($animal['animal_name']) ?></td>
                                 <td><?= $animal['quantity'] ?></td>
-                                <td><?= $animal['health'] ?>%</td>
+                                <td><?= $animal['health'] ?? 100 ?>%</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -168,7 +168,7 @@
                             <tr>
                                 <td><?= $vehicle['id'] ?></td>
                                 <td><?= htmlspecialchars($vehicle['vehicle_name']) ?></td>
-                                <td><?= $vehicle['condition'] ?>%</td>
+                                <td><?= $vehicle['condition'] ?? $vehicle['condition_percent'] ?? 100 ?>%</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

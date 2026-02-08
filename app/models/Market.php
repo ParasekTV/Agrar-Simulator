@@ -245,13 +245,16 @@ class Market
         $offset = ($page - 1) * $perPage;
 
         // Hole Angebote (mit Produkt-Icon falls vorhanden)
+        // Gepushte Angebote zuerst, dann nach Erstellungsdatum
         $sql = "SELECT ml.*, f.farm_name as seller_name,
-                       p.icon as product_icon
+                       p.icon as product_icon,
+                       mpc.highlight_color, mpc.icon as push_icon
                 FROM market_listings ml
                 JOIN farms f ON ml.seller_farm_id = f.id
                 LEFT JOIN products p ON ml.item_name = p.name_de
+                LEFT JOIN market_push_config mpc ON ml.is_pushed = 1 AND ml.pushed_until > NOW()
                 WHERE {$whereClause}
-                ORDER BY ml.created_at DESC
+                ORDER BY (ml.is_pushed = 1 AND ml.pushed_until > NOW()) DESC, ml.created_at DESC
                 LIMIT {$perPage} OFFSET {$offset}";
 
         $listings = $this->db->fetchAll($sql, $params);
@@ -422,5 +425,125 @@ class Market
         }
 
         return $count;
+    }
+
+    // ==========================================
+    // PUSH-FUNKTIONALITÄT (v1.2)
+    // ==========================================
+
+    /**
+     * Gibt verfügbare Push-Optionen zurück
+     */
+    public function getPushOptions(): array
+    {
+        return $this->db->fetchAll(
+            'SELECT * FROM market_push_config WHERE is_active = 1 ORDER BY cost'
+        );
+    }
+
+    /**
+     * Pusht ein Angebot nach oben
+     */
+    public function pushListing(int $listingId, int $pushConfigId, int $farmId): array
+    {
+        // Hole Angebot
+        $listing = $this->db->fetchOne(
+            'SELECT * FROM market_listings WHERE id = ? AND seller_farm_id = ? AND status = ?',
+            [$listingId, $farmId, 'active']
+        );
+
+        if (!$listing) {
+            return ['success' => false, 'message' => 'Angebot nicht gefunden'];
+        }
+
+        // Prüfe ob bereits gepusht
+        if ($listing['is_pushed'] && strtotime($listing['pushed_until']) > time()) {
+            $remainingHours = round((strtotime($listing['pushed_until']) - time()) / 3600);
+            return ['success' => false, 'message' => "Angebot ist bereits gepusht (noch {$remainingHours}h)"];
+        }
+
+        // Hole Push-Konfiguration
+        $pushConfig = $this->db->fetchOne(
+            'SELECT * FROM market_push_config WHERE id = ? AND is_active = 1',
+            [$pushConfigId]
+        );
+
+        if (!$pushConfig) {
+            return ['success' => false, 'message' => 'Push-Option nicht gefunden'];
+        }
+
+        // Prüfe und ziehe Geld ab
+        $farm = new Farm($farmId);
+        if (!$farm->subtractMoney($pushConfig['cost'], "Markt-Push: {$pushConfig['name']}")) {
+            return ['success' => false, 'message' => 'Nicht genügend Geld'];
+        }
+
+        // Berechne Push-Ablaufzeit
+        $pushedUntil = date('Y-m-d H:i:s', strtotime("+{$pushConfig['duration_hours']} hours"));
+
+        // Aktualisiere Angebot
+        $this->db->update('market_listings', [
+            'is_pushed' => 1,
+            'pushed_until' => $pushedUntil,
+            'push_cost' => $pushConfig['cost']
+        ], 'id = :id', ['id' => $listingId]);
+
+        // Speichere in Historie
+        $this->db->insert('market_push_history', [
+            'listing_id' => $listingId,
+            'farm_id' => $farmId,
+            'push_config_id' => $pushConfigId,
+            'cost_paid' => $pushConfig['cost'],
+            'expires_at' => $pushedUntil
+        ]);
+
+        Logger::info('Market listing pushed', [
+            'farm_id' => $farmId,
+            'listing_id' => $listingId,
+            'push_type' => $pushConfig['name']
+        ]);
+
+        return [
+            'success' => true,
+            'message' => "Angebot gepusht! Hervorhebung für {$pushConfig['duration_hours']} Stunden aktiv.",
+            'pushed_until' => $pushedUntil
+        ];
+    }
+
+    /**
+     * Bereinigt abgelaufene Pushes
+     */
+    public static function cleanupExpiredPushes(): int
+    {
+        $db = Database::getInstance();
+
+        $updated = $db->query(
+            "UPDATE market_listings
+             SET is_pushed = 0, pushed_until = NULL
+             WHERE is_pushed = 1 AND pushed_until <= NOW()"
+        )->rowCount();
+
+        if ($updated > 0) {
+            Logger::info('Expired pushes cleaned up', ['count' => $updated]);
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Gibt Push-Historie einer Farm zurück
+     */
+    public function getPushHistory(int $farmId, int $limit = 20): array
+    {
+        return $this->db->fetchAll(
+            "SELECT mph.*, mpc.name as push_type, ml.item_name
+             FROM market_push_history mph
+             JOIN market_push_config mpc ON mph.push_config_id = mpc.id
+             LEFT JOIN market_listings ml ON mph.listing_id = ml.id
+             WHERE mph.farm_id = ?
+             ORDER BY mph.pushed_at DESC
+             LIMIT ?",
+            [$farmId, $limit]
+        );
     }
 }

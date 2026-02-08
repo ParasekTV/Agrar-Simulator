@@ -77,11 +77,14 @@ $router->post('/vehicles/repair', 'Vehicle', 'repair');
 // Produktionen
 $router->get('/productions', 'Production', 'index');
 $router->get('/productions/shop', 'Production', 'shop');
+$router->get('/productions/logs', 'Production', 'logs');
 $router->get('/productions/{id}', 'Production', 'show');
 $router->post('/productions/buy', 'Production', 'buy');
 $router->post('/productions/toggle', 'Production', 'toggle');
 $router->post('/productions/start', 'Production', 'start');
 $router->post('/productions/collect', 'Production', 'collect');
+$router->post('/productions/start-continuous', 'Production', 'startContinuous');
+$router->post('/productions/stop-continuous', 'Production', 'stopContinuous');
 
 // Lager
 $router->get('/storage', 'Storage', 'index');
@@ -92,6 +95,7 @@ $router->post('/storage/transfer', 'Storage', 'transfer');
 // Verkaufsstellen
 $router->get('/salespoints', 'SalesPoint', 'index');
 $router->get('/salespoints/history', 'SalesPoint', 'history');
+$router->get('/salespoints/search', 'SalesPoint', 'search');
 $router->get('/salespoints/compare/{id}', 'SalesPoint', 'compare');
 $router->get('/salespoints/{id}', 'SalesPoint', 'show');
 $router->post('/salespoints/sell', 'SalesPoint', 'sell');
@@ -99,6 +103,7 @@ $router->post('/salespoints/sell', 'SalesPoint', 'sell');
 // Shop/Einkauf
 $router->get('/shop', 'Shop', 'index');
 $router->get('/shop/history', 'Shop', 'history');
+$router->get('/shop/search', 'Shop', 'search');
 $router->get('/shop/compare/{id}', 'Shop', 'compare');
 $router->get('/shop/{id}', 'Shop', 'show');
 $router->post('/shop/buy', 'Shop', 'buy');
@@ -114,6 +119,7 @@ $router->post('/market/create', 'Market', 'create');
 $router->post('/market/buy', 'Market', 'buy');
 $router->post('/market/cancel', 'Market', 'cancel');
 $router->post('/market/sell-direct', 'Market', 'sellDirect');
+$router->post('/market/push', 'Market', 'push');
 $router->get('/market/history', 'Market', 'history');
 
 // Genossenschaften
@@ -139,6 +145,21 @@ $router->post('/cooperative/withdraw-money', 'Cooperative', 'withdrawMoney');
 $router->get('/cooperative/research', 'Cooperative', 'research');
 $router->post('/cooperative/start-research', 'Cooperative', 'startResearch');
 $router->get('/cooperative/challenges', 'Cooperative', 'challenges');
+$router->get('/cooperative/board', 'Cooperative', 'board');
+$router->post('/cooperative/board/create', 'Cooperative', 'createPost');
+$router->post('/cooperative/board/delete', 'Cooperative', 'deletePost');
+$router->post('/cooperative/board/pin', 'Cooperative', 'togglePin');
+$router->post('/cooperative/board/comment', 'Cooperative', 'addComment');
+$router->post('/cooperative/board/comment/delete', 'Cooperative', 'deleteComment');
+$router->post('/cooperative/board/like', 'Cooperative', 'toggleLike');
+$router->get('/cooperative/post/{id}', 'Cooperative', 'post');
+$router->get('/cooperative/vehicles', 'Cooperative', 'vehicles');
+$router->post('/cooperative/vehicles/lend', 'Cooperative', 'lendVehicle');
+$router->post('/cooperative/vehicles/return', 'Cooperative', 'returnVehicle');
+$router->post('/cooperative/vehicles/borrow', 'Cooperative', 'borrowVehicle');
+$router->get('/cooperative/productions', 'Cooperative', 'productions');
+$router->post('/cooperative/productions/buy', 'Cooperative', 'buyProduction');
+$router->post('/cooperative/productions/toggle', 'Cooperative', 'toggleProduction');
 $router->get('/cooperative/{id}', 'Cooperative', 'show');
 
 // News/Forum
@@ -234,6 +255,9 @@ $router->api('GET', '/production/{id}', 'Production', 'getApi');
 $router->api('POST', '/production/start', 'Production', 'startApi');
 $router->api('POST', '/production/collect', 'Production', 'collectApi');
 $router->api('POST', '/production/toggle', 'Production', 'toggleApi');
+$router->api('POST', '/production/start-continuous', 'Production', 'startContinuousApi');
+$router->api('POST', '/production/stop-continuous', 'Production', 'stopContinuousApi');
+$router->api('GET', '/production/logs', 'Production', 'logsApi');
 
 // Storage API
 $router->api('GET', '/storage/list', 'Storage', 'listApi');
@@ -246,6 +270,8 @@ $router->api('GET', '/salespoint/{id}/prices', 'SalesPoint', 'pricesApi');
 $router->api('POST', '/salespoint/sell', 'SalesPoint', 'sellApi');
 $router->api('GET', '/salespoint/best-prices/{id}', 'SalesPoint', 'bestPricesApi');
 $router->api('GET', '/salespoint/history', 'SalesPoint', 'historyApi');
+$router->api('GET', '/salespoint/search', 'SalesPoint', 'searchApi');
+$router->api('GET', '/salespoint/price-change-time', 'SalesPoint', 'priceChangeTimeApi');
 
 // Shop API
 $router->api('GET', '/shop/list', 'Shop', 'listApi');
@@ -253,12 +279,16 @@ $router->api('GET', '/shop/{id}/prices', 'Shop', 'pricesApi');
 $router->api('POST', '/shop/buy', 'Shop', 'buyApi');
 $router->api('GET', '/shop/best-prices/{id}', 'Shop', 'bestPricesApi');
 $router->api('GET', '/shop/history', 'Shop', 'historyApi');
+$router->api('GET', '/shop/search', 'Shop', 'searchApi');
+$router->api('GET', '/shop/price-change-time', 'Shop', 'priceChangeTimeApi');
 
 // Market API
 $router->api('GET', '/market/listings', 'Market', 'listingsApi');
 $router->api('POST', '/market/create', 'Market', 'createApi');
 $router->api('POST', '/market/buy', 'Market', 'buyApi');
 $router->api('DELETE', '/market/cancel/{id}', 'Market', 'cancelApi');
+$router->api('GET', '/market/push-options', 'Market', 'pushOptionsApi');
+$router->api('POST', '/market/push', 'Market', 'pushApi');
 
 // Cooperative API
 $router->api('GET', '/cooperative/list', 'Cooperative', 'listApi');

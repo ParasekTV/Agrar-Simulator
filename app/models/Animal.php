@@ -33,6 +33,26 @@ class Animal
             }
         }
 
+        // Prüfe Kapazität
+        $animalType = $animal['type'] ?? '';
+        $capacity = $this->getAnimalCapacity($farmId, $animalType);
+        $currentCount = $this->getAnimalCount($farmId, $animalType);
+
+        if ($capacity === 0) {
+            return [
+                'success' => false,
+                'message' => "Kein Stall für {$animal['name']} vorhanden. Baue zuerst einen passenden Stall."
+            ];
+        }
+
+        $available = $capacity - $currentCount;
+        if ($quantity > $available) {
+            return [
+                'success' => false,
+                'message' => "Nicht genug Platz! Verfügbar: {$available} von {$capacity}. Baue einen weiteren Stall."
+            ];
+        }
+
         // Berechne Kosten
         $totalCost = $animal['cost'] * $quantity;
 
@@ -74,7 +94,9 @@ class Animal
         return [
             'success' => true,
             'message' => "{$quantity}x {$animal['name']} gekauft!",
-            'total_cost' => $totalCost
+            'total_cost' => $totalCost,
+            'capacity_used' => $currentCount + $quantity,
+            'capacity_total' => $capacity
         ];
     }
 
@@ -352,6 +374,120 @@ class Animal
                  happiness = GREATEST(10, happiness - 10)
              WHERE last_feeding IS NULL
                 OR last_feeding < DATE_SUB(NOW(), INTERVAL 48 HOUR)"
+        );
+    }
+
+    // ==========================================
+    // TIERKAPAZITÄT (v1.2)
+    // ==========================================
+
+    /**
+     * Gibt die Gesamtkapazität für einen Tiertyp zurück
+     * Berechnet aus allen Ställen (Produktionen) die dieser Farm gehören
+     */
+    public function getAnimalCapacity(int $farmId, string $animalType): int
+    {
+        if (empty($animalType)) {
+            return 0;
+        }
+
+        $result = $this->db->fetchColumn(
+            "SELECT COALESCE(SUM(p.animal_capacity), 0)
+             FROM farm_productions fp
+             JOIN productions p ON fp.production_id = p.id
+             WHERE fp.farm_id = ?
+               AND fp.is_active = 1
+               AND p.animal_type = ?",
+            [$farmId, $animalType]
+        );
+
+        return (int) $result;
+    }
+
+    /**
+     * Gibt die aktuelle Anzahl von Tieren eines Typs zurück
+     */
+    public function getAnimalCount(int $farmId, string $animalType): int
+    {
+        if (empty($animalType)) {
+            return 0;
+        }
+
+        $result = $this->db->fetchColumn(
+            "SELECT COALESCE(SUM(fa.quantity), 0)
+             FROM farm_animals fa
+             JOIN animals a ON fa.animal_id = a.id
+             WHERE fa.farm_id = ? AND a.type = ?",
+            [$farmId, $animalType]
+        );
+
+        return (int) $result;
+    }
+
+    /**
+     * Gibt Kapazitätsinfo für alle Tiertypen zurück
+     */
+    public function getCapacityOverview(int $farmId): array
+    {
+        // Alle Tiertypen die Ställe benötigen
+        $animalTypes = $this->db->fetchAll(
+            "SELECT DISTINCT a.type, a.name as type_name
+             FROM animals a
+             WHERE a.type IS NOT NULL AND a.type != ''"
+        );
+
+        $overview = [];
+        foreach ($animalTypes as $type) {
+            $capacity = $this->getAnimalCapacity($farmId, $type['type']);
+            $count = $this->getAnimalCount($farmId, $type['type']);
+
+            $overview[$type['type']] = [
+                'type' => $type['type'],
+                'type_name' => $type['type_name'],
+                'capacity' => $capacity,
+                'count' => $count,
+                'available' => $capacity - $count,
+                'has_housing' => $capacity > 0
+            ];
+        }
+
+        return $overview;
+    }
+
+    /**
+     * Gibt verfügbare Tiere zum Kauf zurück (mit Kapazitätsinfo)
+     */
+    public function getAvailableAnimalsWithCapacity(int $farmId): array
+    {
+        $animals = $this->getAvailableAnimals($farmId);
+
+        foreach ($animals as &$animal) {
+            $type = $animal['type'] ?? '';
+            $animal['capacity'] = $this->getAnimalCapacity($farmId, $type);
+            $animal['current_count'] = $this->getAnimalCount($farmId, $type);
+            $animal['available_slots'] = max(0, $animal['capacity'] - $animal['current_count']);
+            $animal['has_housing'] = $animal['capacity'] > 0;
+        }
+
+        return $animals;
+    }
+
+    /**
+     * Gibt alle Ställe (Produktionen) zurück die Tierkapazität bieten
+     */
+    public function getAnimalHousings(int $farmId): array
+    {
+        return $this->db->fetchAll(
+            "SELECT fp.id as farm_production_id, p.id as production_id,
+                    p.name_de, p.animal_type, p.animal_capacity,
+                    fp.is_active
+             FROM farm_productions fp
+             JOIN productions p ON fp.production_id = p.id
+             WHERE fp.farm_id = ?
+               AND p.animal_type IS NOT NULL
+               AND p.animal_capacity > 0
+             ORDER BY p.animal_type, p.name_de",
+            [$farmId]
         );
     }
 }

@@ -46,17 +46,25 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 ### Farming & Produktion
 - **Felder bewirtschaften** - Kaufe Felder, pflanze verschiedene Feldfrüchte und ernte sie
 - **Bodenqualität** - Düngen und Kalken verbessert die Erträge
-- **Tiere halten** - Kühe, Schweine, Hühner, Schafe, Büffel und mehr
-- **Tierprodukte** - Milch, Eier, Wolle, Fleisch und verarbeitete Produkte
-- **Fahrzeuge nutzen** - Traktoren, Mähdrescher und Transportfahrzeuge
+- **Tiere halten** - Kühe, Schweine, Hühner, Schafe, Ziegen, Enten, Gänse, Bienen, Büffel, Kaninchen, Truthähne und mehr
+- **Tierprodukte** - Milch, Eier, Wolle, Fleisch, Honig und verarbeitete Produkte
+- **Fahrzeuge nutzen** - Traktoren, Mähdrescher, Radlader, Teleskoplader und Transportfahrzeuge
+- **Fahrzeugmarken** - John Deere, Fendt, CLAAS, Case IH, New Holland, Massey Ferguson und mehr
 
 ### Produktionssystem
 - **71+ Produktionsstätten** - Von Bäckerei bis Zuckerfabrik
 - **333 Produkte** - Rohstoffe, Zwischenprodukte und Endprodukte
 - **Produktionsketten** - Komplexe Abhängigkeiten zwischen Produktionen
+- **Kontinuierliche Produktion** - Automatische Produktionszyklen
 - **10 Verkaufsstellen** - Spezialisierte Abnehmer für verschiedene Produktkategorien
 - **5 Händler** - Landhandel, Bauernmarkt, Technik-Partner, Großhandel, Bio-Laden
-- **8 Tierhaltungs-Gebäude** - Hühnerstall, Kuhstall, Schweinestall, Büffelstall, etc.
+- **8+ Tierhaltungs-Gebäude** - Hühnerstall, Kuhstall, Schweinestall, Ziegenstall, Entenstall, Bienenhaus, etc.
+
+### Forschungssystem
+- **Individuelle Tier-Forschung** - Jede Tierart muss einzeln erforscht werden
+- **Individuelle Pflanzen-Forschung** - Neue Feldfrüchte durch Forschung freischalten
+- **Forschungsbaum** - Hierarchische Forschungsstruktur mit Voraussetzungen
+- **Forschungspunkte** - Belohnungen für abgeschlossene Forschungen
 
 ### Infrastruktur & Ressourcen
 - **Wasserversorgung** - Brunnen (klein) und Wasserwerk (groß)
@@ -65,26 +73,28 @@ Ein umfangreiches Browser-basiertes Landwirtschafts-Simulationsspiel, entwickelt
 
 ### Wirtschaft & Handel
 - **Marktplatz** - Handel mit anderen Spielern in Echtzeit
+- **Marktplatz-Push** - Angebote hervorheben für mehr Sichtbarkeit (24h/48h/72h)
 - **Verkaufsstellen** - 10 spezialisierte Abnehmer mit täglichen Preisen
 - **Einkauf/Shop** - 5 Händler mit unterschiedlichen Produktsortimenten
 - **Dynamische Preise** - Tagesbasierte Preisschwankungen bei Kauf und Verkauf
 - **Preisvergleich** - Finde den besten Preis für deine Produkte
 - **Lager-System** - Verwalte deine Ernte- und Produktionsprodukte
 
-### Forschung & Fortschritt
-- **Forschungsbaum** - Schalte neue Technologien und Boni frei
-- **Level-System** - Sammle Punkte und steige im Level auf
-- **Täglicher Login-Bonus** - Belohnungen für regelmäßiges Spielen
-- **Erfahrungspunkte** - Verdiene XP durch alle Aktivitäten
-
-### Community
-- **Genossenschaften** - Gründe oder tritt einer Genossenschaft bei
-- **Ausrüstung teilen** - Verleihe Fahrzeuge an Genossenschaftsmitglieder
-- **Zeitung & Forum** - Diskutiere mit anderen Spielern
-- **Discord-Integration** - Community-Server für direkten Austausch
+### Genossenschaften (v1.2)
+- **Genossenschaften gründen/beitreten** - Kooperatives Spielen mit anderen
+- **Pinnwand** - Internes Forum für Mitglieder mit Posts, Kommentaren und Likes
+- **Fahrzeugverleih** - Verleihe Fahrzeuge an Genossenschaftsmitglieder
+- **Genossenschafts-Produktionen** - Gemeinsame Produktionen mit geteiltem Lager
+- **Genossenschafts-Forschung** - Eigene Forschung für die Genossenschaft
+- **Genossenschafts-Lager** - Gemeinsames Lager für alle Mitglieder
+- **Finanzverwaltung** - Genossenschaftskasse und Spenden
+- **Rollensystem** - Gründer, Admin, Mitglied mit unterschiedlichen Rechten
+- **Herausforderungen** - Gemeinsame Ziele für die Genossenschaft
 
 ### Wettbewerb
 - **Ranglisten** - Globale Spieler- und Genossenschafts-Rankings
+- **Detaillierte Stats** - Tiere, Fahrzeuge, Felder, Produktionen, Forschungspunkte
+- **Online-Status** - Sehe wer gerade aktiv ist
 - **Top-Listen** - Nach Punkten, Level, Geld und mehr
 - **Wöchentliche Herausforderungen** - Spezielle Aufgaben mit Bonuspunkten
 
@@ -127,8 +137,8 @@ Das Spiel verwendet eine eigene Währung: **Agrar Taler (T)**
 
 1. **Repository klonen:**
 ```bash
-git clone https://github.com/dein-username/lsbg-agrar-simulator.git
-cd lsbg-agrar-simulator
+git clone https://github.com/dein-username/agrar-simulator.git
+cd agrar-simulator
 ```
 
 2. **Datenbank erstellen:**
@@ -149,30 +159,45 @@ mysql -u agrar_user -p agrar_simulator < sql/install.sql
 mysql -u agrar_user -p agrar_simulator < sql/productions_migration.sql
 ```
 
-5. **Bug-Report-System einrichten:**
+5. **Fahrzeugsystem importieren:**
 ```bash
-mysql -u agrar_user -p agrar_simulator < sql/bug_reports_migration.sql
-mysql -u agrar_user -p agrar_simulator < sql/bug_reports_discord_update.sql
+mysql -u agrar_user -p agrar_simulator < sql/vehicles_migration.sql
 ```
 
-6. **Shop/Einkauf-System einrichten:**
+6. **Genossenschafts-Erweiterungen importieren:**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/cooperative_extension.sql
+```
+
+7. **v1.2 Features importieren:**
+```bash
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_animal_capacity.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_research_animals.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_research_crops.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_market_push.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_coop_board.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_coop_vehicles.sql
+mysql -u agrar_user -p agrar_simulator < sql/v1.2_coop_productions.sql
+```
+
+8. **Shop/Einkauf-System einrichten:**
 ```bash
 mysql -u agrar_user -p agrar_simulator < sql/shop_migration.sql
 ```
 
-7. **Wasser- und Stromproduktion einrichten:**
+9. **Wasser- und Stromproduktion einrichten:**
 ```bash
 mysql -u agrar_user -p agrar_simulator < sql/water_electricity_migration.sql
 mysql -u agrar_user -p agrar_simulator < sql/energy_water_expansion.sql
 ```
 
-6. **Admin-Benutzer erstellen:**
+10. **Admin-Benutzer erstellen:**
 Nach der Registrierung im Spiel:
 ```sql
 UPDATE users SET is_admin = TRUE WHERE username = 'dein_benutzername';
 ```
 
-7. **Konfiguration anpassen:**
+11. **Konfiguration anpassen:**
 
 Bearbeite `config/database.php`:
 ```php
@@ -195,7 +220,7 @@ define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/DEINE_ID/DEIN_TO
 define('DISCORD_WEBHOOK_ENABLED', true);
 ```
 
-8. **Webserver konfigurieren:**
+12. **Webserver konfigurieren:**
 
 **Apache:** Setze das Document Root auf den `public/` Ordner.
 
@@ -217,7 +242,7 @@ server {
 }
 ```
 
-9. **Cron Jobs einrichten:**
+13. **Cron Jobs einrichten:**
 ```cron
 */5 * * * * php /var/www/agrar-simulator/cron/harvest_check.php
 */5 * * * * php /var/www/agrar-simulator/cron/research_check.php
@@ -228,7 +253,7 @@ server {
 ## Projektstruktur
 
 ```
-lsbg-agrar-simulator/
+agrar-simulator/
 ├── app/
 │   ├── controllers/     # Controller-Klassen
 │   ├── core/            # Kernklassen (Database, Router, Session, DiscordWebhook)
@@ -250,13 +275,12 @@ lsbg-agrar-simulator/
 └── sql/
     ├── install.sql                    # Basis-Datenbank-Schema
     ├── productions_migration.sql      # Produktionssystem-Migration
-    ├── bug_reports_migration.sql      # Bug-Report-System
-    ├── bug_reports_discord_update.sql # Discord-Integration für Bug-Reports
+    ├── vehicles_migration.sql         # Fahrzeugsystem mit Marken
+    ├── cooperative_extension.sql      # Genossenschafts-Erweiterungen
+    ├── v1.2_*.sql                     # v1.2 Feature-Migrationen
     ├── shop_migration.sql             # Shop/Einkauf-System
     ├── water_electricity_migration.sql # Wasserwerk & Kraftwerk
-    ├── energy_water_expansion.sql     # Brunnen, Solar, Wind
-    ├── fix_all_umlauts.sql            # Umlaut-Korrektur für alle Tabellen
-    └── fix_challenge_umlauts.sql      # Umlaut-Korrektur für Challenges
+    └── fix_*.sql                      # Diverses Encoding-Fixes
 ```
 
 ## API-Endpunkte
@@ -306,7 +330,9 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) fü
 
 ## Autor
 
-Entwickelt mit [Claude Code](https://claude.ai/code)
+**Florian Müller**
+
+Entwickelt mit Unterstützung von [Claude Code](https://claude.ai/code)
 
 ---
 

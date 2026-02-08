@@ -7,11 +7,25 @@
         </div>
     </div>
 
+    <!-- Suchformular und Countdown -->
+    <div class="search-countdown-bar">
+        <form action="<?= BASE_URL ?>/salespoints/search" method="get" class="product-search-form">
+            <input type="text" name="q" placeholder="Produkt suchen (z.B. Weizen, Milch...)" class="search-input">
+            <button type="submit" class="btn btn-primary">Suchen</button>
+        </form>
+        <div class="price-countdown">
+            <span class="countdown-label">Neue Preise in:</span>
+            <span class="countdown-timer" id="priceCountdown" data-seconds="<?= $priceChangeTime['total_seconds'] ?>">
+                <?= $priceChangeTime['formatted'] ?>
+            </span>
+        </div>
+    </div>
+
     <!-- Tägliche Preisübersicht -->
     <div class="daily-overview">
         <div class="overview-header">
             <h2>Tagespreise - <?= date('d.m.Y') ?></h2>
-            <p class="overview-hint">Preise ändern sich täglich und variieren je nach Verkaufsstelle</p>
+            <p class="overview-hint">Preise aktualisieren sich um Mitternacht</p>
         </div>
 
         <div class="hot-deals-section">
@@ -138,7 +152,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     flex-wrap: wrap;
     gap: 1rem;
 }
@@ -146,6 +160,80 @@
 .page-actions {
     display: flex;
     gap: 0.5rem;
+}
+
+/* Search and Countdown Bar */
+.search-countdown-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.product-search-form {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 250px;
+    max-width: 500px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.price-countdown {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+}
+
+.countdown-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.countdown-timer {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--color-primary);
+    min-width: 80px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .search-countdown-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .product-search-form {
+        max-width: none;
+    }
+
+    .price-countdown {
+        justify-content: center;
+    }
 }
 
 /* Daily Overview */
@@ -377,3 +465,34 @@
     }
 }
 </style>
+
+<script>
+(function() {
+    const countdownEl = document.getElementById('priceCountdown');
+    if (!countdownEl) return;
+
+    let seconds = parseInt(countdownEl.dataset.seconds, 10);
+
+    function updateCountdown() {
+        if (seconds <= 0) {
+            countdownEl.textContent = '00:00:00';
+            // Seite neu laden um neue Preise zu zeigen
+            setTimeout(() => location.reload(), 1000);
+            return;
+        }
+
+        const hours = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        countdownEl.textContent =
+            String(hours).padStart(2, '0') + ':' +
+            String(mins).padStart(2, '0') + ':' +
+            String(secs).padStart(2, '0');
+
+        seconds--;
+    }
+
+    setInterval(updateCountdown, 1000);
+})();
+</script>

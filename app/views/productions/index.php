@@ -2,6 +2,7 @@
     <div class="page-header">
         <h1>Meine Produktionen</h1>
         <div class="page-actions">
+            <a href="<?= BASE_URL ?>/productions/logs" class="btn btn-outline">Produktions-Historie</a>
             <a href="<?= BASE_URL ?>/productions/shop" class="btn btn-primary">Neue Produktion kaufen</a>
         </div>
     </div>
@@ -37,10 +38,15 @@
                         $canProduce = $production['can_produce'];
                         $readyToCollect = $production['ready_to_collect'];
                         $isProducing = $production['last_production_at'] && !$readyToCollect;
+                        $isRunning = !empty($production['is_running']);
+                        $efficiency = $production['current_efficiency'] ?? 100;
+                        $potentialEfficiency = $production['potential_efficiency'] ?? 100;
+                        $cyclesCompleted = $production['cycles_completed'] ?? 0;
 
                         // Status-Klassen
                         $statusClass = 'idle';
                         if (!$isActive) $statusClass = 'inactive';
+                        elseif ($isRunning) $statusClass = 'running';
                         elseif ($readyToCollect) $statusClass = 'ready';
                         elseif ($isProducing) $statusClass = 'producing';
                         ?>
@@ -79,6 +85,47 @@
                                         <span class="status-icon">&#9940;</span>
                                         <span>Deaktiviert</span>
                                     </div>
+                                <?php elseif ($isRunning): ?>
+                                    <div class="production-status status-running">
+                                        <span class="status-icon animate-pulse">&#9889;</span>
+                                        <span>Kontinuierlich aktiv</span>
+                                    </div>
+                                    <div class="continuous-info">
+                                        <div class="efficiency-display">
+                                            <span class="efficiency-label">Effizienz:</span>
+                                            <span class="efficiency-value efficiency-<?= $efficiency >= 80 ? 'high' : ($efficiency >= 50 ? 'medium' : 'low') ?>">
+                                                <?= number_format($efficiency, 1) ?>%
+                                            </span>
+                                        </div>
+                                        <div class="cycles-display">
+                                            <span class="cycles-label">Zyklen:</span>
+                                            <span class="cycles-value"><?= number_format($cyclesCompleted) ?></span>
+                                        </div>
+                                    </div>
+                                    <?php if ($production['last_cycle_at']): ?>
+                                        <?php
+                                        $nextCycleTime = strtotime($production['last_cycle_at']) + $production['production_time'];
+                                        $remaining = max(0, $nextCycleTime - time());
+                                        ?>
+                                        <div class="next-cycle-info">
+                                            <span class="timer-label">Nächster Zyklus:</span>
+                                            <span class="production-timer" data-end-time="<?= date('Y-m-d H:i:s', $nextCycleTime) ?>">
+                                                <?= gmdate('H:i:s', $remaining) ?>
+                                            </span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <?php
+                                            $elapsed = time() - strtotime($production['last_cycle_at']);
+                                            $progress = min(100, ($elapsed / $production['production_time']) * 100);
+                                            ?>
+                                            <div class="progress-bar-fill" style="width: <?= $progress ?>%"></div>
+                                        </div>
+                                    <?php endif; ?>
+                                    <form action="<?= BASE_URL ?>/productions/stop-continuous" method="POST" class="mt-1">
+                                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                        <input type="hidden" name="farm_production_id" value="<?= $production['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-block">Produktion stoppen</button>
+                                    </form>
                                 <?php elseif ($readyToCollect): ?>
                                     <div class="production-status status-ready">
                                         <span class="status-icon animate-bounce">&#9989;</span>
@@ -116,12 +163,25 @@
                                         <span class="status-icon">&#128260;</span>
                                         <span>Bereit</span>
                                     </div>
-                                    <?php if ($canProduce): ?>
-                                        <form action="<?= BASE_URL ?>/productions/start" method="POST">
-                                            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                            <input type="hidden" name="farm_production_id" value="<?= $production['id'] ?>">
-                                            <button type="submit" class="btn btn-primary btn-block">Produktion starten</button>
-                                        </form>
+                                    <?php if ($potentialEfficiency > 0): ?>
+                                        <div class="efficiency-preview">
+                                            <span class="efficiency-label">Erwartete Effizienz:</span>
+                                            <span class="efficiency-value efficiency-<?= $potentialEfficiency >= 80 ? 'high' : ($potentialEfficiency >= 50 ? 'medium' : 'low') ?>">
+                                                <?= number_format($potentialEfficiency, 1) ?>%
+                                            </span>
+                                        </div>
+                                        <div class="production-actions">
+                                            <form action="<?= BASE_URL ?>/productions/start" method="POST" class="action-form">
+                                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                                <input type="hidden" name="farm_production_id" value="<?= $production['id'] ?>">
+                                                <button type="submit" class="btn btn-outline btn-block" title="Einmaliger Zyklus">1x Starten</button>
+                                            </form>
+                                            <form action="<?= BASE_URL ?>/productions/start-continuous" method="POST" class="action-form">
+                                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                                <input type="hidden" name="farm_production_id" value="<?= $production['id'] ?>">
+                                                <button type="submit" class="btn btn-primary btn-block" title="Läuft automatisch weiter">Dauerhaft</button>
+                                            </form>
+                                        </div>
                                     <?php else: ?>
                                         <p class="text-warning">Rohstoffe fehlen</p>
                                     <?php endif; ?>
@@ -493,5 +553,89 @@ updateProductionTimers();
     height: 100%;
     background: var(--color-primary);
     transition: width 0.3s ease;
+}
+
+/* Kontinuierliche Produktion */
+.production-running {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.status-running {
+    color: #8b5cf6;
+}
+
+.continuous-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+}
+
+.efficiency-display,
+.cycles-display {
+    text-align: center;
+}
+
+.efficiency-label,
+.cycles-label,
+.timer-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+}
+
+.efficiency-value,
+.cycles-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.efficiency-high { color: #22c55e; }
+.efficiency-medium { color: #eab308; }
+.efficiency-low { color: #ef4444; }
+
+.efficiency-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: var(--color-bg-secondary);
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.next-cycle-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.production-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.production-actions .action-form {
+    flex: 1;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
 }
 </style>

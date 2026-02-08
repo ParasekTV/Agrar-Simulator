@@ -40,7 +40,8 @@ class Production
     {
         $sql = "SELECT fp.*, p.name, p.name_de, p.category, p.icon, p.building_cost,
                        p.maintenance_cost, p.production_time, p.description,
-                       TIMESTAMPDIFF(SECOND, fp.last_production_at, NOW()) as seconds_since_production
+                       TIMESTAMPDIFF(SECOND, fp.last_production_at, NOW()) as seconds_since_production,
+                       TIMESTAMPDIFF(SECOND, fp.last_cycle_at, NOW()) as seconds_since_cycle
                 FROM farm_productions fp
                 JOIN productions p ON fp.production_id = p.id
                 WHERE fp.farm_id = ?
@@ -54,6 +55,8 @@ class Production
             $production['outputs'] = $this->getProductionOutputs($production['production_id']);
             $production['can_produce'] = $this->canProduce($farmId, $production['production_id']);
             $production['ready_to_collect'] = $this->isReadyToCollect($production);
+            $production['potential_efficiency'] = $this->calculatePotentialEfficiency($farmId, $production['production_id']);
+            $production['next_cycle_ready'] = $this->isNextCycleReady($production);
         }
 
         return $productions;
@@ -420,5 +423,285 @@ class Production
             'produktion' => 'Produktion',
             'landwirtschaft' => 'Landwirtschaft'
         ];
+    }
+
+    // ==========================================
+    // KONTINUIERLICHE PRODUKTION (v1.2)
+    // ==========================================
+
+    /**
+     * Startet eine kontinuierliche Produktion
+     */
+    public function startContinuousProduction(int $farmProductionId, int $farmId): array
+    {
+        $production = $this->getFarmProduction($farmProductionId, $farmId);
+
+        if (!$production) {
+            return ['success' => false, 'message' => 'Produktion nicht gefunden'];
+        }
+
+        if (!$production['is_active']) {
+            return ['success' => false, 'message' => 'Produktion ist deaktiviert'];
+        }
+
+        if ($production['is_running']) {
+            return ['success' => false, 'message' => 'Produktion läuft bereits'];
+        }
+
+        // Berechne initiale Effizienz
+        $efficiency = $this->calculatePotentialEfficiency($farmId, $production['production_id']);
+
+        if ($efficiency <= 0) {
+            return ['success' => false, 'message' => 'Keine Rohstoffe für die Produktion verfügbar'];
+        }
+
+        // Starte kontinuierliche Produktion
+        $this->db->update('farm_productions', [
+            'is_running' => 1,
+            'started_at' => date('Y-m-d H:i:s'),
+            'current_efficiency' => $efficiency,
+            'last_cycle_at' => date('Y-m-d H:i:s')
+        ], 'id = :id', ['id' => $farmProductionId]);
+
+        Logger::info('Continuous production started', [
+            'farm_id' => $farmId,
+            'farm_production_id' => $farmProductionId,
+            'efficiency' => $efficiency
+        ]);
+
+        return [
+            'success' => true,
+            'message' => "Produktion in {$production['name_de']} gestartet mit {$efficiency}% Effizienz!",
+            'efficiency' => $efficiency
+        ];
+    }
+
+    /**
+     * Stoppt eine kontinuierliche Produktion
+     */
+    public function stopContinuousProduction(int $farmProductionId, int $farmId): array
+    {
+        $production = $this->getFarmProduction($farmProductionId, $farmId);
+
+        if (!$production) {
+            return ['success' => false, 'message' => 'Produktion nicht gefunden'];
+        }
+
+        if (!$production['is_running']) {
+            return ['success' => false, 'message' => 'Produktion läuft nicht'];
+        }
+
+        // Stoppe Produktion
+        $this->db->update('farm_productions', [
+            'is_running' => 0,
+            'started_at' => null,
+            'current_efficiency' => 100.00
+        ], 'id = :id', ['id' => $farmProductionId]);
+
+        Logger::info('Continuous production stopped', [
+            'farm_id' => $farmId,
+            'farm_production_id' => $farmProductionId,
+            'cycles_completed' => $production['cycles_completed']
+        ]);
+
+        return [
+            'success' => true,
+            'message' => "{$production['name_de']} gestoppt. {$production['cycles_completed']} Zyklen abgeschlossen.",
+            'cycles_completed' => $production['cycles_completed']
+        ];
+    }
+
+    /**
+     * Berechnet die potenzielle Effizienz basierend auf verfügbaren Inputs
+     */
+    public function calculatePotentialEfficiency(int $farmId, int $productionId): float
+    {
+        $inputs = $this->getProductionInputs($productionId);
+        $storage = new Storage();
+
+        if (empty($inputs)) {
+            // Keine Inputs nötig = 100% Effizienz (z.B. Brunnen, Solaranlage)
+            return 100.0;
+        }
+
+        $totalEfficiency = 0;
+        $hasAnyInput = false;
+
+        foreach ($inputs as $input) {
+            $available = $storage->getProductQuantity($farmId, $input['product_id']);
+            $needed = $input['quantity'];
+
+            if ($available >= $needed) {
+                // Input vollständig verfügbar
+                $contribution = $input['efficiency_contribution'] ?? (100 / count($inputs));
+                $totalEfficiency += $contribution;
+                $hasAnyInput = true;
+            } elseif ($available > 0 && $input['is_optional']) {
+                // Teilweise verfügbar (nur bei optionalen Inputs anteilig)
+                $ratio = $available / $needed;
+                $contribution = ($input['efficiency_contribution'] ?? (100 / count($inputs))) * $ratio;
+                $totalEfficiency += $contribution;
+                $hasAnyInput = true;
+            } elseif (!$input['is_optional'] && $available < $needed) {
+                // Pflicht-Input fehlt komplett
+                return 0;
+            }
+        }
+
+        // Mindestens ein Input muss vorhanden sein
+        if (!$hasAnyInput) {
+            return 0;
+        }
+
+        return min(100, round($totalEfficiency, 2));
+    }
+
+    /**
+     * Prüft ob der nächste Zyklus bereit ist
+     */
+    private function isNextCycleReady(array $production): bool
+    {
+        if (!$production['is_running'] || !$production['last_cycle_at']) {
+            return false;
+        }
+
+        $secondsSince = $production['seconds_since_cycle'] ?? 0;
+        $productionTime = $production['production_time'] ?? 3600;
+
+        return $secondsSince >= $productionTime;
+    }
+
+    /**
+     * Führt einen Produktionszyklus durch (für Cron-Job)
+     */
+    public function processCycle(int $farmProductionId): array
+    {
+        $sql = "SELECT fp.*, p.name, p.name_de, p.production_time, f.id as farm_id
+                FROM farm_productions fp
+                JOIN productions p ON fp.production_id = p.id
+                JOIN farms f ON fp.farm_id = f.id
+                WHERE fp.id = ? AND fp.is_running = 1 AND fp.is_active = 1";
+
+        $production = $this->db->fetchOne($sql, [$farmProductionId]);
+
+        if (!$production) {
+            return ['success' => false, 'message' => 'Produktion nicht gefunden oder nicht aktiv'];
+        }
+
+        $farmId = $production['farm_id'];
+        $inputs = $this->getProductionInputs($production['production_id']);
+        $outputs = $this->getProductionOutputs($production['production_id']);
+        $storage = new Storage();
+
+        // Berechne aktuelle Effizienz
+        $efficiency = $this->calculatePotentialEfficiency($farmId, $production['production_id']);
+
+        if ($efficiency <= 0) {
+            // Keine Rohstoffe mehr - stoppe Produktion automatisch
+            $this->db->update('farm_productions', [
+                'is_running' => 0,
+                'current_efficiency' => 0
+            ], 'id = :id', ['id' => $farmProductionId]);
+
+            Logger::info('Production stopped - no resources', [
+                'farm_id' => $farmId,
+                'farm_production_id' => $farmProductionId
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Produktion gestoppt - keine Rohstoffe mehr',
+                'stopped' => true
+            ];
+        }
+
+        // Verbrauche Inputs
+        $inputsUsed = [];
+        foreach ($inputs as $input) {
+            $available = $storage->getProductQuantity($farmId, $input['product_id']);
+            $needed = $input['quantity'];
+
+            if ($available >= $needed) {
+                $storage->removeProduct($farmId, $input['product_id'], $needed);
+                $inputsUsed[$input['product_id']] = $needed;
+            } elseif ($available > 0 && $input['is_optional']) {
+                $storage->removeProduct($farmId, $input['product_id'], $available);
+                $inputsUsed[$input['product_id']] = $available;
+            }
+        }
+
+        // Produziere Outputs (skaliert nach Effizienz)
+        $outputsProduced = [];
+        $efficiencyFactor = $efficiency / 100;
+
+        foreach ($outputs as $output) {
+            $quantity = max(1, floor($output['quantity'] * $efficiencyFactor));
+            $storage->addProduct($farmId, $output['product_id'], $quantity);
+            $outputsProduced[$output['product_id']] = $quantity;
+        }
+
+        // Aktualisiere Produktion
+        $newCycleCount = $production['cycles_completed'] + 1;
+        $this->db->update('farm_productions', [
+            'cycles_completed' => $newCycleCount,
+            'current_efficiency' => $efficiency,
+            'last_cycle_at' => date('Y-m-d H:i:s'),
+            'total_produced' => $production['total_produced'] + 1
+        ], 'id = :id', ['id' => $farmProductionId]);
+
+        // Log schreiben
+        $this->db->insert('production_logs', [
+            'farm_production_id' => $farmProductionId,
+            'farm_id' => $farmId,
+            'cycle_number' => $newCycleCount,
+            'efficiency' => $efficiency,
+            'inputs_used' => json_encode($inputsUsed),
+            'outputs_produced' => json_encode($outputsProduced)
+        ]);
+
+        // Punkte vergeben
+        $farm = new Farm($farmId);
+        $farm->addPoints(1, "Produktionszyklus: {$production['name_de']}");
+
+        return [
+            'success' => true,
+            'efficiency' => $efficiency,
+            'cycle' => $newCycleCount,
+            'inputs_used' => $inputsUsed,
+            'outputs_produced' => $outputsProduced
+        ];
+    }
+
+    /**
+     * Gibt alle laufenden Produktionen zurück (für Cron-Job)
+     */
+    public static function getRunningProductions(): array
+    {
+        $db = Database::getInstance();
+
+        return $db->fetchAll(
+            "SELECT fp.id, fp.farm_id, fp.production_id, fp.last_cycle_at, p.production_time
+             FROM farm_productions fp
+             JOIN productions p ON fp.production_id = p.id
+             WHERE fp.is_running = 1 AND fp.is_active = 1
+             AND (fp.last_cycle_at IS NULL OR TIMESTAMPDIFF(SECOND, fp.last_cycle_at, NOW()) >= p.production_time)"
+        );
+    }
+
+    /**
+     * Gibt Produktions-Logs zurück
+     */
+    public function getProductionLogs(int $farmId, int $limit = 50): array
+    {
+        return $this->db->fetchAll(
+            "SELECT pl.*, p.name_de as production_name
+             FROM production_logs pl
+             JOIN farm_productions fp ON pl.farm_production_id = fp.id
+             JOIN productions p ON fp.production_id = p.id
+             WHERE pl.farm_id = ?
+             ORDER BY pl.created_at DESC
+             LIMIT ?",
+            [$farmId, $limit]
+        );
     }
 }

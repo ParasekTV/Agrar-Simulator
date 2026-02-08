@@ -37,7 +37,8 @@ class MarketController extends Controller
             'filter' => [
                 'type' => $itemType,
                 'search' => $search
-            ]
+            ],
+            'pushOptions' => $marketModel->getPushOptions()
         ];
 
         $this->renderWithLayout('market/index', $data);
@@ -319,6 +320,80 @@ class MarketController extends Controller
 
         return $result['success']
             ? $this->jsonSuccess($result['message'])
+            : $this->jsonError($result['message']);
+    }
+
+    // ==========================================
+    // PUSH-FUNKTIONALITÄT (v1.2)
+    // ==========================================
+
+    /**
+     * Pusht ein Angebot (POST)
+     */
+    public function push(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/market');
+        }
+
+        $data = $this->getPostData();
+
+        $marketModel = new Market();
+        $result = $marketModel->pushListing(
+            (int) $data['listing_id'],
+            (int) $data['push_config_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/market');
+    }
+
+    /**
+     * API: Gibt Push-Optionen zurück
+     */
+    public function pushOptionsApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $marketModel = new Market();
+        return $this->json(['options' => $marketModel->getPushOptions()]);
+    }
+
+    /**
+     * API: Pusht ein Angebot
+     */
+    public function pushApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $data = $this->getJsonData();
+
+        if (empty($data['listingId']) || empty($data['pushConfigId'])) {
+            return $this->jsonError('listingId und pushConfigId erforderlich');
+        }
+
+        $marketModel = new Market();
+        $result = $marketModel->pushListing(
+            (int) $data['listingId'],
+            (int) $data['pushConfigId'],
+            $this->getFarmId()
+        );
+
+        return $result['success']
+            ? $this->jsonSuccess($result['message'], ['pushed_until' => $result['pushed_until'] ?? null])
             : $this->jsonError($result['message']);
     }
 }

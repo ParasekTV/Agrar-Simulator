@@ -348,4 +348,68 @@ class Shop
 
         return $overview;
     }
+
+    /**
+     * Sucht nach Produkten und gibt alle Händler zurück, die das Produkt anbieten
+     */
+    public function searchProduct(string $query): array
+    {
+        // Suche passende Produkte
+        $sql = "SELECT DISTINCT p.id, p.name, p.name_de, p.category, p.icon, p.base_price
+                FROM products p
+                JOIN dealer_products dp ON p.id = dp.product_id
+                JOIN dealers d ON dp.dealer_id = d.id
+                WHERE d.is_active = 1 AND dp.is_available = 1 AND (
+                    p.name LIKE ? OR p.name_de LIKE ? OR p.category LIKE ?
+                )
+                ORDER BY p.name_de";
+
+        $searchTerm = '%' . $query . '%';
+        $products = $this->db->fetchAll($sql, [$searchTerm, $searchTerm, $searchTerm]);
+
+        $results = [];
+
+        foreach ($products as $product) {
+            $prices = $this->getBestPricesForProduct($product['id']);
+
+            $results[] = [
+                'product' => $product,
+                'dealers' => $prices,
+                'best_price' => !empty($prices) ? $prices[0]['current_price'] : 0,
+                'worst_price' => !empty($prices) ? end($prices)['current_price'] : 0,
+                'dealer_count' => count($prices)
+            ];
+        }
+
+        return $results;
+    }
+
+    /**
+     * Gibt die Zeit bis zur nächsten Preisaktualisierung zurück (Sekunden bis Mitternacht)
+     */
+    public static function getSecondsUntilPriceChange(): int
+    {
+        $now = time();
+        $midnight = strtotime('tomorrow midnight');
+        return $midnight - $now;
+    }
+
+    /**
+     * Gibt formatierte Zeit bis zur Preisaktualisierung zurück
+     */
+    public static function getTimeUntilPriceChange(): array
+    {
+        $seconds = self::getSecondsUntilPriceChange();
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $secs = $seconds % 60;
+
+        return [
+            'hours' => $hours,
+            'minutes' => $minutes,
+            'seconds' => $secs,
+            'total_seconds' => $seconds,
+            'formatted' => sprintf('%02d:%02d:%02d', $hours, $minutes, $secs)
+        ];
+    }
 }

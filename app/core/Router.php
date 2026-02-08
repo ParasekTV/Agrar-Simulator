@@ -65,6 +65,9 @@ class Router
         $uri = $this->getUri();
         $method = $_SERVER['REQUEST_METHOD'];
 
+        // Aktualisiere Benutzer-Aktivität für Ranking Online-Status
+        Session::updateActivity();
+
         // Prüfe API-Routen zuerst
         if (str_starts_with($uri, '/api/')) {
             $this->handleApiRequest($uri, $method);

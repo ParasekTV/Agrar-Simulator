@@ -22,10 +22,33 @@ class ShopController extends Controller
             'dealers' => $shopModel->getAllDealers(),
             'priceOverview' => $shopModel->getDailyPriceOverview(),
             'buyableProducts' => $shopModel->getAllBuyableProducts(),
-            'farm' => $farm->getData()
+            'farm' => $farm->getData(),
+            'priceChangeTime' => Shop::getTimeUntilPriceChange()
         ];
 
         $this->renderWithLayout('shop/index', $data);
+    }
+
+    /**
+     * Sucht nach Produkten
+     */
+    public function search(): void
+    {
+        $this->requireAuth();
+
+        $query = trim($this->getQueryParam('q', ''));
+        $shopModel = new Shop();
+        $farm = new Farm($this->getFarmId());
+
+        $data = [
+            'title' => 'Produktsuche',
+            'query' => $query,
+            'results' => !empty($query) ? $shopModel->searchProduct($query) : [],
+            'priceChangeTime' => Shop::getTimeUntilPriceChange(),
+            'farm' => $farm->getData()
+        ];
+
+        $this->renderWithLayout('shop/search', $data);
     }
 
     /**
@@ -252,5 +275,38 @@ class ShopController extends Controller
         $history = $shopModel->getPurchaseHistory($this->getFarmId(), $limit);
 
         return $this->json(['history' => $history]);
+    }
+
+    /**
+     * API: Sucht nach Produkten
+     */
+    public function searchApi(): array
+    {
+        if (!Session::isLoggedIn()) {
+            return $this->jsonError('Nicht eingeloggt', 401);
+        }
+
+        $query = trim($_GET['q'] ?? '');
+
+        if (empty($query)) {
+            return $this->jsonError('Suchbegriff erforderlich');
+        }
+
+        $shopModel = new Shop();
+        $results = $shopModel->searchProduct($query);
+
+        return $this->json([
+            'query' => $query,
+            'results' => $results,
+            'priceChangeTime' => Shop::getTimeUntilPriceChange()
+        ]);
+    }
+
+    /**
+     * API: Gibt Zeit bis zur Preisaktualisierung zurück
+     */
+    public function priceChangeTimeApi(): array
+    {
+        return $this->json(Shop::getTimeUntilPriceChange());
     }
 }

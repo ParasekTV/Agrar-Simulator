@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <?= date('Y') ?> LSBG Agrar Simulator. Alle Rechte vorbehalten.</p>
+            <p>&copy; <?= date('Y') ?> Agrar Simulator. Alle Rechte vorbehalten. Entwickelt von Florian Müller</p>
         </div>
     </div>
 </footer>

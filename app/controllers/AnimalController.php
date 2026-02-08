@@ -20,7 +20,9 @@ class AnimalController extends Controller
         $data = [
             'title' => 'Tiere',
             'farmAnimals' => $animalModel->getFarmAnimalsWithStatus($farmId),
-            'availableAnimals' => $animalModel->getAvailableAnimals($farmId),
+            'availableAnimals' => $animalModel->getAvailableAnimalsWithCapacity($farmId),
+            'capacityOverview' => $animalModel->getCapacityOverview($farmId),
+            'housings' => $animalModel->getAnimalHousings($farmId),
             'farm' => $farm->getData()
         ];
 

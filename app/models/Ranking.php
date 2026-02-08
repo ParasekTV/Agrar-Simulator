@@ -14,17 +14,30 @@ class Ranking
     }
 
     /**
-     * Gibt die globale Rangliste zurück
+     * Gibt die globale Rangliste zurück (erweitert mit Online-Status und Stats)
      */
     public function getGlobalRanking(int $page = 1, int $perPage = 50): array
     {
         $offset = ($page - 1) * $perPage;
 
         $rankings = $this->db->fetchAll(
-            "SELECT r.*, f.farm_name, f.level, u.username
+            "SELECT r.*, f.farm_name, f.level, u.username, u.last_login, u.last_activity,
+                    COALESCE((SELECT COUNT(*) FROM farm_animals WHERE farm_id = f.id), 0) AS animal_count,
+                    COALESCE((SELECT SUM(quantity) FROM farm_animals WHERE farm_id = f.id), 0) AS total_animals,
+                    COALESCE((SELECT COUNT(*) FROM farm_vehicles WHERE farm_id = f.id), 0) AS vehicle_count,
+                    COALESCE((SELECT COUNT(*) FROM fields WHERE farm_id = f.id), 0) AS field_count,
+                    COALESCE((SELECT COUNT(*) FROM farm_productions WHERE farm_id = f.id), 0) AS production_count,
+                    COALESCE((SELECT SUM(rt.points_reward) FROM farm_research fr JOIN research_tree rt ON fr.research_id = rt.id WHERE fr.farm_id = f.id AND fr.status = 'completed'), 0) AS research_points,
+                    CASE
+                        WHEN u.last_activity >= NOW() - INTERVAL 15 MINUTE THEN 'online'
+                        WHEN u.last_login >= NOW() - INTERVAL 24 HOUR THEN 'recent'
+                        WHEN u.last_login >= NOW() - INTERVAL 7 DAY THEN 'away'
+                        ELSE 'offline'
+                    END AS online_status
              FROM rankings r
              JOIN farms f ON r.farm_id = f.id
              JOIN users u ON f.user_id = u.id
+             WHERE u.is_active = 1
              ORDER BY r.total_points DESC
              LIMIT {$perPage} OFFSET {$offset}"
         );
@@ -34,7 +47,7 @@ class Ranking
             $rank['position'] = $offset + $index + 1;
         }
 
-        $total = (int) $this->db->fetchColumn('SELECT COUNT(*) FROM rankings');
+        $total = (int) $this->db->fetchColumn('SELECT COUNT(*) FROM rankings r JOIN users u ON r.farm_id = (SELECT id FROM farms WHERE user_id = u.id LIMIT 1) WHERE u.is_active = 1');
 
         return [
             'rankings' => $rankings,
@@ -112,7 +125,7 @@ class Ranking
     }
 
     /**
-     * Gibt die Top-Farmen nach verschiedenen Kriterien zurück
+     * Gibt die Top-Farmen nach verschiedenen Kriterien zurück (erweitert)
      */
     public function getTopBy(string $criteria, int $limit = 10): array
     {
@@ -123,13 +136,35 @@ class Ranking
         }
 
         return $this->db->fetchAll(
-            "SELECT r.*, f.farm_name, f.level, u.username
+            "SELECT r.*, f.farm_name, f.level, u.username, u.last_login, u.last_activity,
+                    COALESCE((SELECT SUM(quantity) FROM farm_animals WHERE farm_id = f.id), 0) AS total_animals,
+                    COALESCE((SELECT COUNT(*) FROM farm_vehicles WHERE farm_id = f.id), 0) AS vehicle_count,
+                    COALESCE((SELECT COUNT(*) FROM fields WHERE farm_id = f.id), 0) AS field_count,
+                    CASE
+                        WHEN u.last_activity >= NOW() - INTERVAL 15 MINUTE THEN 'online'
+                        WHEN u.last_login >= NOW() - INTERVAL 24 HOUR THEN 'recent'
+                        WHEN u.last_login >= NOW() - INTERVAL 7 DAY THEN 'away'
+                        ELSE 'offline'
+                    END AS online_status
              FROM rankings r
              JOIN farms f ON r.farm_id = f.id
              JOIN users u ON f.user_id = u.id
+             WHERE u.is_active = 1
              ORDER BY r.{$criteria} DESC
              LIMIT ?",
             [$limit]
+        );
+    }
+
+    /**
+     * Aktualisiert die letzte Aktivität eines Benutzers
+     */
+    public static function updateUserActivity(int $userId): void
+    {
+        $db = Database::getInstance();
+        $db->query(
+            "UPDATE users SET last_activity = NOW() WHERE id = ?",
+            [$userId]
         );
     }
 

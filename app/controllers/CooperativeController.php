@@ -738,4 +738,491 @@ class CooperativeController extends Controller
 
         $this->renderWithLayout('cooperative/challenges', $data);
     }
+
+    // ============================================
+    // PINNWAND (v1.2)
+    // ============================================
+
+    /**
+     * Zeigt die Pinnwand
+     */
+    public function board(): void
+    {
+        $this->requireAuth();
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            Session::setFlash('error', 'Du bist in keiner Genossenschaft', 'danger');
+            $this->redirect('/cooperative');
+        }
+
+        $postModel = new CooperativePost();
+        $page = (int) ($this->getQueryParam('page', 1));
+        $postsData = $postModel->getPosts($membership['cooperative_id'], $page);
+
+        $data = [
+            'title' => 'Pinnwand',
+            'membership' => $membership,
+            'posts' => $postsData['posts'],
+            'pagination' => [
+                'page' => $postsData['page'],
+                'totalPages' => $postsData['total_pages'],
+                'total' => $postsData['total']
+            ],
+            'unreadCount' => $postModel->getUnreadCount($membership['cooperative_id'], $this->getFarmId()),
+            'isLeader' => in_array($membership['role'], ['leader', 'co_leader'])
+        ];
+
+        $this->renderWithLayout('cooperative/board', $data);
+    }
+
+    /**
+     * Zeigt einen einzelnen Beitrag
+     */
+    public function post(int $id): void
+    {
+        $this->requireAuth();
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            Session::setFlash('error', 'Du bist in keiner Genossenschaft', 'danger');
+            $this->redirect('/cooperative');
+        }
+
+        $postModel = new CooperativePost();
+        $post = $postModel->getPost($id, $membership['cooperative_id']);
+
+        if (!$post) {
+            Session::setFlash('error', 'Beitrag nicht gefunden', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        // Markiere als gelesen
+        $postModel->markAsRead($id, $this->getFarmId());
+
+        $data = [
+            'title' => $post['title'],
+            'membership' => $membership,
+            'post' => $post,
+            'comments' => $postModel->getComments($id),
+            'hasLiked' => $postModel->hasLiked($id, $this->getFarmId()),
+            'canEdit' => $post['author_farm_id'] === $this->getFarmId() || in_array($membership['role'], ['leader', 'co_leader']),
+            'isLeader' => in_array($membership['role'], ['leader', 'co_leader'])
+        ];
+
+        $this->renderWithLayout('cooperative/post', $data);
+    }
+
+    /**
+     * Erstellt einen Beitrag (POST)
+     */
+    public function createPost(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            Session::setFlash('error', 'Du bist in keiner Genossenschaft', 'danger');
+            $this->redirect('/cooperative');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->create(
+            $membership['cooperative_id'],
+            $this->getFarmId(),
+            Validator::sanitizeString($data['title']),
+            Validator::sanitizeString($data['content']),
+            isset($data['is_announcement'])
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/board');
+    }
+
+    /**
+     * Löscht einen Beitrag (POST)
+     */
+    public function deletePost(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            $this->redirect('/cooperative');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->delete(
+            (int) $data['post_id'],
+            $this->getFarmId(),
+            $membership['cooperative_id']
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/board');
+    }
+
+    /**
+     * Pinnt/Unpinnt einen Beitrag (POST)
+     */
+    public function togglePin(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            $this->redirect('/cooperative');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->togglePin(
+            (int) $data['post_id'],
+            $this->getFarmId(),
+            $membership['cooperative_id']
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/board');
+    }
+
+    /**
+     * Fügt einen Kommentar hinzu (POST)
+     */
+    public function addComment(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->addComment(
+            (int) $data['post_id'],
+            $this->getFarmId(),
+            Validator::sanitizeString($data['content'])
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/post/' . (int) $data['post_id']);
+    }
+
+    /**
+     * Löscht einen Kommentar (POST)
+     */
+    public function deleteComment(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            $this->redirect('/cooperative');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->deleteComment(
+            (int) $data['comment_id'],
+            $this->getFarmId(),
+            $membership['cooperative_id']
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/post/' . (int) $data['post_id']);
+    }
+
+    /**
+     * Liked/Unliked einen Beitrag (POST)
+     */
+    public function toggleLike(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/board');
+        }
+
+        $data = $this->getPostData();
+
+        $postModel = new CooperativePost();
+        $result = $postModel->toggleLike((int) $data['post_id'], $this->getFarmId());
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/post/' . (int) $data['post_id']);
+    }
+
+    // ============================================
+    // FAHRZEUGVERLEIH (v1.2)
+    // ============================================
+
+    /**
+     * Zeigt verliehene Fahrzeuge
+     */
+    public function vehicles(): void
+    {
+        $this->requireAuth();
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            Session::setFlash('error', 'Du bist in keiner Genossenschaft', 'danger');
+            $this->redirect('/cooperative');
+        }
+
+        $farm = new Farm($this->getFarmId());
+        $vehicleModel = new Vehicle();
+
+        $data = [
+            'title' => 'Fahrzeugverleih',
+            'membership' => $membership,
+            'lentVehicles' => $coopModel->getLentVehicles($membership['cooperative_id']),
+            'myVehicles' => $vehicleModel->getFarmVehicles($this->getFarmId())
+        ];
+
+        $this->renderWithLayout('cooperative/vehicles', $data);
+    }
+
+    /**
+     * Verleiht ein Fahrzeug (POST)
+     */
+    public function lendVehicle(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/vehicles');
+        }
+
+        $data = $this->getPostData();
+
+        $coopModel = new Cooperative();
+        $result = $coopModel->lendVehicle(
+            $this->getFarmId(),
+            (int) $data['farm_vehicle_id'],
+            (int) ($data['duration_hours'] ?? 24),
+            (float) ($data['hourly_fee'] ?? 0)
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/vehicles');
+    }
+
+    /**
+     * Holt ein Fahrzeug zurueck (POST)
+     */
+    public function returnVehicle(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/vehicles');
+        }
+
+        $data = $this->getPostData();
+
+        $coopModel = new Cooperative();
+        $result = $coopModel->returnLentVehicle($this->getFarmId(), (int) $data['farm_vehicle_id']);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/vehicles');
+    }
+
+    /**
+     * Leiht ein Fahrzeug aus (POST)
+     */
+    public function borrowVehicle(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/vehicles');
+        }
+
+        $data = $this->getPostData();
+
+        $coopModel = new Cooperative();
+        $result = $coopModel->borrowVehicleFromCoop($this->getFarmId(), (int) $data['farm_vehicle_id']);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/vehicles');
+    }
+
+    // ============================================
+    // GENOSSENSCHAFTS-PRODUKTIONEN (v1.2)
+    // ============================================
+
+    /**
+     * Zeigt Genossenschafts-Produktionen
+     */
+    public function productions(): void
+    {
+        $this->requireAuth();
+
+        $coopModel = new Cooperative();
+        $membership = $coopModel->getMembership($this->getFarmId());
+
+        if (!$membership) {
+            Session::setFlash('error', 'Du bist in keiner Genossenschaft', 'danger');
+            $this->redirect('/cooperative');
+        }
+
+        $coopDetails = $coopModel->getDetails($membership['cooperative_id']);
+
+        $canManage = $coopModel->hasPermission($this->getFarmId(), 'manage_finances');
+
+        $data = [
+            'title' => 'Produktionen',
+            'membership' => $membership,
+            'coopDetails' => $coopDetails,
+            'coopProductions' => $coopModel->getCoopProductions($membership['cooperative_id']),
+            'availableProductions' => $canManage ? $coopModel->getAvailableProductions($membership['cooperative_id']) : [],
+            'canManage' => $canManage
+        ];
+
+        $this->renderWithLayout('cooperative/productions', $data);
+    }
+
+    /**
+     * Kauft eine Produktion (POST)
+     */
+    public function buyProduction(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/productions');
+        }
+
+        $data = $this->getPostData();
+
+        $coopModel = new Cooperative();
+        $result = $coopModel->buyCoopProduction($this->getFarmId(), (int) $data['production_id']);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/productions');
+    }
+
+    /**
+     * Startet/Stoppt eine Produktion (POST)
+     */
+    public function toggleProduction(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/cooperative/productions');
+        }
+
+        $data = $this->getPostData();
+
+        $coopModel = new Cooperative();
+        $result = $coopModel->toggleCoopProduction($this->getFarmId(), (int) $data['coop_production_id']);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/cooperative/productions');
+    }
 }

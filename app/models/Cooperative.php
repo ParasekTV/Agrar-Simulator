@@ -242,18 +242,37 @@ class Cooperative
             [$cooperativeId]
         );
 
-        // Hole geteilte Geräte
-        $coop['shared_equipment'] = $this->db->fetchAll(
-            "SELECT cse.*, v.name as vehicle_name, v.vehicle_type, v.power_hp,
+        // Hole geteilte Geräte (altes System)
+        $oldEquipment = $this->db->fetchAll(
+            "SELECT cse.id, cse.farm_vehicle_id, cse.available, fv.farm_id as owner_farm_id,
+                    v.name as vehicle_name, v.vehicle_type, v.power_hp,
                     vb.name as brand_name, f.farm_name as owner_name
              FROM cooperative_shared_equipment cse
              JOIN farm_vehicles fv ON cse.farm_vehicle_id = fv.id
              JOIN vehicles v ON fv.vehicle_id = v.id
-             JOIN vehicle_brands vb ON v.brand_id = vb.id
-             JOIN farms f ON cse.owner_farm_id = f.id
+             LEFT JOIN vehicle_brands vb ON v.brand_id = vb.id
+             JOIN farms f ON fv.farm_id = f.id
              WHERE cse.cooperative_id = ?",
             [$cooperativeId]
         );
+
+        // Hole verliehene Fahrzeuge (neues System v1.2)
+        $lentVehicles = $this->db->fetchAll(
+            "SELECT fv.id, fv.id as farm_vehicle_id, fv.farm_id as owner_farm_id,
+                    v.name as vehicle_name, v.vehicle_type, v.power_hp,
+                    vb.name as brand_name, f.farm_name as owner_name,
+                    CASE WHEN cvl.status = 'borrowed' THEN 0 ELSE 1 END as available
+             FROM farm_vehicles fv
+             JOIN vehicles v ON fv.vehicle_id = v.id
+             LEFT JOIN vehicle_brands vb ON v.brand_id = vb.id
+             JOIN farms f ON fv.farm_id = f.id
+             LEFT JOIN cooperative_vehicle_loans cvl ON fv.id = cvl.farm_vehicle_id AND cvl.status IN ('active', 'borrowed')
+             WHERE fv.lent_to_cooperative_id = ?",
+            [$cooperativeId]
+        );
+
+        // Kombiniere beide Listen
+        $coop['shared_equipment'] = array_merge($oldEquipment, $lentVehicles);
 
         return $coop;
     }
@@ -1239,5 +1258,362 @@ class Cooperative
                 ]);
             }
         }
+    }
+
+    // ============================================
+    // FAHRZEUGVERLEIH (v1.2)
+    // ============================================
+
+    /**
+     * Verleiht ein Fahrzeug an die Genossenschaft
+     */
+    public function lendVehicle(int $farmId, int $farmVehicleId, int $durationHours, float $hourlyFee = 0): array
+    {
+        $membership = $this->getMembership($farmId);
+        if (!$membership) {
+            return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
+        }
+
+        // Prüfe ob Fahrzeug dem Spieler gehört
+        $vehicle = $this->db->fetchOne(
+            'SELECT fv.*, v.name as vehicle_name FROM farm_vehicles fv
+             JOIN vehicles v ON fv.vehicle_id = v.id
+             WHERE fv.id = ? AND fv.farm_id = ?',
+            [$farmVehicleId, $farmId]
+        );
+
+        if (!$vehicle) {
+            return ['success' => false, 'message' => 'Fahrzeug nicht gefunden'];
+        }
+
+        // Prüfe ob bereits verliehen
+        if ($vehicle['lent_to_cooperative_id']) {
+            return ['success' => false, 'message' => 'Fahrzeug ist bereits verliehen'];
+        }
+
+        $lentUntil = date('Y-m-d H:i:s', strtotime("+{$durationHours} hours"));
+
+        // Aktualisiere Fahrzeug
+        $this->db->update('farm_vehicles', [
+            'lent_to_cooperative_id' => $membership['cooperative_id'],
+            'lent_at' => date('Y-m-d H:i:s'),
+            'lent_until' => $lentUntil
+        ], 'id = :id', ['id' => $farmVehicleId]);
+
+        // Erstelle Verleih-Eintrag
+        $this->db->insert('cooperative_vehicle_loans', [
+            'farm_vehicle_id' => $farmVehicleId,
+            'cooperative_id' => $membership['cooperative_id'],
+            'lender_farm_id' => $farmId,
+            'hourly_fee' => $hourlyFee,
+            'lent_until' => $lentUntil,
+            'status' => 'active'
+        ]);
+
+        Logger::info('Vehicle lent to cooperative', [
+            'farm_id' => $farmId,
+            'vehicle_id' => $farmVehicleId,
+            'coop_id' => $membership['cooperative_id']
+        ]);
+
+        return [
+            'success' => true,
+            'message' => "{$vehicle['vehicle_name']} für {$durationHours} Stunden an die Genossenschaft verliehen"
+        ];
+    }
+
+    /**
+     * Holt ein verliehenes Fahrzeug zurück
+     */
+    public function returnLentVehicle(int $farmId, int $farmVehicleId): array
+    {
+        $vehicle = $this->db->fetchOne(
+            'SELECT * FROM farm_vehicles WHERE id = ? AND farm_id = ? AND lent_to_cooperative_id IS NOT NULL',
+            [$farmVehicleId, $farmId]
+        );
+
+        if (!$vehicle) {
+            return ['success' => false, 'message' => 'Fahrzeug nicht gefunden oder nicht verliehen'];
+        }
+
+        // Aktualisiere Verleih-Eintrag
+        $loan = $this->db->fetchOne(
+            "SELECT * FROM cooperative_vehicle_loans WHERE farm_vehicle_id = ? AND status IN ('active', 'borrowed')",
+            [$farmVehicleId]
+        );
+
+        if ($loan) {
+            $hoursUsed = (time() - strtotime($loan['lent_at'])) / 3600;
+            $totalFee = $hoursUsed * $loan['hourly_fee'];
+
+            $this->db->update('cooperative_vehicle_loans', [
+                'returned_at' => date('Y-m-d H:i:s'),
+                'total_hours_used' => round($hoursUsed, 2),
+                'total_fee_paid' => $totalFee,
+                'status' => 'returned'
+            ], 'id = :id', ['id' => $loan['id']]);
+
+            // Zahle Gebühr an Verleiher
+            if ($totalFee > 0) {
+                $farm = new Farm($farmId);
+                $farm->addMoney($totalFee, "Fahrzeugverleih-Gebühr");
+            }
+        }
+
+        // Setze Fahrzeug zurück
+        $this->db->update('farm_vehicles', [
+            'lent_to_cooperative_id' => null,
+            'lent_at' => null,
+            'lent_until' => null
+        ], 'id = :id', ['id' => $farmVehicleId]);
+
+        return ['success' => true, 'message' => 'Fahrzeug zurückgeholt'];
+    }
+
+    /**
+     * Gibt verliehene Fahrzeuge der Genossenschaft zurück
+     */
+    public function getLentVehicles(int $cooperativeId): array
+    {
+        return $this->db->fetchAll(
+            "SELECT fv.*, v.name as vehicle_name, v.image_url, v.vehicle_type,
+                    vb.name as brand_name, vb.logo_url as brand_logo,
+                    f.farm_name as lender_name, cvl.hourly_fee, cvl.lent_at, cvl.lent_until,
+                    cvl.status as loan_status, cvl.borrower_farm_id,
+                    bf.farm_name as borrower_name
+             FROM farm_vehicles fv
+             JOIN vehicles v ON fv.vehicle_id = v.id
+             LEFT JOIN vehicle_brands vb ON v.brand_id = vb.id
+             JOIN farms f ON fv.farm_id = f.id
+             LEFT JOIN cooperative_vehicle_loans cvl ON fv.id = cvl.farm_vehicle_id AND cvl.status IN ('active', 'borrowed')
+             LEFT JOIN farms bf ON cvl.borrower_farm_id = bf.id
+             WHERE fv.lent_to_cooperative_id = ?
+             ORDER BY v.name",
+            [$cooperativeId]
+        );
+    }
+
+    /**
+     * Leiht ein Fahrzeug von der Genossenschaft aus
+     */
+    public function borrowVehicleFromCoop(int $farmId, int $farmVehicleId): array
+    {
+        $membership = $this->getMembership($farmId);
+        if (!$membership) {
+            return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
+        }
+
+        $vehicle = $this->db->fetchOne(
+            'SELECT fv.*, v.name as vehicle_name FROM farm_vehicles fv
+             JOIN vehicles v ON fv.vehicle_id = v.id
+             WHERE fv.id = ? AND fv.lent_to_cooperative_id = ?',
+            [$farmVehicleId, $membership['cooperative_id']]
+        );
+
+        if (!$vehicle) {
+            return ['success' => false, 'message' => 'Fahrzeug nicht gefunden'];
+        }
+
+        // Prüfe ob bereits ausgeliehen
+        $loan = $this->db->fetchOne(
+            "SELECT * FROM cooperative_vehicle_loans WHERE farm_vehicle_id = ? AND status = 'borrowed'",
+            [$farmVehicleId]
+        );
+
+        if ($loan) {
+            return ['success' => false, 'message' => 'Fahrzeug wird bereits von jemandem genutzt'];
+        }
+
+        // Aktualisiere Verleih-Status
+        $this->db->query(
+            "UPDATE cooperative_vehicle_loans SET borrower_farm_id = ?, status = 'borrowed' WHERE farm_vehicle_id = ? AND status = 'active'",
+            [$farmId, $farmVehicleId]
+        );
+
+        return ['success' => true, 'message' => "{$vehicle['vehicle_name']} ausgeliehen"];
+    }
+
+    // ============================================
+    // GENOSSENSCHAFTS-PRODUKTIONEN (v1.2)
+    // ============================================
+
+    /**
+     * Gibt Genossenschafts-Produktionen zurück
+     */
+    public function getCoopProductions(int $cooperativeId): array
+    {
+        return $this->db->fetchAll(
+            "SELECT cp.*, p.name, p.name_de, p.description, p.category, p.icon,
+                    p.production_time, f.farm_name as purchased_by_name
+             FROM cooperative_productions cp
+             JOIN productions p ON cp.production_id = p.id
+             LEFT JOIN farms f ON cp.purchased_by = f.id
+             WHERE cp.cooperative_id = ? AND cp.is_active = 1
+             ORDER BY p.name_de",
+            [$cooperativeId]
+        );
+    }
+
+    /**
+     * Gibt verfügbare Produktionen zum Kauf zurück
+     * Prüft welche Produktionen durch Genossenschafts-Forschung freigeschaltet wurden
+     */
+    public function getAvailableProductions(int $cooperativeId): array
+    {
+        // Hole alle freigeschalteten Produktionen durch Coop-Forschung
+        $unlockedProductions = $this->db->fetchAll(
+            "SELECT crt.unlocks
+             FROM cooperative_research cr
+             JOIN cooperative_research_tree crt ON cr.research_id = crt.id
+             WHERE cr.cooperative_id = ? AND cr.status = 'completed'
+               AND crt.unlocks LIKE 'production:%'",
+            [$cooperativeId]
+        );
+
+        // Extrahiere Produktionsnamen aus unlocks
+        $unlockedNames = [];
+        foreach ($unlockedProductions as $row) {
+            if (preg_match('/^production:(.+)$/', $row['unlocks'], $matches)) {
+                $unlockedNames[] = $matches[1];
+            }
+        }
+
+        if (empty($unlockedNames)) {
+            return [];
+        }
+
+        // Hole die verfügbaren Produktionen
+        $placeholders = implode(',', array_fill(0, count($unlockedNames), '?'));
+        $params = array_merge($unlockedNames, [$cooperativeId]);
+
+        return $this->db->fetchAll(
+            "SELECT p.*, crt.name as research_name
+             FROM productions p
+             LEFT JOIN cooperative_research_tree crt ON crt.unlocks = CONCAT('production:', p.name)
+             WHERE LOWER(p.name) IN ({$placeholders})
+               AND p.is_active = 1
+               AND p.id NOT IN (
+                   SELECT production_id FROM cooperative_productions
+                   WHERE cooperative_id = ? AND is_active = 1
+               )
+             ORDER BY p.building_cost ASC",
+            $params
+        );
+    }
+
+    /**
+     * Kauft eine Produktion für die Genossenschaft
+     */
+    public function buyCoopProduction(int $farmId, int $productionId): array
+    {
+        $membership = $this->getMembership($farmId);
+        if (!$membership) {
+            return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
+        }
+
+        if (!$this->hasPermission($farmId, 'manage_finances')) {
+            return ['success' => false, 'message' => 'Keine Berechtigung'];
+        }
+
+        $production = $this->db->fetchOne('SELECT * FROM productions WHERE id = ?', [$productionId]);
+        if (!$production) {
+            return ['success' => false, 'message' => 'Produktion nicht gefunden'];
+        }
+
+        // Prüfe ob Produktion durch Genossenschafts-Forschung freigeschaltet ist
+        $unlockKey = 'production:' . strtolower($production['name']);
+        $hasResearch = $this->db->fetchOne(
+            "SELECT cr.id FROM cooperative_research cr
+             JOIN cooperative_research_tree crt ON cr.research_id = crt.id
+             WHERE cr.cooperative_id = ? AND cr.status = 'completed'
+               AND LOWER(crt.unlocks) = ?",
+            [$membership['cooperative_id'], $unlockKey]
+        );
+        if (!$hasResearch) {
+            return ['success' => false, 'message' => 'Genossenschafts-Forschung erforderlich'];
+        }
+
+        // Prüfe Kosten
+        $coop = $this->db->fetchOne('SELECT * FROM cooperatives WHERE id = ?', [$membership['cooperative_id']]);
+        if ($coop['treasury'] < $production['building_cost']) {
+            return ['success' => false, 'message' => 'Nicht genügend Geld in der Kasse'];
+        }
+
+        // Ziehe Kosten ab
+        $this->db->query(
+            'UPDATE cooperatives SET treasury = treasury - ? WHERE id = ?',
+            [$production['building_cost'], $membership['cooperative_id']]
+        );
+
+        // Erstelle Produktion
+        $coopProdId = $this->db->insert('cooperative_productions', [
+            'cooperative_id' => $membership['cooperative_id'],
+            'production_id' => $productionId,
+            'purchased_by' => $farmId
+        ]);
+
+        // Log
+        $this->db->insert('cooperative_production_logs', [
+            'cooperative_production_id' => $coopProdId,
+            'cooperative_id' => $membership['cooperative_id'],
+            'action' => 'purchased',
+            'details' => "Produktion gekauft: {$production['name_de']}",
+            'created_by' => $farmId
+        ]);
+
+        $this->logTransaction(
+            $membership['cooperative_id'],
+            'purchase',
+            -$production['cost'],
+            "Produktion gekauft: {$production['name_de']}",
+            $farmId
+        );
+
+        return ['success' => true, 'message' => "{$production['name_de']} für die Genossenschaft gekauft"];
+    }
+
+    /**
+     * Startet/Stoppt eine Genossenschafts-Produktion
+     */
+    public function toggleCoopProduction(int $farmId, int $coopProductionId): array
+    {
+        $membership = $this->getMembership($farmId);
+        if (!$membership) {
+            return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
+        }
+
+        $coopProd = $this->db->fetchOne(
+            'SELECT cp.*, p.name_de FROM cooperative_productions cp
+             JOIN productions p ON cp.production_id = p.id
+             WHERE cp.id = ? AND cp.cooperative_id = ?',
+            [$coopProductionId, $membership['cooperative_id']]
+        );
+
+        if (!$coopProd) {
+            return ['success' => false, 'message' => 'Produktion nicht gefunden'];
+        }
+
+        $newStatus = $coopProd['is_running'] ? 0 : 1;
+        $action = $newStatus ? 'started' : 'stopped';
+
+        $this->db->update('cooperative_productions', [
+            'is_running' => $newStatus,
+            'started_at' => $newStatus ? date('Y-m-d H:i:s') : null
+        ], 'id = :id', ['id' => $coopProductionId]);
+
+        // Log
+        $this->db->insert('cooperative_production_logs', [
+            'cooperative_production_id' => $coopProductionId,
+            'cooperative_id' => $membership['cooperative_id'],
+            'action' => $action,
+            'details' => ($newStatus ? 'Gestartet' : 'Gestoppt') . ": {$coopProd['name_de']}",
+            'created_by' => $farmId
+        ]);
+
+        return [
+            'success' => true,
+            'message' => $newStatus ? 'Produktion gestartet' : 'Produktion gestoppt',
+            'is_running' => $newStatus
+        ];
     }
 }

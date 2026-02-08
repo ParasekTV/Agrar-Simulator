@@ -3,6 +3,9 @@
         <h1>Meine Fahrzeuge</h1>
         <div class="page-actions">
             <span class="efficiency-bonus">Gesamt-Effizienzbonus: +<?= number_format($efficiencyBonus, 1) ?>%</span>
+            <?php if (isset($membership) && $membership): ?>
+                <a href="<?= BASE_URL ?>/cooperative/vehicles" class="btn btn-outline">Geteilte Geraete</a>
+            <?php endif; ?>
             <button class="btn btn-primary" onclick="showBuyVehicleModal()">Fahrzeug kaufen</button>
         </div>
     </div>
@@ -17,7 +20,10 @@
     <?php else: ?>
         <div class="vehicles-grid">
             <?php foreach ($farmVehicles as $vehicle): ?>
-                <div class="vehicle-card">
+                <div class="vehicle-card <?= !empty($vehicle['lent_to_cooperative_id']) ? 'vehicle-lent' : '' ?>">
+                    <?php if (!empty($vehicle['lent_to_cooperative_id'])): ?>
+                        <div class="lent-badge">An Genossenschaft verliehen</div>
+                    <?php endif; ?>
                     <div class="vehicle-header">
                         <?php if (!empty($vehicle['brand_logo'])): ?>
                             <img src="<?= BASE_URL ?><?= htmlspecialchars($vehicle['brand_logo']) ?>"
@@ -79,19 +85,23 @@
                     </div>
 
                     <div class="vehicle-actions">
-                        <?php if ($vehicle['condition_percent'] < 100): ?>
-                            <form action="<?= BASE_URL ?>/vehicles/repair" method="POST" class="inline-form">
+                        <?php if (!empty($vehicle['lent_to_cooperative_id'])): ?>
+                            <span class="text-muted">Verliehen - keine Aktionen moeglich</span>
+                        <?php else: ?>
+                            <?php if ($vehicle['condition_percent'] < 100): ?>
+                                <form action="<?= BASE_URL ?>/vehicles/repair" method="POST" class="inline-form">
+                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                    <input type="hidden" name="farm_vehicle_id" value="<?= $vehicle['id'] ?>">
+                                    <button type="submit" class="btn btn-warning btn-sm">Reparieren</button>
+                                </form>
+                            <?php endif; ?>
+                            <form action="<?= BASE_URL ?>/vehicles/sell" method="POST" class="inline-form"
+                                  onsubmit="return confirm('Wirklich verkaufen?')">
                                 <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                                 <input type="hidden" name="farm_vehicle_id" value="<?= $vehicle['id'] ?>">
-                                <button type="submit" class="btn btn-warning btn-sm">Reparieren</button>
+                                <button type="submit" class="btn btn-outline btn-sm">Verkaufen</button>
                             </form>
                         <?php endif; ?>
-                        <form action="<?= BASE_URL ?>/vehicles/sell" method="POST" class="inline-form"
-                              onsubmit="return confirm('Wirklich verkaufen?')">
-                            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                            <input type="hidden" name="farm_vehicle_id" value="<?= $vehicle['id'] ?>">
-                            <button type="submit" class="btn btn-outline btn-sm">Verkaufen</button>
-                        </form>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -154,6 +164,22 @@ function closeBuyVehicleModal() {
     border-radius: var(--radius-lg);
     padding: 1.25rem;
     box-shadow: var(--shadow-sm);
+    position: relative;
+}
+.vehicle-card.vehicle-lent {
+    border: 2px solid var(--color-warning);
+    opacity: 0.85;
+}
+.lent-badge {
+    position: absolute;
+    top: -10px;
+    right: 1rem;
+    background: var(--color-warning);
+    color: #000;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
 }
 .vehicle-header {
     display: flex;

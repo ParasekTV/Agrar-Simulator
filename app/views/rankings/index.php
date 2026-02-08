@@ -90,11 +90,17 @@
                 <thead>
                     <tr>
                         <th>Rang</th>
+                        <th>Status</th>
                         <th>Farm</th>
                         <th>Spieler</th>
                         <th>Level</th>
                         <th>Punkte</th>
+                        <th>Forschung</th>
                         <th>Vermögen</th>
+                        <th>Tiere</th>
+                        <th>Fahrzeuge</th>
+                        <th>Felder</th>
+                        <th>Produktionen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,13 +119,36 @@
                                     <?php endif; ?>
                                 </span>
                             </td>
+                            <td>
+                                <?php
+                                $status = $rank['online_status'] ?? 'offline';
+                                $statusClass = match($status) {
+                                    'online' => 'status-online',
+                                    'recent' => 'status-recent',
+                                    'away' => 'status-away',
+                                    default => 'status-offline'
+                                };
+                                $statusTitle = match($status) {
+                                    'online' => 'Gerade online',
+                                    'recent' => 'In den letzten 24h online',
+                                    'away' => 'Bis zu 7 Tagen nicht online',
+                                    default => 'Länger offline'
+                                };
+                                ?>
+                                <span class="online-status <?= $statusClass ?>" title="<?= $statusTitle ?>"></span>
+                            </td>
                             <td><strong><?= htmlspecialchars($rank['farm_name']) ?></strong></td>
                             <td><?= htmlspecialchars($rank['username']) ?></td>
                             <td>
                                 <span class="level-badge">Lvl <?= $rank['level'] ?></span>
                             </td>
                             <td><?= number_format($rank['total_points']) ?></td>
+                            <td><?= number_format($rank['research_points'] ?? 0) ?></td>
                             <td><?= number_format($rank['total_money'], 0, ',', '.') ?> T</td>
+                            <td><?= (int)($rank['total_animals'] ?? 0) ?></td>
+                            <td><?= (int)($rank['vehicle_count'] ?? 0) ?></td>
+                            <td><?= (int)($rank['field_count'] ?? 0) ?></td>
+                            <td><?= (int)($rank['production_count'] ?? 0) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

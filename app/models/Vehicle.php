@@ -219,7 +219,7 @@ class Vehicle
                     vb.name as brand_name, vb.logo_url as brand_logo
              FROM farm_vehicles fv
              JOIN vehicles v ON fv.vehicle_id = v.id
-             JOIN vehicle_brands vb ON v.brand_id = vb.id
+             LEFT JOIN vehicle_brands vb ON v.brand_id = vb.id
              WHERE fv.farm_id = ?
              ORDER BY v.category, v.name",
             [$farmId]

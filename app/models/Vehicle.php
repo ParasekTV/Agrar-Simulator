@@ -6,6 +6,8 @@
  */
 class Vehicle
 {
+    use VehicleExtension;
+
     private Database $db;
 
     public function __construct()

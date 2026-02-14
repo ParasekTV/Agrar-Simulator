@@ -43,6 +43,18 @@ $router->get('/auth/discord/complete', 'Auth', 'discordComplete');
 $router->post('/auth/discord/register', 'Auth', 'discordRegister');
 $router->post('/auth/discord/unlink', 'Auth', 'unlinkDiscord');
 
+// Account-Verwaltung
+$router->get('/account', 'Account', 'index');
+$router->post('/account/password', 'Account', 'changePassword');
+$router->post('/account/email', 'Account', 'requestEmailChange');
+$router->get('/account/email/confirm/{token}', 'Account', 'confirmEmailChange');
+$router->post('/account/delete', 'Account', 'requestDeletion');
+$router->post('/account/delete/cancel', 'Account', 'cancelDeletion');
+$router->post('/account/vacation', 'Account', 'toggleVacation');
+$router->post('/account/picture', 'Account', 'uploadPicture');
+$router->post('/account/picture/delete', 'Account', 'deletePicture');
+$router->get('/player/{id}', 'Account', 'profile');
+
 // Dashboard
 $router->get('/dashboard', 'Farm', 'dashboard');
 
@@ -53,10 +65,17 @@ $router->get('/events', 'Farm', 'events');
 
 // Felder
 $router->get('/fields', 'Field', 'index');
+$router->get('/fields/meadows', 'Field', 'meadows');
+$router->get('/fields/greenhouses', 'Field', 'greenhouses');
 $router->get('/fields/{id}', 'Field', 'show');
 $router->post('/fields/plant', 'Field', 'plant');
 $router->post('/fields/harvest', 'Field', 'harvest');
 $router->post('/fields/buy', 'Field', 'buy');
+$router->post('/fields/buy-meadow', 'Field', 'buyMeadow');
+$router->post('/fields/buy-greenhouse', 'Field', 'buyGreenhouse');
+$router->post('/fields/mow', 'Field', 'mow');
+$router->post('/fields/cultivate', 'Field', 'cultivate');
+$router->post('/fields/apply-herbicide', 'Field', 'applyHerbicide');
 $router->post('/fields/fertilize', 'Field', 'fertilize');
 $router->post('/fields/apply-fertilizer', 'Field', 'applyFertilizer');
 $router->post('/fields/lime', 'Field', 'lime');
@@ -65,14 +84,34 @@ $router->post('/fields/lime', 'Field', 'lime');
 $router->get('/animals', 'Animal', 'index');
 $router->post('/animals/buy', 'Animal', 'buy');
 $router->post('/animals/feed', 'Animal', 'feed');
+$router->post('/animals/feed-type', 'Animal', 'feedWithType');
 $router->post('/animals/collect', 'Animal', 'collect');
 $router->post('/animals/sell', 'Animal', 'sell');
+$router->post('/animals/water', 'Animal', 'water');
+$router->post('/animals/straw', 'Animal', 'straw');
+$router->post('/animals/muck-out', 'Animal', 'muckOut');
+$router->post('/animals/medicine', 'Animal', 'medicine');
 
 // Fahrzeuge
 $router->get('/vehicles', 'Vehicle', 'index');
+$router->get('/vehicles/workshop', 'Vehicle', 'workshop');
 $router->post('/vehicles/buy', 'Vehicle', 'buy');
 $router->post('/vehicles/sell', 'Vehicle', 'sell');
 $router->post('/vehicles/repair', 'Vehicle', 'repair');
+$router->post('/vehicles/send-to-workshop', 'Vehicle', 'sendToWorkshop');
+
+// Arena (Genossenschafts-Wettkampf)
+$router->get('/arena', 'Arena', 'index');
+$router->get('/arena/rankings', 'Arena', 'rankings');
+$router->get('/arena/match/{id}', 'Arena', 'match');
+$router->post('/arena/challenge', 'Arena', 'challenge');
+$router->post('/arena/accept', 'Arena', 'accept');
+$router->post('/arena/decline', 'Arena', 'decline');
+$router->post('/arena/pick', 'Arena', 'pick');
+$router->post('/arena/ban', 'Arena', 'ban');
+$router->post('/arena/assign-role', 'Arena', 'assignRole');
+$router->post('/arena/ready', 'Arena', 'ready');
+$router->post('/arena/start', 'Arena', 'start');
 
 // Produktionen
 $router->get('/productions', 'Production', 'index');
@@ -188,6 +227,10 @@ $router->get('/admin/users/{id}', 'Admin', 'editUser');
 $router->post('/admin/users/{id}/update', 'Admin', 'updateUser');
 $router->post('/admin/users/{id}/delete', 'Admin', 'deleteUser');
 $router->post('/admin/users/{id}/verify', 'Admin', 'verifyUser');
+$router->post('/admin/users/{id}/vacation', 'Admin', 'toggleUserVacation');
+$router->post('/admin/users/{id}/deletion', 'Admin', 'toggleUserDeletion');
+$router->post('/admin/users/{id}/reset-password', 'Admin', 'resetUserPassword');
+$router->post('/admin/users/{id}/delete-picture', 'Admin', 'deleteUserPicture');
 $router->get('/admin/farms', 'Admin', 'farms');
 $router->get('/admin/farms/{id}', 'Admin', 'editFarm');
 $router->post('/admin/farms/{id}/update', 'Admin', 'updateFarm');

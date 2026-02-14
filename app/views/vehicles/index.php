@@ -4,7 +4,7 @@
         <div class="page-actions">
             <span class="efficiency-bonus">Gesamt-Effizienzbonus: +<?= number_format($efficiencyBonus, 1) ?>%</span>
             <?php if (isset($membership) && $membership): ?>
-                <a href="<?= BASE_URL ?>/cooperative/vehicles" class="btn btn-outline">Geteilte Geraete</a>
+                <a href="<?= BASE_URL ?>/cooperative/vehicles" class="btn btn-outline">Geteilte Geräte</a>
             <?php endif; ?>
             <button class="btn btn-primary" onclick="showBuyVehicleModal()">Fahrzeug kaufen</button>
         </div>
@@ -86,7 +86,7 @@
 
                     <div class="vehicle-actions">
                         <?php if (!empty($vehicle['lent_to_cooperative_id'])): ?>
-                            <span class="text-muted">Verliehen - keine Aktionen moeglich</span>
+                            <span class="text-muted">Verliehen - keine Aktionen möglich</span>
                         <?php else: ?>
                             <?php if ($vehicle['condition_percent'] < 100): ?>
                                 <form action="<?= BASE_URL ?>/vehicles/repair" method="POST" class="inline-form">

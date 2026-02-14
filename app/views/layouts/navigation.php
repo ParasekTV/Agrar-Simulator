@@ -45,6 +45,7 @@
                 <li><a href="<?= BASE_URL ?>/research" class="nav-link">Forschung</a></li>
                 <li><a href="<?= BASE_URL ?>/market" class="nav-link">Marktplatz</a></li>
                 <li><a href="<?= BASE_URL ?>/cooperative" class="nav-link">Genossenschaft</a></li>
+                <li><a href="<?= BASE_URL ?>/arena" class="nav-link">Arena</a></li>
                 <li><a href="<?= BASE_URL ?>/news" class="nav-link">Zeitung</a></li>
                 <li><a href="<?= BASE_URL ?>/rankings" class="nav-link">Rangliste</a></li>
                 <?php if (isset($currentUser) && $currentUser['is_admin']): ?>
@@ -52,8 +53,8 @@
                 <?php endif; ?>
                 <li class="nav-divider"></li>
                 <li>
-                    <a href="<?= BASE_URL ?>/logout" class="nav-link nav-link-logout">
-                        Abmelden (<?= htmlspecialchars($currentUser['username'] ?? '') ?>)
+                    <a href="<?= BASE_URL ?>/account" class="nav-link">
+                        Account (<?= htmlspecialchars($currentUser['username'] ?? '') ?>)
                     </a>
                 </li>
             </ul>

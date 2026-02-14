@@ -45,9 +45,17 @@
                         </thead>
                         <tbody>
                             <?php foreach ($listings as $listing): ?>
-                                <tr>
+                                <?php
+                                $isPushed = !empty($listing['is_pushed']) && strtotime($listing['pushed_until'] ?? '') > time();
+                                $highlightColor = $isPushed ? ($listing['highlight_color'] ?? '#ffd700') : '';
+                                ?>
+                                <tr class="<?= $isPushed ? 'listing-row-pushed' : '' ?>"
+                                    <?php if ($isPushed): ?>style="background: linear-gradient(90deg, <?= htmlspecialchars($highlightColor) ?>22 0%, transparent 100%);"<?php endif; ?>>
                                     <td>
                                         <div class="market-item-cell">
+                                            <?php if ($isPushed): ?>
+                                                <span class="pushed-icon" title="Gepushtes Angebot">&#11088;</span>
+                                            <?php endif; ?>
                                             <?php if (!empty($listing['product_icon'])): ?>
                                                 <img src="<?= BASE_URL ?>/img/products/<?= htmlspecialchars($listing['product_icon']) ?>"
                                                      class="product-icon" alt="" onerror="this.style.display='none'">
@@ -96,20 +104,35 @@
                 <p class="text-muted">Du hast keine aktiven Angebote.</p>
             <?php else: ?>
                 <?php foreach ($myListings as $listing): ?>
-                    <div class="my-listing-item <?= $listing['status'] !== 'active' ? 'listing-inactive' : '' ?>">
+                    <?php
+                    $isPushed = !empty($listing['is_pushed']) && strtotime($listing['pushed_until'] ?? '') > time();
+                    $pushRemainingHours = $isPushed ? round((strtotime($listing['pushed_until']) - time()) / 3600) : 0;
+                    ?>
+                    <div class="my-listing-item <?= $listing['status'] !== 'active' ? 'listing-inactive' : '' ?> <?= $isPushed ? 'listing-pushed' : '' ?>">
                         <div class="listing-info">
                             <strong><?= htmlspecialchars($listing['item_name']) ?></strong>
                             <span><?= $listing['quantity'] ?>x @ <?= number_format($listing['price_per_unit'], 0, ',', '.') ?> T</span>
                             <small class="listing-status status-<?= $listing['status'] ?>">
                                 <?= ucfirst($listing['status']) ?>
                             </small>
+                            <?php if ($isPushed): ?>
+                                <small class="push-badge">Gepusht (<?= $pushRemainingHours ?>h)</small>
+                            <?php endif; ?>
                         </div>
                         <?php if ($listing['status'] === 'active'): ?>
-                            <form action="<?= BASE_URL ?>/market/cancel" method="POST">
-                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                <input type="hidden" name="listing_id" value="<?= $listing['id'] ?>">
-                                <button type="submit" class="btn btn-outline btn-sm">Stornieren</button>
-                            </form>
+                            <div class="listing-actions">
+                                <?php if (!$isPushed && !empty($pushOptions)): ?>
+                                    <button type="button" class="btn btn-warning btn-sm"
+                                            onclick="showPushModal(<?= $listing['id'] ?>, '<?= htmlspecialchars(addslashes($listing['item_name'])) ?>')">
+                                        Nach oben pushen
+                                    </button>
+                                <?php endif; ?>
+                                <form action="<?= BASE_URL ?>/market/cancel" method="POST" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                    <input type="hidden" name="listing_id" value="<?= $listing['id'] ?>">
+                                    <button type="submit" class="btn btn-outline btn-sm">Stornieren</button>
+                                </form>
+                            </div>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
@@ -200,7 +223,62 @@
     </div>
 </div>
 
+<!-- Modal: Angebot pushen -->
+<div class="modal" id="push-modal">
+    <div class="modal-backdrop" onclick="closePushModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Angebot nach oben pushen</h3>
+            <button class="modal-close" onclick="closePushModal()">&times;</button>
+        </div>
+        <form action="<?= BASE_URL ?>/market/push" method="POST">
+            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+            <input type="hidden" name="listing_id" id="push-listing-id">
+            <div class="modal-body">
+                <p>Artikel: <strong id="push-item-name"></strong></p>
+                <p class="push-info">Gepushte Angebote erscheinen ganz oben in der Liste und werden hervorgehoben.</p>
+
+                <div class="push-options">
+                    <?php if (!empty($pushOptions)): ?>
+                        <?php foreach ($pushOptions as $option): ?>
+                            <label class="push-option">
+                                <input type="radio" name="push_config_id" value="<?= $option['id'] ?>" required>
+                                <div class="push-option-content" style="border-left: 4px solid <?= htmlspecialchars($option['highlight_color'] ?? '#ffd700') ?>">
+                                    <strong><?= htmlspecialchars($option['name']) ?></strong>
+                                    <span class="push-duration"><?= $option['duration_hours'] ?> Stunden</span>
+                                    <span class="push-cost"><?= number_format($option['cost'], 0, ',', '.') ?> T</span>
+                                    <?php if (!empty($option['description'])): ?>
+                                        <small><?= htmlspecialchars($option['description']) ?></small>
+                                    <?php endif; ?>
+                                </div>
+                            </label>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Keine Push-Optionen verfuegbar.</p>
+                    <?php endif; ?>
+                </div>
+
+                <p class="form-help">Dein Guthaben: <?= number_format($farm['money'], 0, ',', '.') ?> T</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closePushModal()">Abbrechen</button>
+                <button type="submit" class="btn btn-warning">Angebot pushen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+function showPushModal(listingId, itemName) {
+    document.getElementById('push-listing-id').value = listingId;
+    document.getElementById('push-item-name').textContent = itemName;
+    document.getElementById('push-modal').classList.add('active');
+}
+
+function closePushModal() {
+    document.getElementById('push-modal').classList.remove('active');
+}
+
 function showCreateListingModal() {
     document.getElementById('create-listing-modal').classList.add('active');
 }
@@ -246,4 +324,122 @@ function updateTotal() {
 <style>
 .market-item-cell { display: flex; align-items: center; gap: 0.5rem; }
 .product-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+
+/* Push-Stile */
+.pushed-icon {
+    font-size: 1.2rem;
+    margin-right: 0.25rem;
+}
+
+.listing-row-pushed {
+    border-left: 3px solid #ffd700;
+}
+
+.listing-pushed {
+    background: linear-gradient(90deg, #ffd70022 0%, transparent 100%);
+    border-left: 3px solid #ffd700;
+}
+
+.push-badge {
+    display: inline-block;
+    background: #ffd700;
+    color: #000;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.listing-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.push-info {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.push-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.push-option {
+    cursor: pointer;
+}
+
+.push-option input[type="radio"] {
+    display: none;
+}
+
+.push-option-content {
+    padding: 1rem;
+    background: var(--color-bg-secondary, #f5f5f5);
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem;
+}
+
+.push-option-content:hover {
+    background: var(--color-bg-hover, #eee);
+}
+
+.push-option input[type="radio"]:checked + .push-option-content {
+    background: var(--color-primary-light, #e3f2fd);
+    outline: 2px solid var(--color-primary, #007bff);
+}
+
+.push-option-content strong {
+    font-size: 1rem;
+}
+
+.push-duration {
+    color: var(--color-text-secondary, #666);
+    font-size: 0.85rem;
+}
+
+.push-cost {
+    font-weight: 700;
+    color: var(--color-warning, #f5a623);
+    font-size: 1.1rem;
+}
+
+.push-option-content small {
+    grid-column: 1 / -1;
+    color: var(--color-text-secondary, #666);
+    font-size: 0.8rem;
+}
+
+.btn-warning {
+    background: #f5a623;
+    color: #000;
+    border: none;
+}
+
+.btn-warning:hover {
+    background: #e09600;
+}
+
+.my-listing-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--color-bg-secondary, #f5f5f5);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
 </style>

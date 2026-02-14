@@ -116,7 +116,8 @@
                                         <div class="progress-bar">
                                             <?php
                                             $elapsed = time() - strtotime($production['last_cycle_at']);
-                                            $progress = min(100, ($elapsed / $production['production_time']) * 100);
+                                            $prodTime = $production['production_time'] ?? 1;
+                                            $progress = $prodTime > 0 ? min(100, ($elapsed / $prodTime) * 100) : 100;
                                             ?>
                                             <div class="progress-bar-fill" style="width: <?= $progress ?>%"></div>
                                         </div>
@@ -154,7 +155,8 @@
                                     <div class="progress-bar">
                                         <?php
                                         $elapsed = time() - $startTime;
-                                        $progress = min(100, ($elapsed / $production['production_time']) * 100);
+                                        $prodTime = $production['production_time'] ?? 1;
+                                        $progress = $prodTime > 0 ? min(100, ($elapsed / $prodTime) * 100) : 100;
                                         ?>
                                         <div class="progress-bar-fill" style="width: <?= $progress ?>%"></div>
                                     </div>
@@ -241,6 +243,8 @@
 
 <script>
 // Timer-Update für laufende Produktionen
+let reloadScheduled = false;
+
 function updateProductionTimers() {
     document.querySelectorAll('.production-timer').forEach(function(timer) {
         const endTime = new Date(timer.dataset.endTime).getTime();
@@ -248,8 +252,17 @@ function updateProductionTimers() {
         const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
 
         if (remaining <= 0) {
-            // Seite neu laden wenn Timer abläuft
-            location.reload();
+            // Timer ist abgelaufen - zeige "Fertig!" statt ständig neuzuladen
+            timer.textContent = 'Fertig!';
+            timer.classList.add('timer-complete');
+
+            // Nur einmal neu laden, mit Verzögerung
+            if (!reloadScheduled) {
+                reloadScheduled = true;
+                setTimeout(function() {
+                    location.reload();
+                }, 3000); // 3 Sekunden warten
+            }
             return;
         }
 
@@ -637,5 +650,10 @@ updateProductionTimers();
 
 .mt-1 {
     margin-top: 0.5rem;
+}
+
+.timer-complete {
+    color: var(--color-success);
+    animation: pulse 1s infinite;
 }
 </style>

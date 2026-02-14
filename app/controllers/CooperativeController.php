@@ -46,10 +46,37 @@ class CooperativeController extends Controller
             $this->redirect('/cooperative');
         }
 
+        $farmId = $this->getFarmId();
+        $membership = $coopModel->getMembership($farmId);
+
+        // Prüfe ob Benutzer Mitglied dieser Genossenschaft ist
+        $isMember = $membership && $membership['cooperative_id'] === $id;
+
+        // Prüfe ob Benutzer Leiter ist
+        $isLeader = $isMember && in_array($membership['role'] ?? '', ['leader', 'co_leader']);
+
+        // Mitglieder aus Details extrahieren
+        $members = $details['members'] ?? [];
+
+        // Member count hinzufügen falls nicht vorhanden
+        if (!isset($details['member_count'])) {
+            $details['member_count'] = count($members);
+        }
+
+        // Geteilte Ausrüstung laden
+        $sharedEquipment = [];
+        if (method_exists($coopModel, 'getSharedEquipment')) {
+            $sharedEquipment = $coopModel->getSharedEquipment($id);
+        }
+
         $data = [
             'title' => $details['name'],
             'cooperative' => $details,
-            'membership' => $coopModel->getMembership($this->getFarmId())
+            'membership' => $membership,
+            'members' => $members,
+            'isLeader' => $isLeader,
+            'isMember' => $isMember,
+            'sharedEquipment' => $sharedEquipment
         ];
 
         $this->renderWithLayout('cooperative/show', $data);
@@ -505,13 +532,48 @@ class CooperativeController extends Controller
             $this->redirect('/cooperative');
         }
 
-        $farm = new Farm($this->getFarmId());
+        // Verwende Storage-Model für korrektes Mapping von product_id
+        $storageModel = new Storage();
+        $storageItems = $storageModel->getStorageItems($this->getFarmId());
+
+        // Kombiniere beide Listen mit korrekten IDs für das Warehouse
+        $farmInventory = [];
+
+        // Produkte aus farm_storage (haben korrekte product_id)
+        foreach ($storageItems['products'] as $item) {
+            $farmInventory[] = [
+                'product_id' => $item['product_id'],
+                'product_name' => $item['name_de'] ?? $item['name'],
+                'quantity' => $item['quantity'],
+                'type' => 'product'
+            ];
+        }
+
+        // Inventory-Items müssen auf products gemappt werden
+        foreach ($storageItems['inventory'] as $item) {
+            // Finde das entsprechende Produkt in der products-Tabelle anhand des Namens
+            $product = $this->db->fetchOne(
+                'SELECT id, name_de FROM products WHERE name = ? OR name_de = ? LIMIT 1',
+                [$item['item_name'], $item['item_name']]
+            );
+
+            if ($product) {
+                $farmInventory[] = [
+                    'product_id' => $product['id'],
+                    'product_name' => $product['name_de'] ?? $item['item_name'],
+                    'quantity' => $item['quantity'],
+                    'type' => 'inventory',
+                    'original_item_id' => $item['item_id'],
+                    'original_item_type' => $item['item_type']
+                ];
+            }
+        }
 
         $data = [
             'title' => 'Genossenschaftslager',
             'membership' => $membership,
             'warehouse' => $coopModel->getWarehouse($membership['cooperative_id']),
-            'farmInventory' => $farm->getInventory(),
+            'farmInventory' => $farmInventory,
             'canWithdraw' => $coopModel->hasPermission($this->getFarmId(), 'manage_warehouse')
         ];
 

@@ -108,6 +108,12 @@
                         </span>
                     </div>
                     <div class="info-item">
+                        <span class="info-label">Letzte Aktivität:</span>
+                        <span class="info-value">
+                            <?= !empty($user['last_activity_at']) ? date('d.m.Y H:i', strtotime($user['last_activity_at'])) : 'Nie' ?>
+                        </span>
+                    </div>
+                    <div class="info-item">
                         <span class="info-label">Verifiziert:</span>
                         <span class="info-value">
                             <?php if ($user['is_verified']): ?>
@@ -117,7 +123,45 @@
                             <?php endif; ?>
                         </span>
                     </div>
+                    <div class="info-item">
+                        <span class="info-label">Urlaubsmodus:</span>
+                        <span class="info-value">
+                            <?php if (!empty($user['vacation_mode'])): ?>
+                                <span class="status-badge status-vacation">Aktiv</span>
+                            <?php else: ?>
+                                <span class="status-badge status-normal">Inaktiv</span>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Löschung:</span>
+                        <span class="info-value">
+                            <?php if (!empty($user['deletion_requested'])): ?>
+                                <span class="status-badge status-danger">
+                                    Angefordert (<?= date('d.m.Y', strtotime($user['deletion_requested_at'])) ?>)
+                                </span>
+                            <?php else: ?>
+                                <span class="status-badge status-normal">Nein</span>
+                            <?php endif; ?>
+                        </span>
+                    </div>
                 </div>
+
+                <?php if (!empty($user['profile_picture'])): ?>
+                    <hr>
+                    <div class="profile-picture-section">
+                        <h4>Profilbild</h4>
+                        <div class="profile-picture-preview">
+                            <img src="<?= BASE_URL ?>/uploads/avatars/<?= htmlspecialchars($user['profile_picture']) ?>"
+                                 alt="Profilbild" class="admin-avatar">
+                        </div>
+                        <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/delete-picture" method="POST"
+                              onsubmit="return confirm('Profilbild löschen?')">
+                            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                            <button type="submit" class="btn btn-outline btn-sm">Profilbild löschen</button>
+                        </form>
+                    </div>
+                <?php endif; ?>
 
                 <?php if (!$user['is_verified']): ?>
                     <hr>
@@ -137,13 +181,67 @@
 
                 <hr>
 
+                <!-- Urlaubsmodus -->
+                <div class="action-zone vacation-zone">
+                    <h4>Urlaubsmodus</h4>
+                    <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/vacation" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                        <?php if (!empty($user['vacation_mode'])): ?>
+                            <p class="action-hint">Urlaubsmodus ist aktiv seit <?= !empty($user['vacation_started_at']) ? date('d.m.Y', strtotime($user['vacation_started_at'])) : 'unbekannt' ?>.</p>
+                            <button type="submit" class="btn btn-warning btn-block">Urlaubsmodus deaktivieren</button>
+                        <?php else: ?>
+                            <p class="action-hint">Benutzer ist nicht im Urlaubsmodus.</p>
+                            <button type="submit" class="btn btn-outline btn-block">Urlaubsmodus aktivieren</button>
+                        <?php endif; ?>
+                    </form>
+                </div>
+
+                <hr>
+
+                <!-- Löschung markieren -->
+                <div class="action-zone deletion-zone">
+                    <h4>Account-Löschung</h4>
+                    <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/deletion" method="POST"
+                          onsubmit="return confirm('<?= !empty($user['deletion_requested']) ? 'Löschung aufheben?' : 'Account zur Löschung markieren? Der Account wird in 7 Tagen gelöscht.' ?>')">
+                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                        <?php if (!empty($user['deletion_requested'])): ?>
+                            <p class="action-hint text-danger">
+                                Löschung angefordert am <?= date('d.m.Y H:i', strtotime($user['deletion_requested_at'])) ?>.<br>
+                                Wird gelöscht am: <?= date('d.m.Y', strtotime($user['deletion_requested_at'] . ' +7 days')) ?>
+                            </p>
+                            <button type="submit" class="btn btn-success btn-block">Löschung aufheben</button>
+                        <?php else: ?>
+                            <p class="action-hint">Account ist nicht zur Löschung markiert.</p>
+                            <button type="submit" class="btn btn-warning btn-block">Zur Löschung markieren (7 Tage)</button>
+                        <?php endif; ?>
+                    </form>
+                </div>
+
+                <hr>
+
+                <!-- Passwort zurücksetzen -->
+                <div class="action-zone password-zone">
+                    <h4>Passwort zurücksetzen</h4>
+                    <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/reset-password" method="POST"
+                          onsubmit="return confirm('Passwort wirklich zurücksetzen?')">
+                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                        <div class="form-group">
+                            <input type="password" name="new_password" class="form-control"
+                                   placeholder="Neues Passwort (min. 8 Zeichen)" minlength="8" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline btn-block">Passwort setzen</button>
+                    </form>
+                </div>
+
+                <hr>
+
                 <div class="danger-zone">
                     <h4>Gefahrenzone</h4>
                     <form action="<?= BASE_URL ?>/admin/users/<?= $user['id'] ?>/delete" method="POST"
                           onsubmit="return confirm('Benutzer wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!')">
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                         <button type="submit" class="btn btn-danger btn-block">
-                            Benutzer löschen
+                            Benutzer sofort löschen
                         </button>
                     </form>
                 </div>
@@ -240,5 +338,57 @@ hr {
 .status-unverified {
     background: var(--color-warning);
     color: #856404;
+}
+.status-vacation {
+    background: #ffc107;
+    color: #856404;
+}
+.status-normal {
+    background: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+.status-danger {
+    background: var(--color-danger);
+    color: white;
+}
+.action-zone {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+.action-zone h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+.action-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+}
+.vacation-zone {
+    border-color: #ffc107;
+}
+.deletion-zone {
+    border-color: var(--color-warning);
+}
+.password-zone {
+    border-color: var(--color-primary);
+}
+.profile-picture-section h4 {
+    margin-bottom: 0.75rem;
+}
+.profile-picture-preview {
+    margin-bottom: 0.75rem;
+}
+.admin-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+}
+.text-danger {
+    color: var(--color-danger);
 }
 </style>

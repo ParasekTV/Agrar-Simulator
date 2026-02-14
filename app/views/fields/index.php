@@ -6,6 +6,12 @@
         </div>
     </div>
 
+    <div class="field-nav mb-4">
+        <a href="<?= BASE_URL ?>/fields" class="btn btn-primary">Felder</a>
+        <a href="<?= BASE_URL ?>/fields/meadows" class="btn btn-outline">Wiesen</a>
+        <a href="<?= BASE_URL ?>/fields/greenhouses" class="btn btn-outline">Gewächshäuser</a>
+    </div>
+
     <div class="fields-grid">
         <?php foreach ($fields as $field): ?>
             <?php
@@ -18,9 +24,17 @@
                 $phClass = 'text-warning';
             }
             ?>
-            <div class="field-card field-<?= $field['status'] ?>" id="field-<?= $field['id'] ?>">
+            <?php
+            $fieldTypeLabel = match($field['field_type'] ?? 'field') {
+                'meadow' => 'Wiese',
+                'greenhouse' => 'Gewächshaus',
+                default => 'Feld'
+            };
+            $fieldTypeClass = $field['field_type'] ?? 'field';
+            ?>
+            <div class="field-card field-<?= $field['status'] ?> field-type-<?= $fieldTypeClass ?>" id="field-<?= $field['id'] ?>">
                 <div class="field-header">
-                    <span class="field-id">Feld #<?= $field['id'] ?></span>
+                    <span class="field-id"><?= $fieldTypeLabel ?> #<?= $field['id'] ?></span>
                     <span class="field-size"><?= $field['size_hectares'] ?> Hektar</span>
                 </div>
 
@@ -79,9 +93,20 @@
                         </div>
 
                     <?php elseif ($field['status'] === 'growing'): ?>
+                        <?php
+                        // Bestimme Anzeigename basierend auf field_type
+                        $displayName = $field['crop_name'] ?? null;
+                        if (!$displayName) {
+                            $displayName = match($field['field_type'] ?? 'field') {
+                                'meadow' => 'Gras',
+                                'greenhouse' => 'Gewächshaus-Pflanze',
+                                default => 'Unbekannt'
+                            };
+                        }
+                        ?>
                         <div class="field-growing">
-                            <span class="field-icon">&#127793;</span>
-                            <h4><?= htmlspecialchars($field['crop_name']) ?></h4>
+                            <span class="field-icon"><?= ($field['field_type'] ?? 'field') === 'meadow' ? '&#127811;' : '&#127793;' ?></span>
+                            <h4><?= htmlspecialchars($displayName) ?></h4>
                             <p>Wächst...</p>
                             <div class="timer-display">
                                 <span class="field-timer" data-harvest-time="<?= $field['harvest_ready_at'] ?>">
@@ -103,15 +128,35 @@
                         </div>
 
                     <?php elseif ($field['status'] === 'ready'): ?>
+                        <?php
+                        // Bestimme Anzeigename basierend auf field_type
+                        $displayNameReady = $field['crop_name'] ?? null;
+                        if (!$displayNameReady) {
+                            $displayNameReady = match($field['field_type'] ?? 'field') {
+                                'meadow' => 'Gras',
+                                'greenhouse' => 'Gewächshaus-Pflanze',
+                                default => 'Unbekannt'
+                            };
+                        }
+                        $isMeadow = ($field['field_type'] ?? 'field') === 'meadow';
+                        ?>
                         <div class="field-ready">
-                            <span class="field-icon animate-bounce">&#127807;</span>
-                            <h4><?= htmlspecialchars($field['crop_name']) ?></h4>
-                            <p class="text-success">Bereit zur Ernte!</p>
+                            <span class="field-icon animate-bounce"><?= $isMeadow ? '&#127811;' : '&#127807;' ?></span>
+                            <h4><?= htmlspecialchars($displayNameReady) ?></h4>
+                            <p class="text-success"><?= $isMeadow ? 'Bereit zum Mähen!' : 'Bereit zur Ernte!' ?></p>
+                            <?php if ($isMeadow): ?>
+                            <form action="<?= BASE_URL ?>/fields/mow" method="POST">
+                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                <input type="hidden" name="field_id" value="<?= $field['id'] ?>">
+                                <button type="submit" class="btn btn-success">Mähen</button>
+                            </form>
+                            <?php else: ?>
                             <form action="<?= BASE_URL ?>/fields/harvest" method="POST">
                                 <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                                 <input type="hidden" name="field_id" value="<?= $field['id'] ?>">
                                 <button type="submit" class="btn btn-success">Ernten</button>
                             </form>
+                            <?php endif; ?>
                             <?php if (!empty($field['active_fertilizer_id'])): ?>
                                 <span class="badge badge-success mt-2">Dünger-Bonus aktiv</span>
                             <?php endif; ?>
@@ -429,5 +474,22 @@ document.addEventListener('click', function(e) {
 
 .text-danger {
     color: var(--color-danger);
+}
+
+/* Feld-Typ Styles */
+.field-type-meadow .field-header {
+    background: linear-gradient(135deg, #228B22, #32CD32);
+}
+
+.field-type-greenhouse .field-header {
+    background: linear-gradient(135deg, #4682B4, #5F9EA0);
+}
+
+.field-type-meadow .field-id::before {
+    content: '🌿 ';
+}
+
+.field-type-greenhouse .field-id::before {
+    content: '🏠 ';
 }
 </style>

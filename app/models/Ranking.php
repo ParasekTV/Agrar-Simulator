@@ -21,7 +21,7 @@ class Ranking
         $offset = ($page - 1) * $perPage;
 
         $rankings = $this->db->fetchAll(
-            "SELECT r.*, f.farm_name, f.level, u.username, u.last_login, u.last_activity,
+            "SELECT r.*, f.farm_name, f.level, u.id as user_id, u.username, u.last_login, u.last_activity,
                     COALESCE((SELECT COUNT(*) FROM farm_animals WHERE farm_id = f.id), 0) AS animal_count,
                     COALESCE((SELECT SUM(quantity) FROM farm_animals WHERE farm_id = f.id), 0) AS total_animals,
                     COALESCE((SELECT COUNT(*) FROM farm_vehicles WHERE farm_id = f.id), 0) AS vehicle_count,
@@ -72,6 +72,43 @@ class Ranking
              LIMIT ?",
             [$limit]
         );
+    }
+
+    /**
+     * Gibt erweiterte Genossenschafts-Rangliste mit Statistiken zurück
+     */
+    public function getCooperativeRankingExtended(int $limit = 10): array
+    {
+        $coops = $this->db->fetchAll(
+            "SELECT c.*,
+                    COUNT(DISTINCT cm.id) as member_count,
+                    f.farm_name as founder_name,
+                    COALESCE((SELECT COUNT(*) FROM cooperative_research cr
+                              WHERE cr.cooperative_id = c.id AND cr.status = 'completed'), 0) AS research_count,
+                    COALESCE((SELECT SUM(crt.cost) FROM cooperative_research cr
+                              JOIN cooperative_research_tree crt ON cr.research_id = crt.id
+                              WHERE cr.cooperative_id = c.id AND cr.status = 'completed'), 0) AS research_value,
+                    COALESCE((SELECT COUNT(*) FROM cooperative_productions cp
+                              WHERE cp.cooperative_id = c.id), 0) AS production_count,
+                    COALESCE((SELECT SUM(r.total_money) FROM rankings r
+                              JOIN farms fa ON r.farm_id = fa.id
+                              JOIN cooperative_members cmm ON fa.id = cmm.farm_id
+                              WHERE cmm.cooperative_id = c.id), 0) AS total_member_wealth
+             FROM cooperatives c
+             JOIN cooperative_members cm ON c.id = cm.cooperative_id
+             JOIN farms f ON c.founder_farm_id = f.id
+             GROUP BY c.id
+             ORDER BY c.total_points DESC
+             LIMIT ?",
+            [$limit]
+        );
+
+        // Füge Rang hinzu
+        foreach ($coops as $index => &$coop) {
+            $coop['position'] = $index + 1;
+        }
+
+        return $coops;
     }
 
     /**

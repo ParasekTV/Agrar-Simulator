@@ -29,7 +29,8 @@ class RankingController extends Controller
             ],
             'myRank' => $myRank,
             'challenges' => $rankingModel->getChallengeProgress($this->getFarmId()),
-            'stats' => $rankingModel->getDashboardStats()
+            'stats' => $rankingModel->getDashboardStats(),
+            'topCooperatives' => $rankingModel->getCooperativeRankingExtended(10)
         ];
 
         $this->renderWithLayout('rankings/index', $data);
@@ -46,7 +47,7 @@ class RankingController extends Controller
 
         $data = [
             'title' => 'Genossenschafts-Rangliste',
-            'rankings' => $rankingModel->getCooperativeRanking()
+            'rankings' => $rankingModel->getCooperativeRankingExtended(50)
         ];
 
         $this->renderWithLayout('rankings/cooperatives', $data);

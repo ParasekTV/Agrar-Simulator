@@ -6,6 +6,8 @@
  */
 class Field
 {
+    use FieldExtension;
+
     private Database $db;
 
     public function __construct()

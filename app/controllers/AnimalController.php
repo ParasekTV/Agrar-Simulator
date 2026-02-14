@@ -273,4 +273,155 @@ class AnimalController extends Controller
             'animals' => $animalModel->getAvailableAnimals($this->getFarmId())
         ]);
     }
+
+    // ==========================================
+    // ANIMAL EXTENSION v2.0
+    // ==========================================
+
+    /**
+     * Füttert mit spezifischem Futter (POST)
+     */
+    public function feedWithType(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/animals');
+        }
+
+        $data = $this->getPostData();
+
+        $animalModel = new Animal();
+        $result = $animalModel->feedWithType(
+            (int) $data['farm_animal_id'],
+            (int) $data['feed_type_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/animals');
+    }
+
+    /**
+     * Tiere tränken (POST)
+     */
+    public function water(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/animals');
+        }
+
+        $data = $this->getPostData();
+
+        $animalModel = new Animal();
+        $result = $animalModel->waterAnimals(
+            (int) $data['farm_animal_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/animals');
+    }
+
+    /**
+     * Stroh einstreuen (POST)
+     */
+    public function straw(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/animals');
+        }
+
+        $data = $this->getPostData();
+
+        $animalModel = new Animal();
+        $result = $animalModel->addStraw(
+            (int) $data['farm_animal_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/animals');
+    }
+
+    /**
+     * Ausmisten (POST)
+     */
+    public function muckOut(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/animals');
+        }
+
+        $data = $this->getPostData();
+
+        $animalModel = new Animal();
+        $result = $animalModel->muckOut(
+            (int) $data['farm_animal_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/animals');
+    }
+
+    /**
+     * Medizin verabreichen (POST)
+     */
+    public function medicine(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/animals');
+        }
+
+        $data = $this->getPostData();
+
+        $animalModel = new Animal();
+        $result = $animalModel->administerMedicine(
+            (int) $data['farm_animal_id'],
+            (int) $data['medicine_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/animals');
+    }
 }

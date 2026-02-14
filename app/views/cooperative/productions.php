@@ -1,9 +1,19 @@
-<div class="coop-productions-page">
+<div class="cooperative-page">
     <div class="page-header">
         <h1>Genossenschafts-Produktionen</h1>
-        <div class="page-actions">
-            <a href="<?= BASE_URL ?>/cooperative" class="btn btn-outline">Zurück</a>
-        </div>
+    </div>
+
+    <div class="coop-nav">
+        <a href="<?= BASE_URL ?>/cooperative" class="coop-nav-item">Übersicht</a>
+        <a href="<?= BASE_URL ?>/cooperative/members" class="coop-nav-item">Mitglieder</a>
+        <a href="<?= BASE_URL ?>/cooperative/warehouse" class="coop-nav-item">Lager</a>
+        <a href="<?= BASE_URL ?>/cooperative/finances" class="coop-nav-item">Finanzen</a>
+        <a href="<?= BASE_URL ?>/cooperative/research" class="coop-nav-item">Forschung</a>
+        <a href="<?= BASE_URL ?>/cooperative/board" class="coop-nav-item">Pinnwand</a>
+        <a href="<?= BASE_URL ?>/cooperative/vehicles" class="coop-nav-item">Fahrzeugverleih</a>
+        <a href="<?= BASE_URL ?>/cooperative/productions" class="coop-nav-item active">Produktionen</a>
+        <a href="<?= BASE_URL ?>/cooperative/challenges" class="coop-nav-item">Herausforderungen</a>
+        <a href="<?= BASE_URL ?>/cooperative/applications" class="coop-nav-item">Bewerbungen</a>
     </div>
 
     <!-- Kasse anzeigen -->
@@ -21,7 +31,8 @@
     <?php else: ?>
         <div class="productions-grid">
             <?php foreach ($coopProductions as $prod): ?>
-                <div class="production-card <?= $prod['is_running'] ? 'running' : '' ?>">
+                <?php $isRunning = $prod['is_running'] ?? false; ?>
+                <div class="production-card <?= $isRunning ? 'running' : '' ?>">
                     <div class="production-header">
                         <?php if (!empty($prod['icon'])): ?>
                             <img src="<?= BASE_URL ?>/img/<?= htmlspecialchars($prod['icon']) ?>"
@@ -34,15 +45,15 @@
 
                     <div class="production-stats">
                         <span class="stat">
-                            <strong>Zyklen:</strong> <?= $prod['cycles_completed'] ?>
+                            <strong>Zyklen:</strong> <?= $prod['cycles_completed'] ?? 0 ?>
                         </span>
                         <span class="stat">
-                            <strong>Effizienz:</strong> <?= number_format($prod['current_efficiency'], 0) ?>%
+                            <strong>Effizienz:</strong> <?= number_format($prod['current_efficiency'] ?? 100, 0) ?>%
                         </span>
                     </div>
 
                     <div class="production-status">
-                        <?php if ($prod['is_running']): ?>
+                        <?php if ($isRunning): ?>
                             <span class="badge badge-success">Läuft</span>
                         <?php else: ?>
                             <span class="badge badge-secondary">Gestoppt</span>
@@ -53,8 +64,8 @@
                         <form action="<?= BASE_URL ?>/cooperative/productions/toggle" method="POST" class="inline-form">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                             <input type="hidden" name="coop_production_id" value="<?= $prod['id'] ?>">
-                            <button type="submit" class="btn <?= $prod['is_running'] ? 'btn-warning' : 'btn-success' ?> btn-sm">
-                                <?= $prod['is_running'] ? 'Stoppen' : 'Starten' ?>
+                            <button type="submit" class="btn <?= $isRunning ? 'btn-warning' : 'btn-success' ?> btn-sm">
+                                <?= $isRunning ? 'Stoppen' : 'Starten' ?>
                             </button>
                         </form>
                     </div>
@@ -125,6 +136,11 @@
 </div>
 
 <style>
+.coop-nav { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; background: var(--color-gray-100, #f3f4f6); padding: 0.25rem; border-radius: 8px; }
+.coop-nav-item { padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; color: var(--color-gray-600, #6b7280); font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+.coop-nav-item:hover { background: white; color: var(--color-gray-900, #111827); }
+.coop-nav-item.active { background: var(--color-primary); color: white; }
+
 .treasury-info {
     background: var(--color-bg);
     border: 1px solid var(--color-border);

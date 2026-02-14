@@ -783,24 +783,41 @@ class Cooperative
             return ['success' => false, 'message' => 'Du bist in keiner Genossenschaft'];
         }
 
-        // Prüfe ob Farm das Item hat (item_id in inventory-Tabelle)
+        $product = $this->db->fetchOne('SELECT * FROM products WHERE id = ?', [$productId]);
+        $sourceTable = null;
+        $farmItem = null;
+
+        // Prüfe zuerst farm_storage (neues Produktsystem)
         $farmItem = $this->db->fetchOne(
-            'SELECT * FROM inventory WHERE farm_id = ? AND item_id = ? AND quantity >= ?',
+            'SELECT *, "farm_storage" as source_table FROM farm_storage WHERE farm_id = ? AND product_id = ? AND quantity >= ?',
             [$farmId, $productId, $quantity]
         );
+
+        if ($farmItem) {
+            $sourceTable = 'farm_storage';
+        } else {
+            // Falls nicht gefunden, prüfe inventory (altes System) - suche nach Produktname
+            if ($product) {
+                $farmItem = $this->db->fetchOne(
+                    'SELECT *, "inventory" as source_table FROM inventory WHERE farm_id = ? AND item_name = ? AND quantity >= ?',
+                    [$farmId, $product['name_de'] ?? $product['name'], $quantity]
+                );
+                if ($farmItem) {
+                    $sourceTable = 'inventory';
+                }
+            }
+        }
 
         if (!$farmItem) {
             return ['success' => false, 'message' => 'Nicht genügend Items im Inventar'];
         }
 
-        $product = $this->db->fetchOne('SELECT * FROM products WHERE id = ?', [$productId]);
-
-        // Reduziere Farm-Inventar
+        // Reduziere Farm-Lager (je nach Quelle)
         $newQty = $farmItem['quantity'] - $quantity;
         if ($newQty <= 0) {
-            $this->db->delete('inventory', 'id = ?', [$farmItem['id']]);
+            $this->db->delete($sourceTable, 'id = ?', [$farmItem['id']]);
         } else {
-            $this->db->update('inventory', ['quantity' => $newQty], 'id = :id', ['id' => $farmItem['id']]);
+            $this->db->update($sourceTable, ['quantity' => $newQty], 'id = :id', ['id' => $farmItem['id']]);
         }
 
         // Erhöhe Genossenschaftslager
@@ -1448,7 +1465,7 @@ class Cooperative
              FROM cooperative_productions cp
              JOIN productions p ON cp.production_id = p.id
              LEFT JOIN farms f ON cp.purchased_by = f.id
-             WHERE cp.cooperative_id = ? AND cp.is_active = 1
+             WHERE cp.cooperative_id = ? AND COALESCE(cp.is_active, 1) != 0
              ORDER BY p.name_de",
             [$cooperativeId]
         );
@@ -1462,7 +1479,7 @@ class Cooperative
     {
         // Hole alle freigeschalteten Produktionen durch Coop-Forschung
         $unlockedProductions = $this->db->fetchAll(
-            "SELECT crt.unlocks
+            "SELECT crt.unlocks, crt.name as research_name
              FROM cooperative_research cr
              JOIN cooperative_research_tree crt ON cr.research_id = crt.id
              WHERE cr.cooperative_id = ? AND cr.status = 'completed'
@@ -1470,11 +1487,11 @@ class Cooperative
             [$cooperativeId]
         );
 
-        // Extrahiere Produktionsnamen aus unlocks
+        // Extrahiere Produktionsnamen aus unlocks (lowercase für Vergleich)
         $unlockedNames = [];
         foreach ($unlockedProductions as $row) {
-            if (preg_match('/^production:(.+)$/', $row['unlocks'], $matches)) {
-                $unlockedNames[] = $matches[1];
+            if (preg_match('/^production:(.+)$/i', $row['unlocks'], $matches)) {
+                $unlockedNames[] = strtolower($matches[1]);
             }
         }
 
@@ -1482,14 +1499,16 @@ class Cooperative
             return [];
         }
 
-        // Hole die verfügbaren Produktionen
+        // Hole die verfügbaren Produktionen (alle Namen sind bereits lowercase)
         $placeholders = implode(',', array_fill(0, count($unlockedNames), '?'));
         $params = array_merge($unlockedNames, [$cooperativeId]);
 
-        return $this->db->fetchAll(
-            "SELECT p.*, crt.name as research_name
+        $productions = $this->db->fetchAll(
+            "SELECT p.id, p.name, p.name_de, p.description, p.category, p.icon,
+                    p.building_cost, p.production_time, p.is_active,
+                    crt.name as research_name, 1 as research_completed
              FROM productions p
-             LEFT JOIN cooperative_research_tree crt ON crt.unlocks = CONCAT('production:', p.name)
+             LEFT JOIN cooperative_research_tree crt ON LOWER(crt.unlocks) = CONCAT('production:', LOWER(p.name))
              WHERE LOWER(p.name) IN ({$placeholders})
                AND p.is_active = 1
                AND p.id NOT IN (
@@ -1499,6 +1518,8 @@ class Cooperative
              ORDER BY p.building_cost ASC",
             $params
         );
+
+        return $productions;
     }
 
     /**
@@ -1549,22 +1570,27 @@ class Cooperative
         $coopProdId = $this->db->insert('cooperative_productions', [
             'cooperative_id' => $membership['cooperative_id'],
             'production_id' => $productionId,
-            'purchased_by' => $farmId
+            'purchased_by' => $farmId,
+            'is_active' => 1
         ]);
 
-        // Log
-        $this->db->insert('cooperative_production_logs', [
-            'cooperative_production_id' => $coopProdId,
-            'cooperative_id' => $membership['cooperative_id'],
-            'action' => 'purchased',
-            'details' => "Produktion gekauft: {$production['name_de']}",
-            'created_by' => $farmId
-        ]);
+        // Log (optional, falls Tabelle existiert)
+        try {
+            $this->db->insert('cooperative_production_logs', [
+                'cooperative_production_id' => $coopProdId,
+                'cooperative_id' => $membership['cooperative_id'],
+                'action' => 'purchased',
+                'details' => "Produktion gekauft: {$production['name_de']}",
+                'created_by' => $farmId
+            ]);
+        } catch (\Exception $e) {
+            // Log-Tabelle existiert noch nicht, ignorieren
+        }
 
         $this->logTransaction(
             $membership['cooperative_id'],
             'purchase',
-            -$production['cost'],
+            -$production['building_cost'],
             "Produktion gekauft: {$production['name_de']}",
             $farmId
         );
@@ -1593,22 +1619,27 @@ class Cooperative
             return ['success' => false, 'message' => 'Produktion nicht gefunden'];
         }
 
-        $newStatus = $coopProd['is_running'] ? 0 : 1;
+        $newStatus = ($coopProd['is_running'] ?? 0) ? 0 : 1;
         $action = $newStatus ? 'started' : 'stopped';
 
-        $this->db->update('cooperative_productions', [
-            'is_running' => $newStatus,
-            'started_at' => $newStatus ? date('Y-m-d H:i:s') : null
-        ], 'id = :id', ['id' => $coopProductionId]);
+        // Update mit Fallback für verschiedene Tabellenstrukturen
+        $this->db->query(
+            'UPDATE cooperative_productions SET is_running = ?, started_at = ? WHERE id = ?',
+            [$newStatus, $newStatus ? date('Y-m-d H:i:s') : null, $coopProductionId]
+        );
 
-        // Log
-        $this->db->insert('cooperative_production_logs', [
-            'cooperative_production_id' => $coopProductionId,
-            'cooperative_id' => $membership['cooperative_id'],
-            'action' => $action,
-            'details' => ($newStatus ? 'Gestartet' : 'Gestoppt') . ": {$coopProd['name_de']}",
-            'created_by' => $farmId
-        ]);
+        // Log (optional, falls Tabelle existiert)
+        try {
+            $this->db->insert('cooperative_production_logs', [
+                'cooperative_production_id' => $coopProductionId,
+                'cooperative_id' => $membership['cooperative_id'],
+                'action' => $action,
+                'details' => ($newStatus ? 'Gestartet' : 'Gestoppt') . ": {$coopProd['name_de']}",
+                'created_by' => $farmId
+            ]);
+        } catch (\Exception $e) {
+            // Log-Tabelle existiert noch nicht, ignorieren
+        }
 
         return [
             'success' => true,

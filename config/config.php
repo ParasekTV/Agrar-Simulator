@@ -79,11 +79,11 @@ define('EMAIL_VERIFICATION_ENABLED', true); // Auf true setzen wenn SMTP konfigu
 define('EMAIL_TOKEN_EXPIRY_HOURS', 24);
 
 // SMTP-Einstellungen
-define('SMTP_HOST', 'smtp.sl-wide.de'); // z.B. smtp.example.com
+define('SMTP_HOST', ''); // z.B. smtp.example.com
 define('SMTP_PORT', 587);
-define('SMTP_USERNAME', 'noreply@sl-wide.de');
+define('SMTP_USERNAME', '');
 define('SMTP_PASSWORD', '');
-define('SMTP_FROM_EMAIL', 'noreply@sl-wide.de');
+define('SMTP_FROM_EMAIL', '');
 define('SMTP_FROM_NAME', 'Agrar Simulator');
 define('SMTP_ENCRYPTION', 'tls'); // tls oder ssl
 

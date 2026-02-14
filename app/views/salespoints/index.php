@@ -472,12 +472,16 @@
     if (!countdownEl) return;
 
     let seconds = parseInt(countdownEl.dataset.seconds, 10);
+    let reloadScheduled = false;
 
     function updateCountdown() {
         if (seconds <= 0) {
             countdownEl.textContent = '00:00:00';
-            // Seite neu laden um neue Preise zu zeigen
-            setTimeout(() => location.reload(), 1000);
+            if (!reloadScheduled) {
+                reloadScheduled = true;
+                clearInterval(countdownInterval);
+                setTimeout(() => location.reload(), 1000);
+            }
             return;
         }
 
@@ -493,6 +497,7 @@
         seconds--;
     }
 
-    setInterval(updateCountdown, 1000);
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
 })();
 </script>

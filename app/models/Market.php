@@ -442,7 +442,7 @@ class Market
     }
 
     /**
-     * Pusht ein Angebot nach oben
+     * Pusht ein Angebot nach oben (kostet Agrar Taler = normales Geld)
      */
     public function pushListing(int $listingId, int $pushConfigId, int $farmId): array
     {
@@ -472,10 +472,15 @@ class Market
             return ['success' => false, 'message' => 'Push-Option nicht gefunden'];
         }
 
-        // Prüfe und ziehe Geld ab
+        // Prüfe und ziehe Geld ab (Agrar Taler = normales Geld)
         $farm = new Farm($farmId);
-        if (!$farm->subtractMoney($pushConfig['cost'], "Markt-Push: {$pushConfig['name']}")) {
-            return ['success' => false, 'message' => 'Nicht genügend Geld'];
+        $cost = (float) $pushConfig['cost'];
+
+        if (!$farm->subtractMoney($cost, "Markt-Push: {$pushConfig['name']}")) {
+            return [
+                'success' => false,
+                'message' => 'Nicht genügend Agrar Taler (benötigt: ' . number_format($cost, 0, ',', '.') . ' T)'
+            ];
         }
 
         // Berechne Push-Ablaufzeit
@@ -485,7 +490,7 @@ class Market
         $this->db->update('market_listings', [
             'is_pushed' => 1,
             'pushed_until' => $pushedUntil,
-            'push_cost' => $pushConfig['cost']
+            'push_cost' => $cost
         ], 'id = :id', ['id' => $listingId]);
 
         // Speichere in Historie
@@ -493,19 +498,20 @@ class Market
             'listing_id' => $listingId,
             'farm_id' => $farmId,
             'push_config_id' => $pushConfigId,
-            'cost_paid' => $pushConfig['cost'],
+            'cost_paid' => $cost,
             'expires_at' => $pushedUntil
         ]);
 
         Logger::info('Market listing pushed', [
             'farm_id' => $farmId,
             'listing_id' => $listingId,
-            'push_type' => $pushConfig['name']
+            'push_type' => $pushConfig['name'],
+            'cost' => $cost
         ]);
 
         return [
             'success' => true,
-            'message' => "Angebot gepusht! Hervorhebung für {$pushConfig['duration_hours']} Stunden aktiv.",
+            'message' => "Angebot gepusht für " . number_format($cost, 0, ',', '.') . " T! Hervorhebung für {$pushConfig['duration_hours']} Stunden aktiv.",
             'pushed_until' => $pushedUntil
         ];
     }

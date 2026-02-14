@@ -21,10 +21,14 @@
                     <thead>
                         <tr>
                             <th>Rang</th>
-                            <th>Name</th>
+                            <th>Genossenschaft</th>
+                            <th>Gründer</th>
                             <th>Mitglieder</th>
                             <th>Punkte</th>
+                            <th>Forschung</th>
                             <th>Kasse</th>
+                            <th>Mitglieder-Vermögen</th>
+                            <th>Produktionen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,19 +48,25 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <strong><?= htmlspecialchars($coop['name']) ?></strong>
-                                    <?php if ($coop['description']): ?>
+                                    <a href="<?= BASE_URL ?>/cooperative/<?= $coop['id'] ?>" class="coop-link" title="Statistik ansehen">
+                                        <strong><?= htmlspecialchars($coop['name']) ?></strong>
+                                    </a>
+                                    <?php if (!empty($coop['description'])): ?>
                                         <br>
                                         <small class="text-muted"><?= htmlspecialchars(mb_substr($coop['description'], 0, 50)) ?>...</small>
                                     <?php endif; ?>
                                 </td>
+                                <td><?= htmlspecialchars($coop['founder_name'] ?? '-') ?></td>
                                 <td>
                                     <span class="member-badge"><?= $coop['member_count'] ?>/<?= $coop['member_limit'] ?></span>
                                 </td>
                                 <td>
-                                    <strong><?= number_format($coop['total_points']) ?></strong>
+                                    <strong><?= number_format($coop['total_points'] ?? 0) ?></strong>
                                 </td>
-                                <td><?= number_format($coop['treasury'], 0, ',', '.') ?> T</td>
+                                <td><?= (int)($coop['research_count'] ?? 0) ?></td>
+                                <td><?= number_format($coop['treasury'] ?? 0, 0, ',', '.') ?> T</td>
+                                <td><?= number_format($coop['total_member_wealth'] ?? 0, 0, ',', '.') ?> T</td>
+                                <td><?= (int)($coop['production_count'] ?? 0) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -72,5 +82,16 @@
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-size: 0.9rem;
+}
+
+.coop-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.coop-link:hover {
+    color: var(--color-primary-dark, #2563eb);
+    text-decoration: underline;
 }
 </style>

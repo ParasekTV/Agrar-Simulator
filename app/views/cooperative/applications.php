@@ -17,6 +17,9 @@ $roleLabels = [
         <a href="<?= BASE_URL ?>/cooperative/warehouse" class="coop-nav-item">Lager</a>
         <a href="<?= BASE_URL ?>/cooperative/finances" class="coop-nav-item">Finanzen</a>
         <a href="<?= BASE_URL ?>/cooperative/research" class="coop-nav-item">Forschung</a>
+        <a href="<?= BASE_URL ?>/cooperative/board" class="coop-nav-item">Pinnwand</a>
+        <a href="<?= BASE_URL ?>/cooperative/vehicles" class="coop-nav-item">Fahrzeugverleih</a>
+        <a href="<?= BASE_URL ?>/cooperative/productions" class="coop-nav-item">Produktionen</a>
         <a href="<?= BASE_URL ?>/cooperative/challenges" class="coop-nav-item">Herausforderungen</a>
         <a href="<?= BASE_URL ?>/cooperative/applications" class="coop-nav-item active">Bewerbungen</a>
     </div>

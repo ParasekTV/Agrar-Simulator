@@ -207,6 +207,8 @@
 </div>
 
 <script>
+let reloadScheduled = false;
+
 function updateTimer() {
     const timer = document.querySelector('.production-timer');
     if (!timer) return;
@@ -216,7 +218,12 @@ function updateTimer() {
     const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
 
     if (remaining <= 0) {
-        location.reload();
+        timer.textContent = 'Fertig!';
+        if (!reloadScheduled) {
+            reloadScheduled = true;
+            clearInterval(timerInterval);
+            setTimeout(() => location.reload(), 2000);
+        }
         return;
     }
 
@@ -229,7 +236,7 @@ function updateTimer() {
         .join(':');
 }
 
-setInterval(updateTimer, 1000);
+const timerInterval = setInterval(updateTimer, 1000);
 updateTimer();
 </script>
 

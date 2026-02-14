@@ -192,4 +192,57 @@ class VehicleController extends Controller
             'vehicles' => $vehicleModel->getAvailableVehicles($this->getFarmId())
         ]);
     }
+
+    // ==========================================
+    // VEHICLE EXTENSION v2.0
+    // ==========================================
+
+    /**
+     * Zeigt Werkstatt-Übersicht
+     */
+    public function workshop(): void
+    {
+        $this->requireAuth();
+
+        $farmId = $this->getFarmId();
+        $vehicleModel = new Vehicle();
+
+        $data = [
+            'title' => 'Werkstatt',
+            'vehiclesInWorkshop' => $vehicleModel->getVehiclesInWorkshop($farmId),
+            'vehiclesNeedingRepair' => $vehicleModel->getVehiclesNeedingRepair($farmId),
+            'dieselStats' => $vehicleModel->getDieselStats($farmId)
+        ];
+
+        $this->renderWithLayout('vehicles/workshop', $data);
+    }
+
+    /**
+     * Sendet Fahrzeug zur Werkstatt (POST)
+     */
+    public function sendToWorkshop(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/vehicles');
+        }
+
+        $data = $this->getPostData();
+
+        $vehicleModel = new Vehicle();
+        $result = $vehicleModel->sendToWorkshop(
+            (int) $data['farm_vehicle_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/vehicles');
+    }
 }

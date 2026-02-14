@@ -110,7 +110,45 @@ class AuthController extends Controller
                 $this->redirect('/auth/verify/pending');
             }
 
-            Session::setFlash('success', $result['message'], 'success');
+            // Account-Status prüfen und aktualisieren
+            $userId = $result['user_id'];
+            $userData = $this->db->fetchOne(
+                'SELECT deletion_requested, vacation_mode FROM users WHERE id = ?',
+                [$userId]
+            );
+
+            $messages = [];
+
+            // Löschungs-Request abbrechen
+            if ($userData && $userData['deletion_requested']) {
+                $this->db->query(
+                    'UPDATE users SET deletion_requested = FALSE, deletion_requested_at = NULL WHERE id = ?',
+                    [$userId]
+                );
+                $messages[] = 'Deine Account-Löschung wurde abgebrochen.';
+            }
+
+            // Urlaubsmodus beenden
+            if ($userData && $userData['vacation_mode']) {
+                $this->db->query(
+                    'UPDATE users SET vacation_mode = FALSE, vacation_started_at = NULL, deletion_warning_sent = FALSE WHERE id = ?',
+                    [$userId]
+                );
+                $messages[] = 'Dein Urlaubsmodus wurde beendet.';
+            }
+
+            // Aktivität aktualisieren
+            $this->db->query(
+                'UPDATE users SET last_activity_at = NOW() WHERE id = ?',
+                [$userId]
+            );
+
+            if (!empty($messages)) {
+                Session::setFlash('info', 'Willkommen zurück! ' . implode(' ', $messages), 'info');
+            } else {
+                Session::setFlash('success', $result['message'], 'success');
+            }
+
             $this->redirect('/dashboard');
         } else {
             Session::setFlash('error', $result['message'], 'danger');

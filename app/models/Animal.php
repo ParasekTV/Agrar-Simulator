@@ -6,6 +6,8 @@
  */
 class Animal
 {
+    use AnimalExtension;
+
     private Database $db;
 
     public function __construct()

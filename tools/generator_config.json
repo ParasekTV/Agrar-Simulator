@@ -1,0 +1,75 @@
+{
+    "plan_file": "../Plan.txt",
+    "turnier_file": "../Farming_Simulator_League_Turnierleitfaden.txt",
+    "templates_dir": "templates/",
+    "output_dir": "../generated/",
+    "sql_output": "../sql/v2.0_generated.sql",
+    "features": {
+        "fields": {
+            "model": "Field",
+            "controller": "FieldController",
+            "table": "fields",
+            "new_tables": ["field_limits", "cultivation_types", "herbicide_types"],
+            "new_columns": {
+                "fields": ["field_type", "needs_cultivation", "cultivation_type", "weed_level", "growth_stage"]
+            }
+        },
+        "animals": {
+            "model": "Animal",
+            "controller": "AnimalController",
+            "table": "farm_animals",
+            "new_tables": ["animal_sicknesses", "animal_medicines", "animal_feed_types", "animal_feed_requirements", "animal_deaths", "animal_births"],
+            "new_columns": {
+                "farm_animals": ["is_sick", "sickness_type_id", "straw_level", "manure_level", "water_level", "age_days", "born_at", "can_reproduce"]
+            }
+        },
+        "vehicles": {
+            "model": "Vehicle",
+            "controller": "VehicleController",
+            "table": "farm_vehicles",
+            "new_tables": ["workshop_repairs", "diesel_consumption_log"],
+            "new_columns": {
+                "farm_vehicles": ["is_in_workshop", "workshop_finished_at", "diesel_consumed_today"]
+            }
+        },
+        "arena": {
+            "model": "Arena",
+            "controller": "ArenaController",
+            "table": "arena_matches",
+            "new_tables": ["arena_matches", "arena_picks_bans", "arena_participants", "arena_score_events", "arena_vehicles_pool", "arena_rankings"],
+            "new_columns": {}
+        }
+    },
+    "feed_mapping": {
+        "chicken": ["Weizen", "Gerste"],
+        "sheep": ["Gras", "Heu"],
+        "pig": ["Schweinefutter", "Kartoffeln"],
+        "cow": ["Mischfutter", "Gras", "Heu"],
+        "horse": ["Gras", "Heu"],
+        "rabbit": ["Gras", "Heu", "Karotten"],
+        "bee": ["Zucker"],
+        "goat": ["Gras", "Heu"],
+        "duck": ["Gras", "Weizen"],
+        "goose": ["Gras", "Weizen"],
+        "turkey": ["Gras", "Weizen"],
+        "buffalo": ["Gras", "Heu", "Mischfutter"]
+    },
+    "field_limits": {
+        "field": [
+            {"size": 1, "count": 10},
+            {"size": 2, "count": 10},
+            {"size": 3, "count": 10},
+            {"size": 5, "count": 10},
+            {"size": 10, "count": 10}
+        ],
+        "meadow": [
+            {"size": 1, "count": 3},
+            {"size": 2, "count": 3},
+            {"size": 5, "count": 4}
+        ],
+        "greenhouse": [
+            {"size": 0.5, "count": 5},
+            {"size": 1, "count": 5}
+        ]
+    }
+}

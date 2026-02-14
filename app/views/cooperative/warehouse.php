@@ -9,6 +9,9 @@
         <a href="<?= BASE_URL ?>/cooperative/warehouse" class="coop-nav-item active">Lager</a>
         <a href="<?= BASE_URL ?>/cooperative/finances" class="coop-nav-item">Finanzen</a>
         <a href="<?= BASE_URL ?>/cooperative/research" class="coop-nav-item">Forschung</a>
+        <a href="<?= BASE_URL ?>/cooperative/board" class="coop-nav-item">Pinnwand</a>
+        <a href="<?= BASE_URL ?>/cooperative/vehicles" class="coop-nav-item">Fahrzeugverleih</a>
+        <a href="<?= BASE_URL ?>/cooperative/productions" class="coop-nav-item">Produktionen</a>
         <a href="<?= BASE_URL ?>/cooperative/challenges" class="coop-nav-item">Herausforderungen</a>
         <a href="<?= BASE_URL ?>/cooperative/applications" class="coop-nav-item">Bewerbungen</a>
     </div>
@@ -80,12 +83,12 @@
                         <tbody>
                             <?php foreach ($farmInventory as $item): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($item['product_name'] ?? $item['item_name'] ?? 'Unbekannt') ?></td>
+                                    <td><?= htmlspecialchars($item['product_name'] ?? 'Unbekannt') ?></td>
                                     <td><?= number_format($item['quantity']) ?></td>
                                     <td>
                                         <form action="<?= BASE_URL ?>/cooperative/deposit" method="POST" class="inline-form">
                                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                            <input type="hidden" name="product_id" value="<?= $item['item_id'] ?? $item['product_id'] ?? $item['id'] ?>">
+                                            <input type="hidden" name="product_id" value="<?= $item['product_id'] ?>">
                                             <div class="input-group-sm">
                                                 <input type="number" name="quantity" min="1" max="<?= $item['quantity'] ?>" value="1" class="form-input form-input-sm">
                                                 <button type="submit" class="btn btn-sm btn-primary">Einlagern</button>

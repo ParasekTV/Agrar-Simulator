@@ -252,6 +252,140 @@ class AdminController extends Controller
         $this->redirect("/admin/users/{$id}");
     }
 
+    /**
+     * Urlaubsmodus umschalten
+     */
+    public function toggleUserVacation(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        $user = $this->db->fetchOne('SELECT id, vacation_mode FROM users WHERE id = ?', [$id]);
+
+        if (!$user) {
+            Session::setFlash('error', 'Benutzer nicht gefunden', 'danger');
+            $this->redirect('/admin/users');
+        }
+
+        if ($user['vacation_mode']) {
+            $this->db->query(
+                'UPDATE users SET vacation_mode = FALSE, vacation_started_at = NULL, deletion_warning_sent = FALSE WHERE id = ?',
+                [$id]
+            );
+            $message = 'Urlaubsmodus deaktiviert';
+        } else {
+            $this->db->query(
+                'UPDATE users SET vacation_mode = TRUE, vacation_started_at = NOW() WHERE id = ?',
+                [$id]
+            );
+            $message = 'Urlaubsmodus aktiviert';
+        }
+
+        Logger::info('Admin toggled user vacation mode', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
+
+        Session::setFlash('success', $message, 'success');
+        $this->redirect("/admin/users/{$id}");
+    }
+
+    /**
+     * Löschung markieren/aufheben
+     */
+    public function toggleUserDeletion(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        // Verhindere Selbstlöschung
+        if ($id === Session::getUserId()) {
+            Session::setFlash('error', 'Du kannst deinen eigenen Account nicht zur Löschung markieren', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        $user = $this->db->fetchOne('SELECT id, deletion_requested FROM users WHERE id = ?', [$id]);
+
+        if (!$user) {
+            Session::setFlash('error', 'Benutzer nicht gefunden', 'danger');
+            $this->redirect('/admin/users');
+        }
+
+        if ($user['deletion_requested']) {
+            $this->db->query(
+                'UPDATE users SET deletion_requested = FALSE, deletion_requested_at = NULL WHERE id = ?',
+                [$id]
+            );
+            $message = 'Löschung aufgehoben';
+        } else {
+            $this->db->query(
+                'UPDATE users SET deletion_requested = TRUE, deletion_requested_at = NOW() WHERE id = ?',
+                [$id]
+            );
+            $message = 'Account zur Löschung markiert (7 Tage)';
+        }
+
+        Logger::info('Admin toggled user deletion', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
+
+        Session::setFlash('success', $message, 'success');
+        $this->redirect("/admin/users/{$id}");
+    }
+
+    /**
+     * Passwort zurücksetzen
+     */
+    public function resetUserPassword(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        $data = $this->getPostData();
+        $newPassword = $data['new_password'] ?? '';
+
+        if (strlen($newPassword) < 8) {
+            Session::setFlash('error', 'Passwort muss mindestens 8 Zeichen haben', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        $hash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+        $this->db->query('UPDATE users SET password_hash = ? WHERE id = ?', [$hash, $id]);
+
+        Logger::info('Admin reset user password', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
+
+        Session::setFlash('success', 'Passwort wurde zurückgesetzt', 'success');
+        $this->redirect("/admin/users/{$id}");
+    }
+
+    /**
+     * Profilbild löschen
+     */
+    public function deleteUserPicture(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Ungültige Anfrage', 'danger');
+            $this->redirect("/admin/users/{$id}");
+        }
+
+        $accountModel = new Account();
+        $accountModel->deleteProfilePicture($id);
+
+        Logger::info('Admin deleted user profile picture', ['admin_id' => Session::getUserId(), 'user_id' => $id]);
+
+        Session::setFlash('success', 'Profilbild gelöscht', 'success');
+        $this->redirect("/admin/users/{$id}");
+    }
+
     // ==========================================
     // FARM-VERWALTUNG
     // ==========================================

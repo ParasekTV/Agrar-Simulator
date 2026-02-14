@@ -35,9 +35,10 @@
                         <th>Farm</th>
                         <th>Level</th>
                         <th>Geld</th>
-                        <th>Punkte</th>
                         <th>Status</th>
-                        <th>Verifiziert</th>
+                        <th>Urlaub</th>
+                        <th>Löschung</th>
+                        <th>Letzte Aktivität</th>
                         <th>Aktionen</th>
                     </tr>
                 </thead>
@@ -55,19 +56,38 @@
                             <td><?= htmlspecialchars($user['farm_name'] ?? '-') ?></td>
                             <td><?= $user['level'] ?? '-' ?></td>
                             <td><?= $user['money'] ? number_format($user['money'], 0, ',', '.') . ' T' : '-' ?></td>
-                            <td><?= $user['points'] ? number_format($user['points']) : '-' ?></td>
                             <td>
                                 <?php if ($user['is_active']): ?>
-                                    <span class="status-badge status-active">Aktiv</span>
+                                    <?php if ($user['is_verified'] ?? false): ?>
+                                        <span class="status-badge status-active">OK</span>
+                                    <?php else: ?>
+                                        <span class="status-badge status-unverified">Unverifiziert</span>
+                                    <?php endif; ?>
                                 <?php else: ?>
                                     <span class="status-badge status-inactive">Inaktiv</span>
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($user['is_verified'] ?? false): ?>
-                                    <span class="status-badge status-verified">Ja</span>
+                                <?php if (!empty($user['vacation_mode'])): ?>
+                                    <span class="status-badge status-vacation">Ja</span>
                                 <?php else: ?>
-                                    <span class="status-badge status-unverified">Nein</span>
+                                    <span class="status-badge status-normal">-</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($user['deletion_requested'])): ?>
+                                    <span class="status-badge status-deletion" title="Wird gelöscht am <?= date('d.m.Y', strtotime($user['deletion_requested_at'] . ' +7 days')) ?>">
+                                        <?= date('d.m.', strtotime($user['deletion_requested_at'] . ' +7 days')) ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="status-badge status-normal">-</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="nowrap">
+                                <?php if (!empty($user['last_activity_at'])): ?>
+                                    <?= date('d.m.y', strtotime($user['last_activity_at'])) ?>
+                                <?php else: ?>
+                                    -
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -142,5 +162,20 @@
 .status-unverified {
     background: var(--color-warning);
     color: #856404;
+}
+.status-vacation {
+    background: #ffc107;
+    color: #856404;
+}
+.status-deletion {
+    background: var(--color-danger);
+    color: white;
+}
+.status-normal {
+    background: var(--color-gray-200);
+    color: var(--color-gray-500);
+}
+.nowrap {
+    white-space: nowrap;
 }
 </style>

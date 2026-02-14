@@ -389,4 +389,187 @@ class FieldController extends Controller
             ? $this->jsonSuccess($result['message'], ['field_id' => $result['field_id'] ?? null])
             : $this->jsonError($result['message']);
     }
+
+    // ==========================================
+    // FIELD EXTENSION v2.0
+    // ==========================================
+
+    /**
+     * Zeigt Wiesen-Übersicht
+     */
+    public function meadows(): void
+    {
+        $this->requireAuth();
+
+        $farmId = $this->getFarmId();
+        $fieldModel = new Field();
+
+        $data = [
+            'title' => 'Wiesen',
+            'meadows' => $fieldModel->getMeadows($farmId),
+            'fieldLimits' => $fieldModel->getFieldLimits('meadow')
+        ];
+
+        $this->renderWithLayout('fields/meadows', $data);
+    }
+
+    /**
+     * Zeigt Gewächshaus-Übersicht
+     */
+    public function greenhouses(): void
+    {
+        $this->requireAuth();
+
+        $farmId = $this->getFarmId();
+        $fieldModel = new Field();
+
+        $data = [
+            'title' => 'Gewächshäuser',
+            'greenhouses' => $fieldModel->getGreenhouses($farmId),
+            'greenhouseCrops' => $fieldModel->getGreenhouseCrops($farmId),
+            'fieldLimits' => $fieldModel->getFieldLimits('greenhouse')
+        ];
+
+        $this->renderWithLayout('fields/greenhouses', $data);
+    }
+
+    /**
+     * Kauft eine Wiese (POST)
+     */
+    public function buyMeadow(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields/meadows');
+        }
+
+        $data = $this->getPostData();
+        $size = (float) ($data['size'] ?? 1);
+
+        $fieldModel = new Field();
+        $result = $fieldModel->buyMeadow($this->getFarmId(), $size);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields/meadows');
+    }
+
+    /**
+     * Kauft ein Gewächshaus (POST)
+     */
+    public function buyGreenhouse(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields/greenhouses');
+        }
+
+        $data = $this->getPostData();
+        $size = (float) ($data['size'] ?? 0.5);
+
+        $fieldModel = new Field();
+        $result = $fieldModel->buyGreenhouse($this->getFarmId(), $size);
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields/greenhouses');
+    }
+
+    /**
+     * Mäht eine Wiese (POST)
+     */
+    public function mow(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields/meadows');
+        }
+
+        $data = $this->getPostData();
+
+        $fieldModel = new Field();
+        $result = $fieldModel->mowMeadow((int) $data['field_id'], $this->getFarmId());
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields/meadows');
+    }
+
+    /**
+     * Grubbern/Pflügen (POST)
+     */
+    public function cultivate(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields');
+        }
+
+        $data = $this->getPostData();
+
+        $fieldModel = new Field();
+        $result = $fieldModel->cultivate(
+            (int) $data['field_id'],
+            $data['cultivation_type'] ?? 'grubbing',
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields');
+    }
+
+    /**
+     * Herbizid anwenden (POST)
+     */
+    public function applyHerbicide(): void
+    {
+        $this->requireAuth();
+
+        if (!$this->validateCsrf()) {
+            Session::setFlash('error', 'Sitzung abgelaufen', 'danger');
+            $this->redirect('/fields');
+        }
+
+        $data = $this->getPostData();
+
+        $fieldModel = new Field();
+        $result = $fieldModel->applyHerbicide(
+            (int) $data['field_id'],
+            (int) $data['herbicide_id'],
+            $this->getFarmId()
+        );
+
+        Session::setFlash(
+            $result['success'] ? 'success' : 'error',
+            $result['message'],
+            $result['success'] ? 'success' : 'danger'
+        );
+
+        $this->redirect('/fields');
+    }
 }

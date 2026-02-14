@@ -75,21 +75,22 @@
                     </thead>
                     <tbody>
                         <?php foreach ($members as $member): ?>
+                            <?php $memberIsLeader = in_array($member['role'] ?? '', ['founder', 'leader', 'co_leader']); ?>
                             <tr class="<?= $member['farm_id'] === Session::getFarmId() ? 'highlight-row' : '' ?>">
                                 <td>
                                     <strong><?= htmlspecialchars($member['farm_name']) ?></strong>
-                                    <?php if ($member['is_leader']): ?>
+                                    <?php if ($memberIsLeader): ?>
                                         <span class="leader-badge">&#128081; Leiter</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?= $member['level'] ?></td>
                                 <td><?= number_format($member['points']) ?></td>
                                 <td>
-                                    <?= $member['is_leader'] ? 'Leiter' : 'Mitglied' ?>
+                                    <?= $memberIsLeader ? 'Leiter' : 'Mitglied' ?>
                                     <br>
-                                    <small class="text-muted">Beitritt: <?= date('d.m.Y', strtotime($member['joined_at'])) ?></small>
+                                    <small class="text-muted">Beitritt: <?= date('d.m.Y', strtotime($member['joined_at'] ?? $member['created_at'] ?? 'now')) ?></small>
                                 </td>
-                                <?php if ($isLeader && !$member['is_leader']): ?>
+                                <?php if ($isLeader && !$memberIsLeader): ?>
                                     <td>
                                         <form action="<?= BASE_URL ?>/cooperative/kick" method="POST" class="inline-form"
                                               onsubmit="return confirm('Mitglied wirklich entfernen?')">

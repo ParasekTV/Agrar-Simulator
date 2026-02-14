@@ -138,7 +138,11 @@
                                 <span class="online-status <?= $statusClass ?>" title="<?= $statusTitle ?>"></span>
                             </td>
                             <td><strong><?= htmlspecialchars($rank['farm_name']) ?></strong></td>
-                            <td><?= htmlspecialchars($rank['username']) ?></td>
+                            <td>
+                                <a href="<?= BASE_URL ?>/player/<?= $rank['user_id'] ?>" class="player-link" title="Profil ansehen">
+                                    <?= htmlspecialchars($rank['username']) ?>
+                                </a>
+                            </td>
                             <td>
                                 <span class="level-badge">Lvl <?= $rank['level'] ?></span>
                             </td>
@@ -175,3 +179,86 @@
         </div>
     </div>
 </div>
+
+    <!-- Top-Genossenschaften -->
+    <?php if (!empty($topCooperatives)): ?>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Top-Agrargenossenschaften</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-rankings">
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Genossenschaft</th>
+                        <th>Gründer</th>
+                        <th>Mitglieder</th>
+                        <th>Punkte</th>
+                        <th>Forschung</th>
+                        <th>Vermögen (Kasse)</th>
+                        <th>Mitglieder-Vermögen</th>
+                        <th>Produktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($topCooperatives as $coop): ?>
+                        <tr>
+                            <td>
+                                <span class="rank-number rank-<?= $coop['position'] <= 3 ? $coop['position'] : 'other' ?>">
+                                    <?php if ($coop['position'] === 1): ?>
+                                        &#127942;
+                                    <?php elseif ($coop['position'] === 2): ?>
+                                        &#129352;
+                                    <?php elseif ($coop['position'] === 3): ?>
+                                        &#129353;
+                                    <?php else: ?>
+                                        #<?= $coop['position'] ?>
+                                    <?php endif; ?>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="<?= BASE_URL ?>/cooperative/<?= $coop['id'] ?>" class="coop-link" title="Statistik ansehen">
+                                    <strong><?= htmlspecialchars($coop['name']) ?></strong>
+                                </a>
+                            </td>
+                            <td><?= htmlspecialchars($coop['founder_name'] ?? '-') ?></td>
+                            <td>
+                                <span class="member-count"><?= (int)$coop['member_count'] ?>/<?= (int)$coop['member_limit'] ?></span>
+                            </td>
+                            <td><?= number_format($coop['total_points'] ?? 0) ?></td>
+                            <td><?= (int)($coop['research_count'] ?? 0) ?></td>
+                            <td><?= number_format($coop['treasury'] ?? 0, 0, ',', '.') ?> T</td>
+                            <td><?= number_format($coop['total_member_wealth'] ?? 0, 0, ',', '.') ?> T</td>
+                            <td><?= (int)($coop['production_count'] ?? 0) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <div class="mt-3">
+                <a href="<?= BASE_URL ?>/rankings/cooperatives" class="btn btn-outline">Alle Genossenschaften anzeigen</a>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<style>
+.player-link,
+.coop-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.player-link:hover,
+.coop-link:hover {
+    color: var(--color-primary-dark, #2563eb);
+    text-decoration: underline;
+}
+
+.member-count {
+    color: var(--color-text-muted, #6b7280);
+    font-size: 0.9em;
+}
+</style>
